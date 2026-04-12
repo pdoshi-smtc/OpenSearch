@@ -1,0 +1,22 @@
+2025-07-26 19:49:41,152 - __main__ - INFO - Starting customer data extraction from Confluence...
+2025-07-26 19:49:41,152 - __main__ - INFO - Fetching Confluence page: 466383617
+2025-07-26 19:49:42,260 - __main__ - ERROR - Failed to retrieve page. Status: 404
+2025-07-26 19:49:42,262 - __main__ - ERROR - Response: {"statusCode":404,"data":{"authorized":false,"valid":true,"allowedInReadOnlyMode":true,"errors":[],"successful":false},"message":"No content found with id: ContentId{id=466383617}","reason":"Not Found"}
+2025-07-26 19:49:42,264 - __main__ - ERROR - Failed to fetch Confluence page
+2025-07-26 19:55:30,664 - __main__ - INFO - Starting customer data extraction from Confluence...
+2025-07-26 19:55:30,665 - __main__ - INFO - Fetching Confluence page: 466383617
+2025-07-26 19:55:31,852 - __main__ - ERROR - Failed to retrieve page. Status: 404
+2025-07-26 19:55:31,853 - __main__ - ERROR - Response: {"statusCode":404,"data":{"authorized":false,"valid":true,"allowedInReadOnlyMode":true,"errors":[],"successful":false},"message":"No content found with id: ContentId{id=466383617}","reason":"Not Found"}
+2025-07-26 19:55:31,854 - __main__ - ERROR - Failed to fetch Confluence page
+2025-07-26 19:59:51,757 - __main__ - INFO - Starting customer data extraction from Confluence...
+2025-07-26 19:59:51,758 - __main__ - INFO - Fetching Confluence page: 466383617
+2025-07-26 19:59:55,333 - __main__ - INFO - Successfully fetched Confluence page
+2025-07-26 19:59:55,493 - __main__ - INFO - Found 1 tables in the page
+2025-07-26 19:59:55,495 - __main__ - INFO - Table 1 headers: ['Customer Name', 'Serving Country Location', 'Categorization VIP/Important/Normal', 'Device Type', 'Services Using Data/Voice,SMS,USSD', "End Customer's actual Service offered by our customer\xa0 e.g water leakage monitoring, Heat Sensing, Fleet Management\xa0 etc", 'SIM Version', 'OpenSearch KPI/Traffic Trend Observation']
+2025-07-26 19:59:55,524 - __main__ - INFO - Extracted 715 rows from table 1
+2025-07-26 19:59:55,524 - __main__ - INFO - Processing table 1 with 715 rows
+2025-07-26 19:59:55,526 - __main__ - INFO - Processed 706 customer records
+2025-07-26 19:59:55,527 - __main__ - INFO - Found 705 unique customers
+2025-07-26 19:59:55,542 - __main__ - INFO - Successfully saved customer data to data\customer_data.json
+2025-07-26 19:59:55,543 - __main__ - INFO - Metadata saved to data\customer_metadata.json
+2025-07-26 19:59:55,543 - __main__ - INFO - Customer data extraction completed successfully

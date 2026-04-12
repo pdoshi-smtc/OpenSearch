@@ -1,0 +1,1245 @@
+{
+  "alerts": [
+    {
+      "id": "566d9ec2-3525-453c-81a4-e8263287cc17-1776013438522",
+      "tinyId": "992755",
+      "createdAt": 1776013438522,
+      "updatedAt": 1776013738470,
+      "message": "vma-telfrt-05.mobiquithings.com: Current Status of NodeStatus_status is Down. Check Node state",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-369198233cd6",
+      "tags": [
+        "Production",
+        "SIG",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1776013438522,
+      "escalationIds": [
+        "88d2e52a-7529-4626-b43e-438f9a6e2503",
+        "9b11646c-9fa9-406c-a148-a2eb3594d203"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 299948,
+      "responders": [
+        {
+          "id": "ad93bb07-ce11-4b41-bae0-33efff6115b8",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 17:03:58 UTC",
+      "updatedAt_readable": "2026-04-12 17:08:58 UTC",
+      "lastOccuredAt_readable": "2026-04-12 17:03:58 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 0.69,
+      "age_days": 0
+    },
+    {
+      "id": "4ffe05d3-c336-409b-9196-a98f03ebaa3c-1776007101170",
+      "tinyId": "992752",
+      "createdAt": 1776007101170,
+      "updatedAt": 1776007401497,
+      "message": "rou-fkt-01.mobiquithings.com: threshold of Discarded Packets exceeded: current value 3.750000",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3682d6c8fb43",
+      "tags": [
+        "IP",
+        "MBQT",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1776007101170,
+      "escalationIds": [
+        "1fa6f22e-ed18-4ae9-b191-d1967f55c109",
+        "88d2e52a-7529-4626-b43e-438f9a6e2503"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P2",
+      "elapsedTime": 300327,
+      "responders": [
+        {
+          "id": "acc9e20d-e967-4b11-bbc9-755f53b22f4f",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 15:18:21 UTC",
+      "updatedAt_readable": "2026-04-12 15:23:21 UTC",
+      "lastOccuredAt_readable": "2026-04-12 15:18:21 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 2.45,
+      "age_days": 0
+    },
+    {
+      "id": "f5bf251e-7239-4520-8ca1-5cac4568ff42-1775994754120",
+      "tinyId": "992751",
+      "createdAt": 1775994754120,
+      "updatedAt": 1775995053769,
+      "message": "rou-fkt-02.mobiquithings.com: threshold of Discarded Packets exceeded: current value 8.466667",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3666175c60d4",
+      "tags": [
+        "IP",
+        "MBQT",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775994754120,
+      "escalationIds": [
+        "1fa6f22e-ed18-4ae9-b191-d1967f55c109",
+        "88d2e52a-7529-4626-b43e-438f9a6e2503"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P2",
+      "elapsedTime": 299649,
+      "responders": [
+        {
+          "id": "acc9e20d-e967-4b11-bbc9-755f53b22f4f",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 11:52:34 UTC",
+      "updatedAt_readable": "2026-04-12 11:57:33 UTC",
+      "lastOccuredAt_readable": "2026-04-12 11:52:34 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 5.88,
+      "age_days": 0
+    },
+    {
+      "id": "104c77b2-3a5d-432f-9f1d-1eef614642a2-1775985305336",
+      "tinyId": "992750",
+      "createdAt": 1775985305336,
+      "updatedAt": 1775990957125,
+      "message": "bbo-c9300-04.maingate.se: unexpected error: [<twisted.python.failure.Failure exceptions.ValueError: need more than 1 value to unpa",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3650174b9950",
+      "tags": [
+        "MBQT",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 2,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775985305442,
+      "escalationIds": [],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P2",
+      "elapsedTime": 5651789,
+      "responders": [
+        {
+          "id": "acc9e20d-e967-4b11-bbc9-755f53b22f4f",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "linked",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 09:15:05 UTC",
+      "updatedAt_readable": "2026-04-12 10:49:17 UTC",
+      "lastOccuredAt_readable": "2026-04-12 09:15:05 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 8.51,
+      "age_days": 0
+    },
+    {
+      "id": "f0ac5fa7-0af2-4a7b-b346-96884dbf9289-1775977882697",
+      "tinyId": "992747",
+      "createdAt": 1775977882697,
+      "updatedAt": 1775979082863,
+      "message": "lspisolaw21: Free space on volume: lspisolaw21-C:\\ Label: DA680453",
+      "entity": "lspisolaw21",
+      "source": "Solarwinds",
+      "status": "closed",
+      "alias": "lspisolaw21: Free space on volume: lspisolaw21-C:\\ Label: DA680453",
+      "tags": [
+        "Operations (IT Production)",
+        "Operations (Monitoring)",
+        "Production",
+        "Serious",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": true,
+      "count": 5,
+      "owner": "cdingman@semtech.com",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775979082368,
+      "escalationIds": [
+        "24f83339-660f-4133-a445-f175d9a79db8",
+        "7332363f-489e-4394-9c2a-2666fcb9f947",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Solarwinds",
+      "integrationName": "Solarwinds",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 1200166,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "b80ff045-4a94-4367-b885-66623089ed50",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "linked",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 07:11:22 UTC",
+      "updatedAt_readable": "2026-04-12 07:31:22 UTC",
+      "lastOccuredAt_readable": "2026-04-12 07:31:22 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 10.57,
+      "age_days": 0
+    },
+    {
+      "id": "9ecdb7e8-71dc-4b92-a1b3-ba3351b5f7b9-1775976754438",
+      "tinyId": "992746",
+      "createdAt": 1775976754438,
+      "updatedAt": 1775977356944,
+      "message": "rou-fkt-02.mobiquithings.com: threshold of Discarded Packets exceeded: current value 4.776667",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-363c2e5c62af",
+      "tags": [
+        "IP",
+        "MBQT",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 2,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775977053421,
+      "escalationIds": [
+        "1fa6f22e-ed18-4ae9-b191-d1967f55c109",
+        "47e30f0c-6a3b-4307-8539-a0739bd662d2"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P2",
+      "elapsedTime": 602506,
+      "responders": [
+        {
+          "id": "acc9e20d-e967-4b11-bbc9-755f53b22f4f",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 06:52:34 UTC",
+      "updatedAt_readable": "2026-04-12 07:02:36 UTC",
+      "lastOccuredAt_readable": "2026-04-12 06:57:33 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 10.88,
+      "age_days": 0
+    },
+    {
+      "id": "bfdf318c-2bc0-4cfd-a979-f221162c6288-1775976265400",
+      "tinyId": "992745",
+      "createdAt": 1775976265400,
+      "updatedAt": 1775976729562,
+      "message": "kibana: VPLMN DOWN -Hi3G Access AB [MVNO-EU - Lost-Service] - Radius Terminated sessions increase |         The number of radius t",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-363b0b51b2fb",
+      "tags": [
+        "Production"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": true,
+      "count": 1,
+      "owner": "pdoshi@semtech.com",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775976265400,
+      "escalationIds": [
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 464162,
+      "responders": [
+        {
+          "id": "21006fff-c91b-4b01-a648-da81675859d4",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 06:44:25 UTC",
+      "updatedAt_readable": "2026-04-12 06:52:09 UTC",
+      "lastOccuredAt_readable": "2026-04-12 06:44:25 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 11.02,
+      "age_days": 0
+    },
+    {
+      "id": "f690588b-ae66-4db4-9cef-8d96b9e63cd4-1775968041332",
+      "tinyId": "992744",
+      "createdAt": 1775968041332,
+      "updatedAt": 1775968340989,
+      "message": "rou-vty-02.mobiquithing.com: threshold of Discarded Packets exceeded: current value 10.066667",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3627e51e2b16",
+      "tags": [
+        "IP",
+        "MBQT",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775968041332,
+      "escalationIds": [
+        "1fa6f22e-ed18-4ae9-b191-d1967f55c109",
+        "47e30f0c-6a3b-4307-8539-a0739bd662d2"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P2",
+      "elapsedTime": 299657,
+      "responders": [
+        {
+          "id": "acc9e20d-e967-4b11-bbc9-755f53b22f4f",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 04:27:21 UTC",
+      "updatedAt_readable": "2026-04-12 04:32:20 UTC",
+      "lastOccuredAt_readable": "2026-04-12 04:27:21 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 13.3,
+      "age_days": 0
+    },
+    {
+      "id": "a95caa14-3f1a-49e5-ab86-ce2ce9abdd79-1775967141810",
+      "tinyId": "992743",
+      "createdAt": 1775967141810,
+      "updatedAt": 1775967441121,
+      "message": "rac-srv-fkt-esxi-10.infra.mobiquithings.com: Scan stopped; Collection time exceeded interval - Elapsed time 480.869029 seconds gre",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3625cce586d9",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775967141810,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 299311,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 04:12:21 UTC",
+      "updatedAt_readable": "2026-04-12 04:17:21 UTC",
+      "lastOccuredAt_readable": "2026-04-12 04:12:21 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 13.55,
+      "age_days": 0
+    },
+    {
+      "id": "79f6d754-099d-4811-b55d-bc0e98483d63-1775967141423",
+      "tinyId": "992742",
+      "createdAt": 1775967141423,
+      "updatedAt": 1775967165985,
+      "message": "rac-srv-vty-esxi-12.infra.mobiquithings.com: Scan stopped; Collection time exceeded interval - Elapsed time 480.736398 seconds gre",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3625ccd448bf",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775967141423,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 24562,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 04:12:21 UTC",
+      "updatedAt_readable": "2026-04-12 04:12:45 UTC",
+      "lastOccuredAt_readable": "2026-04-12 04:12:21 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 13.55,
+      "age_days": 0
+    },
+    {
+      "id": "94087fc7-4d1f-4d93-a57e-726f057f7c1c-1775967141334",
+      "tinyId": "992741",
+      "createdAt": 1775967141334,
+      "updatedAt": 1775967165870,
+      "message": "rac-srv-vty-esxi-12.infra.mobiquithings.com: Missed run: rac-srv-vty-esxi-12.infra.mobiquithings.com",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3625ccc8d708",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775967141334,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 24536,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 04:12:21 UTC",
+      "updatedAt_readable": "2026-04-12 04:12:45 UTC",
+      "lastOccuredAt_readable": "2026-04-12 04:12:21 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 13.55,
+      "age_days": 0
+    },
+    {
+      "id": "b8601f13-7374-464b-85fe-c26bd2af4dd0-1775967141232",
+      "tinyId": "992740",
+      "createdAt": 1775967141232,
+      "updatedAt": 1775967435475,
+      "message": "rac-srv-fkt-esxi-10.infra.mobiquithings.com: Missed run: rac-srv-fkt-esxi-10.infra.mobiquithings.com",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3625ccbfd653",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775967141232,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 294243,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 04:12:21 UTC",
+      "updatedAt_readable": "2026-04-12 04:17:15 UTC",
+      "lastOccuredAt_readable": "2026-04-12 04:12:21 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 13.55,
+      "age_days": 0
+    },
+    {
+      "id": "296539fe-5483-43ac-91ed-b84f911ce532-1775966396547",
+      "tinyId": "992739",
+      "createdAt": 1775966396547,
+      "updatedAt": 1775969996081,
+      "message": "Squid - vma-itfrt-05.mobiquithings.com - :Squid Cache errors are too high : 12 / 1h",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-362410c626c0",
+      "tags": [
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": true,
+      "count": 1,
+      "owner": "cdingman@numerex.com",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775966396547,
+      "escalationIds": [
+        "7332363f-489e-4394-9c2a-2666fcb9f947",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 3599534,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 03:59:56 UTC",
+      "updatedAt_readable": "2026-04-12 04:59:56 UTC",
+      "lastOccuredAt_readable": "2026-04-12 03:59:56 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 13.76,
+      "age_days": 0
+    },
+    {
+      "id": "04c1910e-111a-4b7c-977f-674e2dd16ec1-1775963155566",
+      "tinyId": "992737",
+      "createdAt": 1775963155566,
+      "updatedAt": 1775964355416,
+      "message": "fktp-sig-adea: SCTP Retransmission chunks number on SparkleCt2 is too high. Value : 140.0.",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-361c85072cc6",
+      "tags": [
+        "Production",
+        "SIG",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775963155566,
+      "escalationIds": [
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30",
+        "9b11646c-9fa9-406c-a148-a2eb3594d203"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 1199850,
+      "responders": [
+        {
+          "id": "ad93bb07-ce11-4b41-bae0-33efff6115b8",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 03:05:55 UTC",
+      "updatedAt_readable": "2026-04-12 03:25:55 UTC",
+      "lastOccuredAt_readable": "2026-04-12 03:05:55 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 14.66,
+      "age_days": 0
+    },
+    {
+      "id": "25452636-870c-483e-8672-c6e98565d4f4-1775961678910",
+      "tinyId": "992733",
+      "createdAt": 1775961678910,
+      "updatedAt": 1775961979154,
+      "message": "lspisolaw21: Free space on volume: lspisolaw21-C:\\ Label: DA680453",
+      "entity": "lspisolaw21",
+      "source": "Solarwinds",
+      "status": "closed",
+      "alias": "lspisolaw21: Free space on volume: lspisolaw21-C:\\ Label: DA680453",
+      "tags": [
+        "Operations (IT Production)",
+        "Operations (Monitoring)",
+        "Production",
+        "Serious",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 2,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775961978676,
+      "escalationIds": [
+        "24f83339-660f-4133-a445-f175d9a79db8",
+        "7332363f-489e-4394-9c2a-2666fcb9f947",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Solarwinds",
+      "integrationName": "Solarwinds",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 300244,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "b80ff045-4a94-4367-b885-66623089ed50",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "linked",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 02:41:18 UTC",
+      "updatedAt_readable": "2026-04-12 02:46:19 UTC",
+      "lastOccuredAt_readable": "2026-04-12 02:46:18 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 15.07,
+      "age_days": 0
+    },
+    {
+      "id": "5b1468f4-d552-43ea-99b4-948695ba1129-1775954451997",
+      "tinyId": "992731",
+      "createdAt": 1775954451997,
+      "updatedAt": 1775954791368,
+      "message": "kibana-observability: [INFO] Increase In Error: [Teleservice/EPS not provisioned - SIGTRAN] | Impacted customers: others | Impacte",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-000d-b74f-11f0-f72ee930f028",
+      "tags": [
+        "Production",
+        "SIG"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775954451997,
+      "escalationIds": [
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30",
+        "9b11646c-9fa9-406c-a148-a2eb3594d203"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 339371,
+      "responders": [
+        {
+          "id": "4fc04789-23cc-47ba-a4c0-e487d234e8b2",
+          "type": "user"
+        },
+        {
+          "id": "ad93bb07-ce11-4b41-bae0-33efff6115b8",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 00:40:51 UTC",
+      "updatedAt_readable": "2026-04-12 00:46:31 UTC",
+      "lastOccuredAt_readable": "2026-04-12 00:40:51 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 17.08,
+      "age_days": 0
+    },
+    {
+      "id": "165cfe67-0a54-4f35-8d3c-df552986358d-1775950937638",
+      "tinyId": "992725",
+      "createdAt": 1775950937638,
+      "updatedAt": 1775950941042,
+      "message": "rac-srv-fkt-esxi-10.infra.mobiquithings.com: Scan stopped; Collection time exceeded interval - Elapsed time 481.094778 seconds gre",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-36001268e531",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775950937638,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 3404,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-11 23:42:17 UTC",
+      "updatedAt_readable": "2026-04-11 23:42:21 UTC",
+      "lastOccuredAt_readable": "2026-04-11 23:42:17 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 18.05,
+      "age_days": 0
+    },
+    {
+      "id": "e97506ce-bbe4-4cfd-8ae5-fd6df177fe88-1775950937384",
+      "tinyId": "992724",
+      "createdAt": 1775950937384,
+      "updatedAt": 1775950966044,
+      "message": "rac-srv-vty-esxi-12.infra.mobiquithings.com: Scan stopped; Collection time exceeded interval - Elapsed time 481.047887 seconds gre",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-36001268e530",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775950937384,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 28660,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-11 23:42:17 UTC",
+      "updatedAt_readable": "2026-04-11 23:42:46 UTC",
+      "lastOccuredAt_readable": "2026-04-11 23:42:17 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 18.05,
+      "age_days": 0
+    },
+    {
+      "id": "eb5e263a-794b-4d9e-abac-7ba0b9fe20c5-1775950937310",
+      "tinyId": "992723",
+      "createdAt": 1775950937310,
+      "updatedAt": 1775950965949,
+      "message": "rac-srv-vty-esxi-12.infra.mobiquithings.com: Missed run: rac-srv-vty-esxi-12.infra.mobiquithings.com",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3600124c3568",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775950937310,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 28639,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-11 23:42:17 UTC",
+      "updatedAt_readable": "2026-04-11 23:42:45 UTC",
+      "lastOccuredAt_readable": "2026-04-11 23:42:17 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 18.05,
+      "age_days": 0
+    },
+    {
+      "id": "f282e78d-d05a-402a-8ebd-7286861515ce-1775950936242",
+      "tinyId": "992722",
+      "createdAt": 1775950936242,
+      "updatedAt": 1775950940931,
+      "message": "rac-srv-fkt-esxi-10.infra.mobiquithings.com: Missed run: rac-srv-fkt-esxi-10.infra.mobiquithings.com",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-3600123e52ad",
+      "tags": [
+        "HLR",
+        "Infrastructure",
+        "Production",
+        "autoclose"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": false,
+      "count": 1,
+      "owner": "",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775950936242,
+      "escalationIds": [
+        "a37e649a-d5f9-4217-94dd-879ffa2632d1",
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 4689,
+      "responders": [
+        {
+          "id": "aafd56dc-c02a-4479-ab99-91b3f54432a1",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-11 23:42:16 UTC",
+      "updatedAt_readable": "2026-04-11 23:42:20 UTC",
+      "lastOccuredAt_readable": "2026-04-11 23:42:16 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 18.05,
+      "age_days": 0
+    }
+  ],
+  "metadata": {
+    "total_count": 20,
+    "fetched_at": "2026-04-12T17:45:34.215899+00:00",
+    "source": "https://sierrawireless.atlassian.net/gateway/api/jsm/ops/web/3a7467b6-6c2f-4bfc-a2d9-21020a74bee4/v1/alerts",
+    "statistics": {
+      "priority_distribution": {
+        "P3": 15,
+        "P2": 5
+      },
+      "status_distribution": {
+        "closed": 20
+      },
+      "source_distribution": {
+        "Zenoss": 18,
+        "Solarwinds": 2
+      },
+      "total_alerts": 20
+    }
+  }
+}
