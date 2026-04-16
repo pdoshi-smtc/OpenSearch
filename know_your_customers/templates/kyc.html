@@ -1,0 +1,776 @@
+{% extends "base.html" %}
+
+{% block title %}Know Your Customers - Semtech Intelligence Platform{% endblock %}
+
+{% block custom_css %}
+<style>
+    /* Page specific styles */
+    .kyc-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .kyc-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .kyc-header h2 {
+        color: var(--semtech-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .kyc-header .subtitle {
+        color: var(--semtech-gray);
+        font-size: 1.1rem;
+    }
+
+    /* Search Section */
+    .search-section {
+        max-width: 700px;
+        margin: 0 auto 40px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        flex: 1;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 15px 20px;
+        padding-left: 50px;
+        border: 2px solid #e9ecef;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--semtech-gray);
+        font-size: 1.2rem;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--semtech-primary);
+        box-shadow: 0 0 0 0.2rem rgba(0, 83, 159, 0.25);
+    }
+
+    .btn-search-customer {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .btn-search-customer:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 83, 159, 0.3);
+        color: white;
+    }
+
+    /* Autocomplete Suggestions */
+    .suggestion-box {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid var(--semtech-primary);
+        border-top: none;
+        border-radius: 0 0 15px 15px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    .suggestion-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .suggestion-item:hover {
+        background: linear-gradient(135deg, rgba(0, 83, 159, 0.1) 0%, rgba(0, 128, 199, 0.1) 100%);
+        padding-left: 25px;
+    }
+
+    .suggestion-highlight {
+        font-weight: 600;
+        color: var(--semtech-primary);
+    }
+
+    /* Quick Stats */
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card-mini {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card-mini:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 83, 159, 0.3);
+    }
+
+    .stat-value-mini {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .stat-label-mini {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Customer Details */
+    .customer-details {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .customer-header {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        padding: 25px 30px;
+    }
+
+    .customer-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .customer-id {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .details-table tr {
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.2s ease;
+    }
+
+    .details-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .details-table tr:hover {
+        background: rgba(0, 83, 159, 0.03);
+    }
+
+    .details-table td {
+        padding: 20px 30px;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: var(--semtech-primary);
+        width: 30%;
+    }
+
+    .detail-value {
+        color: var(--semtech-dark);
+    }
+
+    /* Suggestions Section */
+    .suggestions-section {
+        text-align: center;
+        padding: 40px;
+        background: var(--semtech-light-gray);
+        border-radius: 20px;
+        margin-bottom: 30px;
+    }
+
+    .suggestions-title {
+        font-size: 1.3rem;
+        color: var(--semtech-dark);
+        margin-bottom: 20px;
+    }
+
+    .suggestions-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .suggestion-chip {
+        background: white;
+        border: 2px solid var(--semtech-primary);
+        color: var(--semtech-primary);
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .suggestion-chip:hover {
+        background: var(--semtech-primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 83, 159, 0.3);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 20px;
+    }
+
+    /* Browse All Button */
+    .browse-section {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn-browse-all {
+        background: white;
+        color: var(--semtech-primary);
+        border: 2px solid var(--semtech-primary);
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-browse-all:hover {
+        background: var(--semtech-primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 83, 159, 0.3);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn-action {
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-refresh {
+        background: white;
+        color: var(--semtech-primary);
+        border: 2px solid var(--semtech-primary);
+    }
+
+    .btn-refresh:hover {
+        background: var(--semtech-primary);
+        color: white;
+    }
+
+    .btn-export {
+        background: var(--semtech-success);
+        color: white;
+        border: none;
+    }
+
+    .btn-export:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Alphabet Filter */
+    .alphabet-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .letter-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid var(--semtech-primary);
+        background: white;
+        color: var(--semtech-primary);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .letter-btn:hover {
+        background: var(--semtech-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .letter-btn.active {
+        background: var(--semtech-primary);
+        color: white;
+    }
+
+    /* Error State */
+    .error-message {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .search-form {
+            flex-direction: column;
+        }
+        
+        .btn-search-customer {
+            width: 100%;
+        }
+        
+        .quick-stats {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .detail-label {
+            width: 40%;
+        }
+        
+        .details-table td {
+            padding: 15px 20px;
+        }
+    }
+
+    /* Loading Animation */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- KYC Container -->
+    <div class="kyc-container">
+        <div class="kyc-header">
+            <h2><i class="fas fa-users me-2"></i>Know Your Customers</h2>
+            <p class="subtitle">Access comprehensive customer information instantly</p>
+        </div>
+
+        <!-- Quick Stats -->
+        {% if stats %}
+        <div class="quick-stats">
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.total_customers }}</div>
+                <div class="stat-label-mini">Total Customers</div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.total_records }}</div>
+                <div class="stat-label-mini">Total Records</div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.tables_count }}</div>
+                <div class="stat-label-mini">Data Sources</div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.fields|length }}</div>
+                <div class="stat-label-mini">Data Fields</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <form method="POST" action="{{ url_for('kyc.search_customer') }}" class="search-form">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="customer_name" 
+                        name="customer_name" 
+                        class="search-input" 
+                        placeholder="Enter customer name..." 
+                        value="{{ search_query }}"
+                        autocomplete="off"
+                        required
+                    >
+                    <ul id="suggestions" class="suggestion-box"></ul>
+                </div>
+                <button type="submit" class="btn btn-search-customer">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </form>
+
+            <!-- Alphabet Filter -->
+            <div class="alphabet-filter">
+                <button class="letter-btn" onclick="filterByLetter('all')">All</button>
+                {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+                <button class="letter-btn" onclick="filterByLetter('{{ letter }}')">{{ letter }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Results Section -->
+    {% if result %}
+    <div class="customer-details fade-in">
+        <div class="customer-header">
+            <div class="customer-name">{{ result["Customer Name"] }}</div>
+            {% if result.get("Customer ID") %}
+            <div class="customer-id">ID: {{ result["Customer ID"] }}</div>
+            {% endif %}
+        </div>
+        <table class="details-table">
+            {% for key, value in result.items() %}
+            <tr>
+                <td class="detail-label">{{ key }}</td>
+                <td class="detail-value">{{ value if value else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="action-buttons">
+            <a href="#" class="btn-action btn-export" onclick="exportCustomer('{{ result["Customer Name"] }}')">
+                <i class="fas fa-download"></i> Export Details
+            </a>
+            <a href="{{ url_for('kyc.kyc_home') }}" class="btn-action btn-refresh">
+                <i class="fas fa-search"></i> New Search
+            </a>
+        </div>
+    </div>
+    {% elif search_query and suggestions %}
+    <div class="suggestions-section">
+        <h3 class="suggestions-title">
+            No exact match found for "<strong>{{ search_query }}</strong>"
+        </h3>
+        <p class="text-muted mb-4">Did you mean one of these customers?</p>
+        <div class="suggestions-grid">
+            {% for name in suggestions %}
+            <a href="#" class="suggestion-chip" onclick="selectSuggestion('{{ name }}')">
+                {{ name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif search_query %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-user-slash"></i>
+        </div>
+        <h3>No Customer Found</h3>
+        <p class="text-muted">No customer found matching "<strong>{{ search_query }}</strong>"</p>
+        <p class="text-muted">Try searching with a different name or browse all customers</p>
+    </div>
+    {% endif %}
+
+    <!-- Browse All Section -->
+    <div class="browse-section">
+        <button class="btn btn-browse-all" onclick="browseAllCustomers()">
+            <i class="fas fa-list me-2"></i>Browse All Customers
+        </button>
+    </div>
+</div>
+
+<!-- Customer List Modal -->
+<div class="modal fade" id="customerListModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">All Customers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="customerListContent">
+                <!-- Customer list will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById("customer_name");
+    const suggestionsBox = document.getElementById("suggestions");
+    let selectedIndex = -1;
+    let suggestions = [];
+
+    // Autocomplete functionality
+    input.addEventListener("input", async function() {
+        const query = input.value.trim();
+        
+        if (!query) {
+            suggestionsBox.style.display = "none";
+            return;
+        }
+
+        try {
+            const response = await fetch(`/know-your-customers/api/suggest?q=${encodeURIComponent(query)}`);
+            suggestions = await response.json();
+            
+            suggestionsBox.innerHTML = "";
+            selectedIndex = -1;
+            
+            if (suggestions.length === 0) {
+                suggestionsBox.style.display = "none";
+                return;
+            }
+            
+            suggestions.forEach((name, index) => {
+                const div = document.createElement("div");
+                div.className = "suggestion-item";
+                
+                // Highlight matching part
+                const regex = new RegExp(`(${query})`, 'gi');
+                const highlighted = name.replace(regex, '<span class="suggestion-highlight">$1</span>');
+                div.innerHTML = highlighted;
+                
+                div.addEventListener("click", () => {
+                    input.value = name;
+                    suggestionsBox.style.display = "none";
+                    document.querySelector("form").submit();
+                });
+                
+                suggestionsBox.appendChild(div);
+            });
+            
+            suggestionsBox.style.display = "block";
+        } catch (error) {
+            console.error("Error fetching suggestions:", error);
+        }
+    });
+
+    // Keyboard navigation
+    input.addEventListener("keydown", function(e) {
+        const items = suggestionsBox.querySelectorAll(".suggestion-item");
+        
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection(items);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, -1);
+            updateSelection(items);
+        } else if (e.key === "Enter" && selectedIndex >= 0) {
+            e.preventDefault();
+            input.value = suggestions[selectedIndex];
+            suggestionsBox.style.display = "none";
+            document.querySelector("form").submit();
+        } else if (e.key === "Escape") {
+            suggestionsBox.style.display = "none";
+            selectedIndex = -1;
+        }
+    });
+
+    function updateSelection(items) {
+        items.forEach((item, index) => {
+            if (index === selectedIndex) {
+                item.style.background = "linear-gradient(135deg, rgba(0, 83, 159, 0.1) 0%, rgba(0, 128, 199, 0.1) 100%)";
+            } else {
+                item.style.background = "";
+            }
+        });
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest(".search-input-wrapper")) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+});
+
+// Select suggestion from "Did you mean"
+function selectSuggestion(name) {
+    document.getElementById("customer_name").value = name;
+    document.querySelector("form").submit();
+}
+
+// Filter by letter
+async function filterByLetter(letter) {
+    // This would require additional backend endpoint implementation
+    console.log("Filter by letter:", letter);
+    // TODO: Implement letter filtering
+}
+
+// Browse all customers
+async function browseAllCustomers() {
+    const modal = new bootstrap.Modal(document.getElementById('customerListModal'));
+    const content = document.getElementById('customerListContent');
+    
+    content.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
+    modal.show();
+    
+    try {
+        const response = await fetch('/know-your-customers/api/customers?per_page=100');
+        const data = await response.json();
+        
+        let html = `
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        data.customers.forEach(customer => {
+            html += `
+                <tr>
+                    <td>${customer["Customer Name"]}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewCustomer('${customer["Customer Name"]}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-3">
+                <small class="text-muted">Showing ${data.customers.length} of ${data.total} customers</small>
+            </div>
+        `;
+        
+        content.innerHTML = html;
+    } catch (error) {
+        content.innerHTML = '<div class="alert alert-danger">Error loading customers</div>';
+    }
+}
+
+// View customer from list
+function viewCustomer(name) {
+    document.getElementById("customer_name").value = name;
+    document.querySelector("form").submit();
+}
+
+// Export customer details
+function exportCustomer(customerName) {
+    // Create CSV content
+    const table = document.querySelector('.details-table');
+    let csv = 'Field,Value\n';
+    
+    table.querySelectorAll('tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length === 2) {
+            csv += `"${cells[0].textContent}","${cells[1].textContent}"\n`;
+        }
+    });
+    
+    // Download CSV
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `customer_${customerName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+}
+
+// Refresh data
+async function refreshData() {
+    try {
+        const response = await fetch('/know-your-customers/api/refresh');
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('Customer data refreshed successfully!');
+            location.reload();
+        }
+    } catch (error) {
+        alert('Error refreshing data: ' + error.message);
+    }
+}
+</script>
+{% endblock %}

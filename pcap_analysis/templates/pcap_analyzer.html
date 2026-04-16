@@ -1,0 +1,942 @@
+{% extends "base.html" %}
+
+{% block title %}PCAP Network Analyzer - Semtech{% endblock %}
+
+{% block custom_css %}
+<style>
+    body {
+        padding-top: 80px; 
+    }
+
+    .error-display {
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        color: white;
+        padding: 1.25rem 1.5rem;
+        border-radius: 10px;
+        margin: 1.5rem 0;
+        font-weight: 600;
+        font-size: 1rem;
+        display: none;
+        position: relative;
+        box-shadow: 0 5px 20px rgba(220, 53, 69, 0.25);
+        border-left: 4px solid #dc3545;
+        animation: slideInDown 0.5s ease;
+    }
+
+    .error-display.show {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .analyzer-container {
+        padding: 2rem 0;
+    }
+
+    /* Upload Section */
+    .upload-card {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-accent) 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 83, 159, 0.2);
+    }
+
+    .upload-form {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .file-input-wrapper input[type=file] {
+        position: absolute;
+        left: -9999px;
+    }
+
+    .file-input-label {
+        background: white;
+        color: var(--semtech-primary);
+        padding: 12px 24px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .file-input-label:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-analyze {
+        background: white;
+        color: var(--semtech-primary);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-analyze:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-analyze:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    /* Error Display */
+    .error-alert {
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin: 1.5rem 0;
+        font-weight: 600;
+        animation: slideIn 0.5s ease;
+        display: none;
+    }
+
+    .error-alert.show {
+        display: block;
+    }
+
+    .error-alert i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    /* Timeline Section */
+    .timeline-section {
+        display: none;
+        animation: fadeIn 0.6s ease;
+    }
+
+    .timeline-section.show {
+        display: block;
+    }
+
+    .timeline-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+        color: var(--semtech-primary);
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid var(--semtech-accent);
+    }
+    .timeline-section {
+    margin: 30px 0;
+    display: none;
+    }
+
+    .timeline-section.show {
+    display: block;
+    }
+
+    .pcap-header {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+
+    }
+
+    .pcap-header h2 {
+        color: var(--semtech-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .pcap-header .subtitle {
+        color: var(--semtech-gray);
+        font-size: 1.1rem;
+
+    }
+
+    .timeline-container {
+    overflow-x: auto;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    }
+
+    .timeline {
+    display: flex;
+    gap: 20px;
+    min-width: fit-content;
+    position: relative;
+    padding: 20px 0;
+    }
+
+    .timeline::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ddd;
+    z-index: 1;
+    }
+
+    .packet-item {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 200px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s;
+    cursor: pointer;
+    }
+
+    .packet-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .packet-item.error {
+    border-color: #ff6b6b;
+    background: #ffecec;
+    }
+
+    .packet-item.success {
+    border-color: #51cf66;
+    background: #e3fcef;
+    }
+
+    .packet-item.gtpv2 {
+    border-color: #ffa726;
+    background: #fff3e0;
+    }
+
+    .packet-time {
+    font-weight: bold;
+    color: #667eea;
+    font-size: 12px;
+    margin-bottom: 5px;
+    }
+
+    .packet-protocol {
+    background: #667eea;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 11px;
+    margin-bottom: 5px;
+    }
+
+    .packet-protocol.gtpv2 {
+    background: #ffa726;
+    }
+
+    .packet-info {
+    color: #333;
+    font-size: 13px;
+    word-break: break-word;
+    font-weight: 600;
+    }
+
+    .packet-info.error {
+    color: #ff6b6b;
+    }
+
+
+        /* Light theme for network diagram */
+    .network-diagram {  
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        display: none;
+    }
+
+
+    .network-diagram.show {
+        display: block;
+    }
+
+    .diagram-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+    }
+
+    .diagram-header h2 {
+        color: #333333;
+        font-size: 1.5rem;
+        font-weight: 600;
+        border: none;
+        margin: 0;
+        color: black;
+    }
+
+    .stats {
+        display: flex;
+        gap: 20px;
+    }
+
+    .stat-item {
+        background: #f8f9fa;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        color: #495057;
+        border: 1px solid #dee2e6;
+    }
+
+    .stat-item span {
+        font-weight: 700;
+        color: #28a745;
+        margin-left: 5px;
+    }
+
+    .stat-item.error-stat span {
+        color: #dc3545;
+    }
+
+    /* Remove emoji if you want a cleaner look */
+    .diagram-header h2::before {
+        content: '';  /* Remove the emoji */
+    }
+
+    .diagram-container {
+        text-align: center;
+    }
+
+
+    /* SOP Content */
+    .sopContent {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-top: 2rem;
+        display: none;
+        animation: fadeIn 0.6s ease;
+    }
+
+    .sopContent.show {
+        display: block;
+    }
+
+    .sopContent h1 {
+        color: #222;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+        font-weight: 700;
+        padding-bottom: 20px;
+
+    }
+    #sopContent h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+    }
+
+    .sopContent h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: 400;
+        font-size: 1.4rem;
+    }
+
+    .sopContent ol, #sopContent ul {
+        margin-left: 1.5rem;
+        line-height: 1.8;
+    }
+
+    .sopContent table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 1.5rem 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .sopContent table thead {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+    }
+
+    .sopContent th, #sopContent td {
+        padding: 0.75rem;
+        text-align: left;
+        border: 1px solid #dee2e6;
+    }
+
+    .sopContent tbody tr:hover {
+        background-color: var(--semtech-light-gray);
+    }
+
+    /* matchTableCotainer Content */
+    .matchTableContainer{
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-top: 2rem;
+        display: none;
+        animation: fadeIn 0.6s ease;
+    }
+
+    .matchTableContainer.show {
+        display: block;
+    }
+    .matchTableContainer table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+    border-radius: 10px;
+    overflow: hidden;
+    }
+
+    .matchTableContainer table thead {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+    }
+
+    .matchTableContainer th,
+    .matchTableContainer td {
+        padding: 0.75rem;
+        text-align: left;
+        border: 1px solid #dee2e6;
+    }
+
+    .matchTableContainer tbody tr:hover {
+        background-color: var(--semtech-light-gray);
+    }
+
+
+    /* Mermaid Diagram */
+    .mermaid {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    .mermaid.show{
+        display: block;
+    }
+
+    /* Loading State */
+    .loading {
+        text-align: center;
+        padding: 3rem;
+        display: none;
+    }
+
+    .loading.show {
+        display: block;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid var(--semtech-light-gray);
+        border-top: 4px solid var(--semtech-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1.5rem;
+    }
+
+    .loading-text {
+        color: var(--semtech-primary);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    /* Error Indicator Badge */
+    .error-indicator {
+        position: fixed;
+        top: 120px;
+        right: 20px;
+        background: linear-gradient(135deg, var(--semtech-danger) 0%, #ff6b6b 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        display: none;
+        animation: slideInRight 0.5s ease;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
+    }
+
+    .error-indicator.show {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .upload-form {
+            flex-direction: column;
+        }
+
+        .stats {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .stat-item {
+            width: 100%;
+            text-align: center;
+        }
+
+        .packet-item {
+            min-width: 150px;
+        }
+    }
+
+    .upload-section {
+
+    padding: 30px;
+    margin: 20px 0;
+    }
+
+    .upload-form {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    input[type="file"] {
+        padding: 10px 20px;
+        background: #ffffff;
+        color: #6c757d;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    input[type="file"]:hover {
+        background: #e9ecef;
+        border-color: #adb5bd;
+    }
+
+    /* Or if using a custom file input with label */
+    .file-input-label {
+        padding: 10px 20px;
+        background: #f8f9fa;
+        color: #6c757d;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+        font-size: 14px;
+    }
+
+    .file-input-label:hover {
+        background: #e9ecef;
+        border-color: #adb5bd;
+    }
+
+    /* Analyze Button */
+    #analyzeBtn {
+        padding: 10px 35px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    #analyzeBtn:hover:not(:disabled) {
+        background: #0052a3;
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    }
+
+    #analyzeBtn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    
+    <div class="error-indicator" id="errorIndicator">⚠️ Pcap has error code</div>
+    <div class="container">
+        <div class="pcap-header">
+            <h2> <i class="fas fa-network-wired me-1"></i>  PCAP Analyzer</h2>
+            <p class="subtitle">Monitor and manage system alerts in real-time</p>
+            
+            <form class="upload-form" style="padding-top:30px ; gap: 5%;" id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="pcapFile" name="pcap_file" accept=".pcap,.pcapng" required>
+                <button type="submit" id="analyzeBtn">Analyze PCAP</button>
+            </form>
+        </div>        
+        
+        <div id="loading" class="loading">Analyzing PCAP file</div>
+        
+        <div id="errorDisplay" class="error-display"></div>
+        
+        <div id="timelineSection" class="timeline-section">
+            <h2>Call Flow Timeline</h2>
+            <div class="timeline-container">
+                <div id="timeline" class="timeline"></div>
+            </div>
+        </div>
+
+        <div id="networkDiagram" class="network-diagram">
+            <div class="diagram-header">
+                <h2>🌐 PCAP Analysis</h2>
+                <div class="stats">
+                    <div class="stat-item">Total Packets: <span id="totalPackets">0</span></div>
+                    <div class="stat-item">Successful: <span id="successPackets">0</span></div>
+                    <div class="stat-item error-stat">Errors: <span id="errorPackets">0</span></div>
+                </div>
+            </div>
+        </div> 
+
+
+        <div id="noErrorDiv"></div>
+        
+        <div id="errorMeaning" class="network-diagram"></div> 
+
+        <div id="matchTableContainer" class="matchTableContainer"></div>
+
+        <div id="sopContent" class="sopContent"></div>
+        
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:false});</script>
+<script>
+      document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const fileInput = document.getElementById('pcapFile');
+          const file = fileInput.files[0];
+          const analyzeBtn = document.getElementById('analyzeBtn');
+          const loading = document.getElementById('loading');
+          
+          if (!file) {
+              alert('Please select a PCAP file');
+              return;
+          }
+          
+          // Show loading, disable button
+          loading.classList.add('show');
+          analyzeBtn.disabled = true;
+          
+          // Clear previous results
+          clearResults();
+          
+          // Create FormData
+          const formData = new FormData();
+          formData.append('pcap_file', file);
+          
+          try {
+              const response = await fetch('upload', {
+                  method: 'POST',
+                  body: formData
+              });
+              
+              const result = await response.json();
+              console.log(result.data)
+            //console.log("match", result.data.match)
+              
+              
+              if (response.ok && result.success) {
+                  displayResults(result.data);
+              } else {
+                  alert(result.error || 'Error analyzing PCAP file');
+              }
+          } catch (error) {
+              alert('Error uploading file: ' + error.message);
+          } finally {
+              loading.classList.remove('show');
+              analyzeBtn.disabled = false;
+          }
+      });
+
+      
+      function clearResults() {
+          document.getElementById('errorDisplay').classList.remove('show');
+          document.getElementById('errorIndicator').classList.remove('show');
+          document.getElementById('timelineSection').classList.remove('show');
+          document.getElementById('networkDiagram').classList.remove('show');
+          document.getElementById('errorMeaning').classList.remove('show');
+          document.getElementById('sopContent').classList.remove('show');
+          document.getElementById('noErrorDiv').classList.remove('show');
+          document.getElementById('matchTableContainer').classList.remove('show');
+          document.getElementById('timeline').innerHTML = '';
+          document.getElementById('noErrorDiv').innerHTML = '';
+      }
+
+      
+      
+      function displayResults(data) {
+          // Display first error if found
+          if(data.error_type)
+          {
+              displayErrorMeaning(data.meaning,data.packets)
+              document.getElementById('errorMeaning').classList.add('show');
+          }
+
+          if(data.match)
+          {
+              displayMatchTable(data.match)
+              document.getElementById('matchTableContainer').classList.add('show');
+
+          }
+          if (data.first_error) {
+              displayError(data.first_error);
+              document.getElementById('errorIndicator').classList.add('show');
+          }
+
+          if(data.sop && data.error_type){
+              loadSOP(data.sop);
+              document.getElementById('sopContent').classList.add('show');
+          }
+          
+          // Display timeline
+          if (data.packets && data.packets.length > 0) {
+              displayTimeline(data.packets);
+          } else {
+              document.getElementById('timelineSection').classList.add('show');
+              document.getElementById('timeline').innerHTML = '<div class="no-data">No packet data found in PCAP file</div>';
+          }
+
+          // Display network diagram with highlights
+          displayNetworkDiagram(data.error_type, data.lost_service,data.mermaid_div);
+          
+          // Update statistics
+          updateStats(data.total_packets, data.success_packets, data.error_packets);
+      }
+    
+        function displayMatchTable(matchData) {
+            const matchTableContainer = document.getElementById('matchTableContainer');
+            matchTableContainer.classList.add('show');
+
+            if (!matchData || matchData.length === 0) {
+                matchTableContainer.innerHTML = '<p>No match data available.</p>';
+                return;
+            }
+
+            const columns_to_keep = ['Product version', 'country','Network', 'Roaming Sponsors', 'Available', 'Who blocked','sponsors rank','sms','voice','2G','3G','4G'];
+
+            let table = `
+                <h2>Roaming Sponsers Availability</h2>
+                <table id="matchTable">
+                    <thead>
+                        <tr>
+                            ${columns_to_keep.map(col => `<th>${col}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${matchData.map(row => `
+                            <tr>
+                                ${columns_to_keep.map(col => `<td>${row[col] ?? ''}</td>`).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+                // Collect service unavailability info
+                let unavailableInfo = '';
+                matchData.forEach(row => {
+                    const unavailable = ['sms','voice','2G','3G','4G'].filter(svc => 
+                        (row[svc] || '').toString().trim().toLowerCase() === 'no'
+                    );
+                    if (unavailable.length > 0) {
+                        unavailableInfo += `<p>⚠️ <b>Roaming Sponsor:</b> ${row['Roaming Sponsors'] ?? 'NA'}, 
+                        <b>Network:</b> ${row['Network'] ?? 'NA'} — 
+                        <b>Services not available:</b> ${unavailable.join(', ')}</p>`;
+                    }
+
+                });
+
+            matchTableContainer.innerHTML = table + (unavailableInfo || '<p> All services available for all sponsors. Check with Semetch HLR SME</p>');
+        }
+
+
+      function loadSOP(sop) {
+      try {
+          document.getElementById("sopContent").innerHTML = `${marked.parse(sop)}`;
+      } catch (error) {
+          document.getElementById("sopContent").innerText = "Error loading SOP.";
+          console.error(error);
+      }}
+      
+      
+      function displayError(error) {
+          const errorDisplay = document.getElementById('errorDisplay');
+          errorDisplay.textContent = `⚠️ Error Found: ${error}`;
+          errorDisplay.classList.add('show');
+      }
+
+    function displayErrorMeaning(meaning, packets) {
+        const errorMeaning = document.getElementById('errorMeaning');
+        errorMeaning.classList.add('show');
+
+        // Start with main meaning
+        let html = `<h5><b>Predicted error: </b>${meaning}</h5><br><h5>All PCAP Errors:</h5>`;
+
+        // Add all error_details on separate lines
+        let anyError = false;
+        packets.forEach((pkt, i) => {
+            if (pkt.error_details && pkt.error_details.trim() !== '') {
+                html += `<p>🔹 Packet ${i + 1}: ${pkt.error_details}</p>`;
+                anyError = true;
+            }
+        });
+
+        // Fallback message if no errors found
+        if (!anyError) html += `<p>No specific error details found in packets.</p>`;
+
+        errorMeaning.innerHTML = html;
+        console.log(meaning, packets);
+    }
+
+    
+      function displayTimeline(packets) {
+          const timelineSection = document.getElementById('timelineSection');
+          const timeline = document.getElementById('timeline');
+          
+          timeline.innerHTML = '';
+          
+          packets.forEach(packet => {
+              const item = document.createElement('div');
+              let itemClass = 'packet-item';
+              
+              if (packet.is_error) {
+                  itemClass += ' error';
+              } else if (packet.protocol === 'GTPv2') {
+                  itemClass += ' gtpv2';
+              } else {
+                  itemClass += ' success';
+              }
+              
+              item.className = itemClass;
+              
+              const infoClass = packet.is_error ? 'packet-info error' : 'packet-info';
+              const protocolClass = packet.protocol === 'GTPv2' ? 'packet-protocol gtpv2' : 'packet-protocol';
+              
+              item.innerHTML = `
+                  <div class="packet-time">⏰ ${packet.time || 'N/A'}</div>
+                  <div class="${protocolClass}">${packet.protocol}</div>
+                  <div class="${infoClass}">${packet.info || 'N/A'}</div>
+                  <div style="font-size: 11px; color: #666; margin-top: 5px;">
+                      ${packet.source || 'Unknown'} → ${packet.destination || 'Unknown'} | ${packet.length} bytes
+                  </div>
+              `;
+              
+              // Add tooltip for error packets
+              if (packet.is_error && packet.error_details) {
+                  item.title = `Error: ${packet.error_details}`;
+              }
+              
+              timeline.appendChild(item);
+          });
+          
+          timelineSection.classList.add('show');
+      }
+      
+        function displayNetworkDiagram(errorType, lostServiceData, mermaid_div) {
+            const diagram = document.getElementById('networkDiagram');
+            diagram.classList.add('show');
+            const noErrorDiv = document.getElementById('noErrorDiv');
+            noErrorDiv.style.display = 'block';
+
+            mermaid.render('newDiagram_' + Date.now(), mermaid_div).then(({ svg }) => {
+                noErrorDiv.classList.add('mermaid');
+                noErrorDiv.innerHTML = `
+                    <div style="position: relative;">
+                        <button id="downloadBtn" 
+                            style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:20px; cursor:pointer;">⬇️</button>
+                        <h1>End-to-End Call Flow</h1><br>${svg}
+                    </div>`;
+
+                document.getElementById("downloadBtn").onclick = () => {
+                    const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+                    const a = document.createElement("a");
+                    a.href = URL.createObjectURL(blob);
+                    a.download = "network_diagram.svg";
+                    a.click();
+                };
+            }).catch(err => console.error("Mermaid rendering failed:", err));
+        }
+
+      
+      function updateStats(total, success, errors) {
+          document.getElementById('totalPackets').textContent = total || 0;
+          document.getElementById('successPackets').textContent = success || 0;
+          document.getElementById('errorPackets').textContent = errors || 0;
+      }
+  </script>
+{% endblock %}

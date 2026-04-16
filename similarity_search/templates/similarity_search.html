@@ -1,0 +1,956 @@
+{% extends "base.html" %}
+
+{% block title %}Similar Incident - Semtech Intelligence Platform{% endblock %}
+
+{% block custom_css %}
+<style>
+    /* Page specific styles */
+    .search-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .search-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .search-header h2 {
+        color: var(--semtech-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .search-header .subtitle {
+        color: var(--semtech-gray);
+        font-size: 1.1rem;
+    }
+
+    .search-input-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .search-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 1rem;
+        resize: vertical;
+        transition: all 0.3s ease;
+    }
+
+    .search-textarea:focus {
+        outline: none;
+        border-color: var(--semtech-primary);
+        box-shadow: 0 0 0 0.2rem rgba(0, 83, 159, 0.25);
+    }
+
+    .search-controls {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
+
+    .control-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .control-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--semtech-dark);
+        font-weight: 500;
+    }
+
+    .form-select, .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: var(--semtech-primary);
+        box-shadow: 0 0 0 0.2rem rgba(0, 83, 159, 0.25);
+    }
+
+    .btn-search-main {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-search-main:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 83, 159, 0.3);
+        color: white;
+    }
+
+    .btn-search-main:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Advanced Options */
+    .advanced-options {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .weight-slider {
+        margin: 10px 0;
+    }
+
+    .slider-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+    }
+
+    .range-slider {
+        width: 100%;
+        height: 6px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: #e9ecef;
+        border-radius: 3px;
+        outline: none;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: var(--semtech-primary);
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .range-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: var(--semtech-primary);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+    }
+
+    /* Results Section */
+    .results-header {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .result-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        padding: 25px;
+        margin-bottom: 20px;
+        border-left: 5px solid var(--semtech-primary);
+        transition: all 0.3s ease;
+    }
+
+    .result-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .result-card.priority-high {
+        border-left-color: var(--semtech-danger);
+    }
+
+    .result-card.priority-medium {
+        border-left-color: var(--semtech-warning);
+    }
+
+    .result-card.priority-low {
+        border-left-color: var(--semtech-success);
+    }
+
+    .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .issue-key {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+
+    .issue-key:hover {
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .score-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .score-badge {
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .similarity-score {
+        background: #e8f5e8;
+        color: #2d5a2d;
+    }
+
+    .date-score {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .combined-score {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+
+    .result-summary {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--semtech-dark);
+        margin-bottom: 10px;
+    }
+
+    .result-description {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .result-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #777;
+    }
+
+    .meta-item i {
+        color: var(--semtech-primary);
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-open {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-closed {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-progress {
+        background: #cfe2ff;
+        color: #084298;
+    }
+
+    .key-terms {
+        background: #f8f9fa;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .key-terms-label {
+        font-weight: 600;
+        color: var(--semtech-primary);
+        margin-right: 10px;
+    }
+
+    .scoring-info {
+        background: rgba(0, 83, 159, 0.05);
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin-top: 15px;
+        font-size: 0.85rem;
+    }
+
+    .score-breakdown {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+
+    .score-item {
+        background: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        color: #495057;
+    }
+
+    /* Loading State */
+    .loading-container {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--semtech-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* No Results */
+    .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+    }
+
+    .no-results i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 20px;
+    }
+
+    /* Stats Modal */
+    .stats-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-card h5 {
+        color: var(--semtech-primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Quick Filters */
+    .quick-filters {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+
+    .quick-filter-btn {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        border: 2px solid var(--semtech-primary);
+        background: white;
+        color: var(--semtech-primary);
+        transition: all 0.3s ease;
+    }
+
+    .quick-filter-btn:hover {
+        background: var(--semtech-primary);
+        color: white;
+    }
+
+    .quick-filter-btn.active {
+        background: var(--semtech-primary);
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .search-controls {
+            flex-direction: column;
+        }
+        
+        .control-group {
+            width: 100%;
+        }
+        
+        .btn-search-main {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .results-header {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Search Container -->
+    <div class="search-container">
+        <div class="search-header">
+            <h2><i class="fas fa-search me-2"></i>Similar Incident</h2>
+            <p class="subtitle">Find similar tickets and issues using advanced AI-powered search</p>
+        </div>
+
+        <!-- Search Input -->
+        <div class="search-input-group">
+            <textarea 
+                id="searchQuery" 
+                class="search-textarea" 
+                placeholder="Describe your issue or incident in detail...&#10;Example: Database connection timeout in production environment during peak hours"
+                rows="4"></textarea>
+        </div>
+
+        <!-- Search Controls -->
+        <div class="search-controls">
+            <div class="control-group">
+                <label for="searchType">Search Type</label>
+                <select id="searchType" class="form-select">
+                    <option value="semantic">Semantic Similarity</option>
+                    <option value="keyword">Keyword Matching</option>
+                    <option value="hybrid">Hybrid Search</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="topK">Results Count</label>
+                <select id="topK" class="form-select">
+                    <option value="5">5 Results</option>
+                    <option value="10" selected>10 Results</option>
+                    <option value="15">15 Results</option>
+                    <option value="20">20 Results</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="statusFilter">Filter by Status</label>
+                <select id="statusFilter" class="form-select" multiple style="height: 100px;">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+
+            <div class="control-group">
+                <button id="searchBtn" class="btn btn-search-main">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+            <button class="quick-filter-btn" onclick="selectStatusFilter(['Open', 'New'])">
+                <i class="fas fa-folder-open"></i> Open
+            </button>
+            <button class="quick-filter-btn" onclick="selectStatusFilter(['In Progress', 'Work in progress'])">
+                <i class="fas fa-spinner"></i> In Progress
+            </button>
+            <button class="quick-filter-btn" onclick="selectStatusFilter(['Closed', 'Done', 'Resolved'])">
+                <i class="fas fa-check-circle"></i> Closed
+            </button>
+            <button class="quick-filter-btn" onclick="clearFilters()">
+                <i class="fas fa-times"></i> Clear Filters
+            </button>
+        </div>
+
+        <!-- Advanced Options -->
+        <div class="advanced-options" style="display: none;">
+            <h5>Advanced Options</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="weight-slider">
+                        <div class="slider-label">
+                            <span>Date Weight</span>
+                            <span id="dateWeightValue">70%</span>
+                        </div>
+                        <input type="range" class="range-slider" id="dateWeight" min="0" max="100" value="70">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="weight-slider">
+                        <div class="slider-label">
+                            <span>Similarity Weight</span>
+                            <span id="similarityWeightValue">30%</span>
+                        </div>
+                        <input type="range" class="range-slider" id="similarityWeight" min="0" max="100" value="30">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-3 d-flex gap-2">
+            <button id="clearBtn" class="btn btn-outline-secondary">
+                <i class="fas fa-eraser"></i> Clear
+            </button>
+            <button id="statsBtn" class="btn btn-outline-info">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+            <button id="advancedBtn" class="btn btn-outline-primary">
+                <i class="fas fa-cog"></i> Advanced
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Container -->
+    <div id="results"></div>
+</div>
+
+<!-- Stats Modal -->
+<div class="modal fade" id="statsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-chart-bar me-2"></i>System Statistics</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="statsContent">
+                <!-- Stats will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const searchBtn = document.getElementById('searchBtn');
+    const searchQuery = document.getElementById('searchQuery');
+    const searchType = document.getElementById('searchType');
+    const topK = document.getElementById('topK');
+    const statusFilter = document.getElementById('statusFilter');
+    const clearBtn = document.getElementById('clearBtn');
+    const statsBtn = document.getElementById('statsBtn');
+    const advancedBtn = document.getElementById('advancedBtn');
+    const resultsContainer = document.getElementById('results');
+    const advancedOptions = document.querySelector('.advanced-options');
+    
+    // Weight sliders
+    const dateWeight = document.getElementById('dateWeight');
+    const similarityWeight = document.getElementById('similarityWeight');
+    const dateWeightValue = document.getElementById('dateWeightValue');
+    const similarityWeightValue = document.getElementById('similarityWeightValue');
+
+    // Load available statuses on page load
+    loadAvailableStatuses();
+
+    // Event listeners
+    searchBtn.addEventListener('click', performSearch);
+    searchQuery.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            performSearch();
+        }
+    });
+
+    clearBtn.addEventListener('click', function() {
+        searchQuery.value = '';
+        statusFilter.selectedIndex = -1;
+        resultsContainer.innerHTML = '';
+        searchQuery.focus();
+    });
+
+    statsBtn.addEventListener('click', showStats);
+
+    advancedBtn.addEventListener('click', function() {
+        advancedOptions.style.display = advancedOptions.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Weight slider updates
+    dateWeight.addEventListener('input', function() {
+        const value = this.value;
+        dateWeightValue.textContent = value + '%';
+        similarityWeight.value = 100 - value;
+        similarityWeightValue.textContent = (100 - value) + '%';
+    });
+
+    similarityWeight.addEventListener('input', function() {
+        const value = this.value;
+        similarityWeightValue.textContent = value + '%';
+        dateWeight.value = 100 - value;
+        dateWeightValue.textContent = (100 - value) + '%';
+    });
+
+    // Functions
+    function loadAvailableStatuses() {
+        fetch('/similarity-search/statuses')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    populateStatusFilter(data.statuses);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading statuses:', error);
+            });
+    }
+
+    function populateStatusFilter(statuses) {
+        statusFilter.innerHTML = '';
+        statuses.forEach(status => {
+            const option = document.createElement('option');
+            option.value = status;
+            option.textContent = status;
+            statusFilter.appendChild(option);
+        });
+    }
+
+    window.selectStatusFilter = function(statusList) {
+        for (let option of statusFilter.options) {
+            option.selected = statusList.includes(option.value);
+        }
+    };
+
+    window.clearFilters = function() {
+        statusFilter.selectedIndex = -1;
+    };
+
+    function performSearch() {
+        const query = searchQuery.value.trim();
+        if (!query) {
+            alert('Please enter a search query');
+            return;
+        }
+
+        showLoading();
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+
+        const selectedStatuses = Array.from(statusFilter.selectedOptions).map(option => option.value);
+        
+        const requestData = {
+            query: query,
+            top_k: parseInt(topK.value),
+            search_type: searchType.value,
+            status_filter: selectedStatuses,
+            date_weight: dateWeight.value / 100,
+            similarity_weight: similarityWeight.value / 100,
+            max_days_back: 365
+        };
+
+        fetch('/similarity-search/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                displayResults(data);
+            } else {
+                showError(data.error);
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showError('Network error: ' + error.message);
+        })
+        .finally(() => {
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = '<i class="fas fa-search"></i> Search';
+        });
+    }
+
+    function displayResults(data) {
+        const results = data.results;
+        const searchTypeValue = searchType.value;
+
+        if (searchTypeValue === 'hybrid') {
+            displayHybridResults(results, data);
+        } else {
+            displayStandardResults(results, data);
+        }
+    }
+
+    function displayStandardResults(results, data) {
+        if (results.length === 0) {
+            resultsContainer.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h4>No similar tickets found</h4>
+                    <p>Try using different keywords or adjusting your filters</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = `
+            <div class="results-header">
+                <div>
+                    <h5 class="mb-0">Found ${results.length} similar tickets</h5>
+                    <small>Query: "${data.query}"</small>
+                </div>
+                <div>
+                    <small>Sorted by combined score (${Math.round(data.scoring_parameters.date_weight * 100)}% date, ${Math.round(data.scoring_parameters.similarity_weight * 100)}% similarity)</small>
+                </div>
+            </div>
+        `;
+
+        results.forEach((ticket, index) => {
+            html += createResultCard(ticket, index);
+        });
+
+        resultsContainer.innerHTML = html;
+    }
+
+    function displayHybridResults(results, data) {
+        let html = `
+            <div class="results-header">
+                <div>
+                    <h5 class="mb-0">Hybrid Search Results</h5>
+                    <small>Semantic: ${results.semantic.length} | Keyword: ${results.keyword.length}</small>
+                </div>
+            </div>
+        `;
+
+        if (results.semantic.length > 0) {
+            html += '<h4 class="mt-4 mb-3"><i class="fas fa-brain me-2"></i>Semantic Similarity Results</h4>';
+            results.semantic.forEach((ticket, index) => {
+                html += createResultCard(ticket, index);
+            });
+        }
+
+        if (results.keyword.length > 0) {
+            html += '<h4 class="mt-4 mb-3"><i class="fas fa-key me-2"></i>Keyword Matching Results</h4>';
+            results.keyword.forEach((ticket, index) => {
+                html += createResultCard(ticket, index);
+            });
+        }
+
+        resultsContainer.innerHTML = html;
+    }
+
+    function createResultCard(ticket, index) {
+        const priorityClass = getPriorityClass(ticket.priority);
+        const statusClass = getStatusClass(ticket.status);
+        const jiraUrl = `${getJiraBaseUrl()}${ticket.issue_key}`;
+
+        let daysAgoText = '';
+        if (ticket.days_ago !== null && ticket.days_ago !== undefined) {
+            daysAgoText = ticket.days_ago === 0 ? 'Today' : 
+                         ticket.days_ago === 1 ? '1 day ago' : 
+                         `${ticket.days_ago} days ago`;
+        }
+
+        return `
+            <div class="result-card ${priorityClass} fade-in" style="animation-delay: ${index * 0.1}s">
+                <div class="result-header">
+                    <a href="${jiraUrl}" target="_blank" class="issue-key">
+                        ${ticket.issue_key}
+                    </a>
+                    <div class="score-badges">
+                        ${ticket.similarity_score ? `<span class="score-badge similarity-score">Similarity: ${ticket.similarity_score}</span>` : ''}
+                        ${ticket.date_score ? `<span class="score-badge date-score">Date: ${ticket.date_score}</span>` : ''}
+                        ${ticket.combined_score ? `<span class="score-badge combined-score">Combined: ${ticket.combined_score}</span>` : ''}
+                        ${ticket.keyword_matches ? `<span class="score-badge similarity-score">Keywords: ${ticket.keyword_matches}</span>` : ''}
+                    </div>
+                </div>
+                
+                <h5 class="result-summary">${ticket.summary}</h5>
+                
+                <div class="result-description">
+                    ${ticket.description || 'No description available'}
+                </div>
+                
+                <div class="result-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-flag"></i>
+                        <span class="status-badge ${statusClass}">${ticket.status}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>${ticket.priority}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-user"></i>
+                        <span>${ticket.assignee}</span>
+                    </div>
+                    ${daysAgoText ? `
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${daysAgoText}</span>
+                    </div>
+                    ` : ''}
+                    <div class="meta-item">
+                        <i class="fas fa-external-link-alt"></i>
+                        <a href="${jiraUrl}" target="_blank">View in Jira</a>
+                    </div>
+                </div>
+                
+                ${ticket.key_terms ? `
+                <div class="key-terms">
+                    <span class="key-terms-label">Key Terms:</span>
+                    ${ticket.key_terms}
+                </div>
+                ` : ''}
+                
+                ${ticket.scoring_info ? `
+                <div class="scoring-info">
+                    <strong><i class="fas fa-info-circle"></i> Score Breakdown:</strong>
+                    <div class="score-breakdown">
+                        <span class="score-item">Raw Similarity: ${ticket.scoring_info.raw_similarity}</span>
+                        <span class="score-item">Raw Date Score: ${ticket.scoring_info.raw_date_score}</span>
+                        <span class="score-item">Weights: ${Math.round(ticket.scoring_info.similarity_weight * 100)}% similarity, ${Math.round(ticket.scoring_info.date_weight * 100)}% date</span>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    function getPriorityClass(priority) {
+        if (!priority) return '';
+        const p = priority.toLowerCase();
+        if (p.includes('high') || p.includes('critical')) return 'priority-high';
+        if (p.includes('medium')) return 'priority-medium';
+        if (p.includes('low')) return 'priority-low';
+        return '';
+    }
+
+    function getStatusClass(status) {
+        if (!status) return '';
+        const s = status.toLowerCase();
+        if (s.includes('open') || s.includes('new')) return 'status-open';
+        if (s.includes('closed') || s.includes('resolved')) return 'status-closed';
+        if (s.includes('progress')) return 'status-progress';
+        return '';
+    }
+
+    function getJiraBaseUrl() {
+        // This should be configured in your environment
+        return 'https://sierrawireless.atlassian.net/browse/';
+    }
+
+    function showStats() {
+        fetch('/similarity-search/stats')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+
+                let statsHtml = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5><i class="fas fa-database"></i> Dataset Overview</h5>
+                                <div class="stat-item">
+                                    <span>Total Tickets</span>
+                                    <strong>${data.total_tickets}</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <span>Vector Dimensions</span>
+                                    <strong>${data.vector_dimensions[0]} x ${data.vector_dimensions[1]}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5><i class="fas fa-chart-pie"></i> Status Distribution</h5>
+                                ${Object.entries(data.status_counts).slice(0, 5).map(([status, count]) => `
+                                    <div class="stat-item">
+                                        <span>${status}</span>
+                                        <strong>${count}</strong>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('statsContent').innerHTML = statsHtml;
+                new bootstrap.Modal(document.getElementById('statsModal')).show();
+            })
+            .catch(error => {
+                showError('Failed to load statistics: ' + error.message);
+            });
+    }
+
+    function showError(message) {
+        resultsContainer.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+
+    // Auto-focus on search input
+    searchQuery.focus();
+});
+</script>
+{% endblock %}

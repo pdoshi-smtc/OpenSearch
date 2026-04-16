@@ -1,0 +1,24 @@
+{
+  "extraction_date": "2025-11-06T07:08:25.035546",
+  "total_issues": 500,
+  "status_distribution": {
+    "Work in progress": 14,
+    "Completed": 393,
+    "Open": 18,
+    "Awaiting implementation": 34,
+    "Implementing": 1,
+    "Canceled": 15,
+    "Under review": 2,
+    "Done": 9,
+    "Closed": 11,
+    "Pending External RCA": 1,
+    "In review": 1,
+    "Under investigation": 1
+  },
+  "priority_distribution": {
+    "P5-Lowest": 144,
+    "P3-Medium": 137,
+    "P4-Low": 209,
+    "P2-High": 10
+  }
+}

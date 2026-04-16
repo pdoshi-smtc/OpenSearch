@@ -1,0 +1,974 @@
+{% extends "base.html" %}
+
+{% block title %}Nexora — GNOC Advance Assistant | TINA{% endblock %}
+
+{% block custom_css %}
+<style>
+    .nexora-wrap {
+        --nx-bg0: #070a12;
+        --nx-bg1: #0f1629;
+        --nx-accent: #7c3aed;
+        --nx-cyan: #22d3ee;
+        --nx-mint: #34d399;
+        --nx-warn: #fbbf24;
+        --nx-danger: #f87171;
+        --nx-glass: rgba(255, 255, 255, 0.06);
+        min-height: calc(100vh - 160px);
+        margin: -1rem 0 0;
+        padding: 0 0 3rem;
+        background: radial-gradient(1200px 600px at 10% -10%, rgba(124, 58, 237, 0.35), transparent 55%),
+            radial-gradient(900px 500px at 90% 10%, rgba(34, 211, 238, 0.2), transparent 50%),
+            linear-gradient(180deg, var(--nx-bg0), var(--nx-bg1));
+        color: #e8edf7;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nx-hidden {
+        display: none !important;
+    }
+
+    .nx-start {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 3rem 1.25rem 4rem;
+        text-align: left;
+    }
+
+    .nx-start h1 {
+        margin: 0 0 1rem;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #f8fafc;
+        line-height: 1.3;
+    }
+
+    .nx-start p {
+        margin: 0 0 0.85rem;
+        color: rgba(232, 237, 247, 0.82);
+        font-size: 0.95rem;
+        line-height: 1.55;
+    }
+
+    .nx-start .nx-enter {
+        margin-top: 1.75rem;
+        padding: 0.55rem 1.35rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #020617;
+        background: linear-gradient(120deg, var(--nx-cyan), #a78bfa);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .nx-start .nx-enter:hover {
+        filter: brightness(1.05);
+    }
+
+    .nx-shell {
+        position: relative;
+        z-index: 1;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem 0;
+    }
+
+    .nx-hero {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .nx-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: var(--nx-glass);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .nx-hero h2 {
+        font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+        font-weight: 700;
+        margin: 0.5rem 0 0.25rem;
+    }
+
+    .nx-hero .lead {
+        color: rgba(232, 237, 247, 0.72);
+        max-width: 640px;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .nx-pipeline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        font-size: 0.78rem;
+        color: rgba(232, 237, 247, 0.65);
+    }
+
+    .nx-pipeline i {
+        opacity: 0.5;
+    }
+
+    .nx-chip {
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        background: rgba(124, 58, 237, 0.2);
+        border: 1px solid rgba(124, 58, 237, 0.35);
+    }
+
+    .nx-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 1rem;
+    }
+
+    @media (max-width: 1100px) {
+        .nx-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .nx-panel {
+        background: var(--nx-glass);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(14px);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 520px;
+    }
+
+    .nx-panel-head {
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .nx-panel-head h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .nx-chat-log {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        max-height: 420px;
+        scroll-behavior: smooth;
+    }
+
+    .nx-msg {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 0.65rem;
+    }
+
+    .nx-msg.user {
+        flex-direction: row-reverse;
+    }
+
+    .nx-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .nx-msg.assistant .nx-avatar {
+        background: linear-gradient(145deg, var(--nx-accent), #4c1d95);
+    }
+
+    .nx-msg.user .nx-avatar {
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .nx-bubble {
+        padding: 0.75rem 1rem;
+        border-radius: 14px;
+        max-width: min(100%, 720px);
+        line-height: 1.55;
+        font-size: 0.92rem;
+    }
+
+    .nx-msg.assistant .nx-bubble {
+        background: rgba(15, 23, 42, 0.65);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+    }
+
+    .nx-msg.user .nx-bubble {
+        background: rgba(34, 211, 238, 0.12);
+        border: 1px solid rgba(34, 211, 238, 0.25);
+    }
+
+    .nx-input-row {
+        padding: 0.75rem 1rem 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .nx-input-row textarea {
+        flex: 1;
+        resize: none;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(2, 6, 23, 0.5);
+        color: #f1f5f9;
+        padding: 0.65rem 0.85rem;
+        min-height: 46px;
+        max-height: 120px;
+        font-size: 0.92rem;
+    }
+
+    .nx-input-row textarea:focus {
+        outline: none;
+        border-color: var(--nx-cyan);
+        box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+    }
+
+    .nx-btn-send {
+        border: none;
+        border-radius: 12px;
+        padding: 0 1.1rem;
+        font-weight: 600;
+        color: #020617;
+        background: linear-gradient(120deg, var(--nx-cyan), #a78bfa);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .nx-btn-send:hover {
+        box-shadow: 0 6px 20px rgba(34, 211, 238, 0.35);
+    }
+
+    .nx-btn-send:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .nx-side {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nx-card {
+        background: var(--nx-glass);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        font-size: 0.86rem;
+    }
+
+    .nx-card h4 {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: rgba(232, 237, 247, 0.55);
+        margin: 0 0 0.5rem;
+    }
+
+    .nx-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.45rem;
+        padding-bottom: 0.45rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nx-check:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .nx-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-top: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    .nx-dot.ok {
+        background: var(--nx-mint);
+        box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+    }
+
+    .nx-dot.warn {
+        background: var(--nx-warn);
+    }
+
+    .nx-dot.pending {
+        background: #94a3b8;
+    }
+
+    .nx-cov-block {
+        margin-bottom: 0.65rem;
+        padding: 0.5rem 0.65rem;
+        border-radius: 8px;
+        background: rgba(2, 6, 23, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nx-cov-block strong {
+        color: var(--nx-cyan);
+    }
+
+    .nx-sim-row {
+        padding: 0.45rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 0.82rem;
+    }
+
+    .nx-sim-row:last-child {
+        border-bottom: none;
+    }
+
+    .nx-actions {
+        margin-top: auto;
+    }
+
+    .nx-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .nx-tab {
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        color: #e8edf7;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+    }
+
+    .nx-tab:hover,
+    .nx-tab.active {
+        background: rgba(124, 58, 237, 0.25);
+        border-color: rgba(167, 139, 250, 0.5);
+    }
+
+    .nx-tab-pane {
+        display: none;
+        max-height: 220px;
+        overflow: auto;
+    }
+
+    .nx-tab-pane.active {
+        display: block;
+    }
+
+    .nx-tab-pane pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-size: 0.78rem;
+        line-height: 1.45;
+        color: rgba(232, 237, 247, 0.88);
+    }
+
+    .nx-confirm {
+        display: none;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .nx-confirm.visible {
+        display: flex;
+    }
+
+    .nx-form-card {
+        padding: 0.85rem 1rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(2, 6, 23, 0.35);
+    }
+
+    .nx-form-card h4 {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: rgba(232, 237, 247, 0.55);
+        margin: 0 0 0.65rem;
+    }
+
+    .nx-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem 0.75rem;
+    }
+
+    @media (max-width: 700px) {
+        .nx-form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .nx-field label {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: rgba(232, 237, 247, 0.55);
+        margin-bottom: 0.2rem;
+    }
+
+    .nx-field input,
+    .nx-field textarea {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(2, 6, 23, 0.55);
+        color: #f1f5f9;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.88rem;
+    }
+
+    .nx-field textarea {
+        min-height: 64px;
+        resize: vertical;
+    }
+
+    .nx-run {
+        margin-top: 0.65rem;
+        border: none;
+        border-radius: 10px;
+        padding: 0.5rem 1.2rem;
+        font-weight: 600;
+        color: #020617;
+        background: linear-gradient(120deg, var(--nx-cyan), #a78bfa);
+        cursor: pointer;
+    }
+
+    .nx-run:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    .nx-pcap-choice {
+        display: none;
+        padding: 0.65rem 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .nx-pcap-choice.visible {
+        display: flex;
+    }
+
+    .nx-os-panel {
+        font-size: 0.8rem;
+        line-height: 1.45;
+        color: rgba(232, 237, 247, 0.82);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .nx-btn {
+        border-radius: 10px;
+        padding: 0.45rem 1rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        font-size: 0.88rem;
+    }
+
+    .nx-btn-yes {
+        background: rgba(52, 211, 153, 0.2);
+        border-color: rgba(52, 211, 153, 0.45);
+        color: #ecfdf5;
+    }
+
+    .nx-btn-no {
+        background: rgba(248, 113, 113, 0.12);
+        border-color: rgba(248, 113, 113, 0.35);
+        color: #fee2e2;
+    }
+
+    footer {
+        margin-top: 0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="nexora-wrap">
+    <div class="nx-start" id="nxStartScreen" role="region" aria-label="Nexora welcome">
+        <h1>Hi — I'm Nexora</h1>
+        <p>
+            I'm the <strong>GNOC Advance Assistant</strong> on TINA. I help your Global Network Operations team shrink
+            engineering check time when you see field issues—<strong>lost service</strong>, <strong>location update</strong> problems,
+            <strong>maintenance</strong> correlations, or <strong>customer-specific</strong> incidents.
+        </p>
+        <p>
+            I pull an <strong>alert time window</strong> when you give a <strong>tinyId</strong>, correlate the exported
+            <strong>OpenSearch</strong> snapshot, validate <strong>coverage data.json</strong> for alternate networks and sponsors,
+            match <strong>similar Jira tickets</strong>, answer with <strong>device / SIM version / impact counts</strong>, build
+            <strong>JSM</strong> and <strong>status page</strong> drafts immediately, and optionally send you to <strong>PCAP</strong> for deeper proof.
+        </p>
+        <button type="button" class="nx-enter" id="nxEnterBtn">Start session</button>
+    </div>
+
+    <div class="nx-shell nx-hidden" id="nxMainApp">
+        <div class="nx-hero">
+            <div>
+                <span class="nx-badge"><i class="fas fa-shield-halved"></i> GNOC Advance Assistant · TINA</span>
+                <h2>Faster checks. Clearer next steps.</h2>
+                <p class="lead">
+                    Fill <strong>any one</strong> field (or several): <strong>tinyId</strong>, <strong>country</strong>, <strong>VPLMN / network</strong>,
+                    <strong>sponsor</strong>, or what you are seeing. I anchor on the alert when possible, slice OpenSearch, cross-check coverage,
+                    and return <strong>Nexora’s</strong> assessment plus <strong>JSM</strong> and <strong>status</strong> drafts in one pass.
+                </p>
+                <div class="nx-pipeline mt-2">
+                    <span class="nx-chip">Alert + time</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="nx-chip">OpenSearch</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="nx-chip">Jira similarity</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="nx-chip">PCAP (optional)</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="nx-chip">Templates</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nx-layout">
+            <div class="nx-panel">
+                <div class="nx-panel-head">
+                    <h3><i class="fas fa-comments me-2 text-info"></i>Nexora session</h3>
+                    <span class="badge bg-dark border border-secondary" id="nxPhasePill">phase: collect_context</span>
+                </div>
+                <div class="nx-form-card">
+                    <h4>Incident context</h4>
+                    <div class="nx-form-grid">
+                        <div class="nx-field">
+                            <label for="nxTinyId">Alert tinyId</label>
+                            <input id="nxTinyId" type="text" inputmode="numeric" placeholder="e.g. 992755" autocomplete="off" />
+                        </div>
+                        <div class="nx-field">
+                            <label for="nxCountry">Country</label>
+                            <input id="nxCountry" type="text" placeholder="e.g. Sweden" autocomplete="off" />
+                        </div>
+                        <div class="nx-field">
+                            <label for="nxVplmn">VPLMN / network name</label>
+                            <input id="nxVplmn" type="text" placeholder="e.g. Hi3G Access AB" autocomplete="off" />
+                        </div>
+                        <div class="nx-field">
+                            <label for="nxSponsor">Sponsor / roaming partner (optional)</label>
+                            <input id="nxSponsor" type="text" placeholder="e.g. ORANGE_901" autocomplete="off" />
+                        </div>
+                        <div class="nx-field" style="grid-column: 1 / -1;">
+                            <label for="nxSymptoms">What are you seeing? (optional if other fields set)</label>
+                            <textarea id="nxSymptoms" placeholder="Lost service, location update failures, maintenance smoke, customer-specific…"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" class="nx-run" id="nxRunCheck" disabled>Run GNOC check</button>
+                </div>
+                <div class="nx-chat-log" id="nxChatLog"></div>
+                <div class="nx-pcap-choice" id="nxPcapChoice" aria-live="polite">
+                    <span class="small text-secondary me-1">Run PCAP analysis now?</span>
+                    <button type="button" class="nx-btn nx-btn-yes" id="nxPcapYes">Yes — I'll upload a trace</button>
+                    <button type="button" class="nx-btn nx-btn-no" id="nxPcapNo">No — continue</button>
+                </div>
+                <div class="nx-input-row">
+                    <textarea id="nxInput" rows="1" placeholder="Optional: type yes/no for PCAP, or notes…"
+                        aria-label="Message to Nexora"></textarea>
+                    <button type="button" class="nx-btn-send" id="nxSend">Send</button>
+                </div>
+            </div>
+
+            <div class="nx-side">
+                <div class="nx-card">
+                    <h4>Validation checks</h4>
+                    <div id="nxChecks">Run a check to populate this panel.</div>
+                </div>
+                <div class="nx-card">
+                    <h4>OpenSearch window</h4>
+                    <div id="nxOpenSearch" class="nx-os-panel text-secondary">Correlation narrative appears after Run GNOC check.</div>
+                </div>
+                <div class="nx-card">
+                    <h4>Coverage workbook</h4>
+                    <div id="nxCoverage">Alternate PLMNs and sponsors from `coverage data.json` appear after a check.</div>
+                </div>
+                <div class="nx-card">
+                    <h4>Similar incidents (RAG)</h4>
+                    <div id="nxSimilar">—</div>
+                </div>
+                <div class="nx-card nx-actions">
+                    <h4>Next actions</h4>
+                    <div class="nx-tabs" role="tablist">
+                        <button type="button" class="nx-tab active" data-tab="pcap">PCAP</button>
+                        <button type="button" class="nx-tab" data-tab="jsm">JSM ticket</button>
+                        <button type="button" class="nx-tab" data-tab="status">Status page</button>
+                    </div>
+                    <div id="pane-pcap" class="nx-tab-pane active">
+                        <p class="small text-secondary mb-2">Upload a PCAP / PCAPNG for diameter and mobility timelines.</p>
+                        <a class="btn btn-sm btn-outline-light" href="{{ url_for('pcap_analysis.pcap_home') }}"><i
+                                class="fas fa-network-wired me-1"></i>Open PCAP Analyzer</a>
+                        <a class="btn btn-sm btn-outline-secondary mt-2 d-block" href="{{ url_for('similarity.similarity_home') }}"><i
+                                class="fas fa-magnifying-glass me-1"></i>Similarity search</a>
+                        <a class="btn btn-sm btn-outline-secondary mt-2 d-block" href="{{ url_for('status.status_home') }}"><i
+                                class="fas fa-signal me-1"></i>Status page</a>
+                    </div>
+                    <div id="pane-jsm" class="nx-tab-pane">
+                        <pre id="nxTplJsm">JSM draft is generated when you run a check.</pre>
+                    </div>
+                    <div id="pane-status" class="nx-tab-pane">
+                        <pre id="nxTplStatus">Status page draft is generated when you run a check.</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+(function () {
+    const INTERACT_URL = "{{ url_for('nexora.interact') }}";
+
+    const state = {
+        phase: "collect_context",
+        last_tiny_id: "",
+        last_country: "",
+        last_vplmn: "",
+        last_sponsor: "",
+        last_symptoms: "",
+        last_alert_message: "",
+        last_center_time_iso: "",
+        last_networks: [],
+        last_opensearch_narrative: "",
+        last_coverage_narrative: ""
+    };
+
+    const el = {
+        startScreen: document.getElementById("nxStartScreen"),
+        mainApp: document.getElementById("nxMainApp"),
+        enterBtn: document.getElementById("nxEnterBtn"),
+        chat: document.getElementById("nxChatLog"),
+        input: document.getElementById("nxInput"),
+        send: document.getElementById("nxSend"),
+        runCheck: document.getElementById("nxRunCheck"),
+        phasePill: document.getElementById("nxPhasePill"),
+        checks: document.getElementById("nxChecks"),
+        openSearch: document.getElementById("nxOpenSearch"),
+        coverage: document.getElementById("nxCoverage"),
+        similar: document.getElementById("nxSimilar"),
+        tplJsm: document.getElementById("nxTplJsm"),
+        tplStatus: document.getElementById("nxTplStatus"),
+        pcapChoice: document.getElementById("nxPcapChoice"),
+        pcapYes: document.getElementById("nxPcapYes"),
+        pcapNo: document.getElementById("nxPcapNo"),
+        tinyId: document.getElementById("nxTinyId"),
+        country: document.getElementById("nxCountry"),
+        vplmn: document.getElementById("nxVplmn"),
+        sponsor: document.getElementById("nxSponsor"),
+        symptoms: document.getElementById("nxSymptoms")
+    };
+
+    function anyFormFilled() {
+        return !!(el.tinyId.value.trim() || el.country.value.trim() || el.vplmn.value.trim() ||
+            el.sponsor.value.trim() || el.symptoms.value.trim());
+    }
+
+    function updateRunEnabled() {
+        el.runCheck.disabled = !anyFormFilled();
+    }
+
+    function esc(s) {
+        const d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    function formatAssistantText(text) {
+        if (!text) return "";
+        let h = esc(text);
+        h = h.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        return h.replace(/\n/g, "<br>");
+    }
+
+    function appendMessage(role, text) {
+        const row = document.createElement("div");
+        row.className = "nx-msg " + role;
+        const av = document.createElement("div");
+        av.className = "nx-avatar";
+        av.innerHTML = role === "user" ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+        const bubble = document.createElement("div");
+        bubble.className = "nx-bubble";
+        if (role === "assistant") {
+            bubble.innerHTML = formatAssistantText(text);
+        } else {
+            bubble.textContent = text;
+        }
+        row.appendChild(av);
+        row.appendChild(bubble);
+        el.chat.appendChild(row);
+        el.chat.scrollTop = el.chat.scrollHeight;
+    }
+
+    function renderChecks(checks) {
+        if (!checks || !checks.length) {
+            el.checks.innerHTML = "<span class='text-secondary'>No checks yet.</span>";
+            return;
+        }
+        el.checks.innerHTML = checks.map(function (c) {
+            const cls = c.status === "ok" ? "ok" : (c.status === "warn" ? "warn" : "pending");
+            return "<div class='nx-check'><span class='nx-dot " + cls + "'></span><div><strong>" + esc(c.label) + "</strong><br><span class='text-secondary' style='font-size:0.8rem'>" + esc(c.detail) + "</span></div></div>";
+        }).join("");
+    }
+
+    function renderCoverage(cov) {
+        const nets = (cov && cov.networks) ? cov.networks : [];
+        const fi = cov && cov.file_insight;
+        let html = "";
+        if (fi && (fi.matches || (fi.alternate_networks && fi.alternate_networks.length) || (fi.alternate_sponsors && fi.alternate_sponsors.length))) {
+            html += "<div class='mb-2'><span class='text-secondary small'>coverage data.json matches:</span> <strong>" + esc(String(fi.matches || 0)) + "</strong></div>";
+            if (fi.product_versions_top && fi.product_versions_top.length) {
+                html += "<div class='mb-2'><span class='text-secondary small'>Product builds in slice:</span><br>";
+                html += fi.product_versions_top.map(function (p) {
+                    return "<span class='badge bg-secondary me-1 mb-1'>" + esc(p[0]) + " ×" + esc(String(p[1])) + "</span>";
+                }).join(" ") + "</div>";
+            }
+            if (fi.alternate_networks && fi.alternate_networks.length) {
+                html += "<div class='mb-2'><strong class='small'>Alternate networks (Available: Yes)</strong><br><span class='text-secondary' style='font-size:0.78rem'>" +
+                    fi.alternate_networks.map(function (x) { return esc(x); }).join(", ") + "</span></div>";
+            }
+            if (fi.alternate_sponsors && fi.alternate_sponsors.length) {
+                html += "<div class='mb-2'><strong class='small'>Sponsors on available rows</strong><br><span class='text-secondary' style='font-size:0.78rem'>" +
+                    fi.alternate_sponsors.map(function (x) { return esc(x); }).join(", ") + "</span></div>";
+            }
+        } else {
+            html += "<p class='small text-secondary mb-2'>No coverage row match yet — add country and/or network name as in the workbook.</p>";
+        }
+        if (nets.length) {
+            html += nets.map(function (n) {
+                const rats = (n.rat_types || []).join(", ");
+                const sp = (n.typical_sponsors || []).join(", ");
+                return "<div class='nx-cov-block'><strong>" + esc(n.label || n.token) + "</strong><br>" +
+                    "RAT: " + esc(rats) + "<br>Sponsors: " + esc(sp) + "<br><span class='text-secondary' style='font-size:0.8rem'>" + esc(n.notes || "") + "</span></div>";
+            }).join("");
+        }
+        el.coverage.innerHTML = html || "<span class='text-secondary'>—</span>";
+    }
+
+    function renderSimilar(rows, ragError) {
+        if (ragError) {
+            el.similar.innerHTML = "<span class='text-warning'>" + esc(ragError) + "</span>";
+            return;
+        }
+        if (!rows || !rows.length) {
+            el.similar.innerHTML = "<span class='text-secondary'>No matches returned (index may be empty).</span>";
+            return;
+        }
+        el.similar.innerHTML = rows.map(function (r) {
+            const sn = (r.resolution_snippet || "").slice(0, 220);
+            const snBlock = sn ? "<br><span class='text-info' style='font-size:0.78rem'>Past ticket context: " + esc(sn) + (r.resolution_snippet && r.resolution_snippet.length > 220 ? "…" : "") + "</span>" : "";
+            return "<div class='nx-sim-row'><strong>" + esc(String(r.issue_key)) + "</strong> · score " + esc(String(r.match_score)) +
+                "<br><span class='text-secondary'>" + esc((r.summary || "").slice(0, 200)) + "</span>" + snBlock + "</div>";
+        }).join("");
+    }
+
+    function renderOpenSearch(report) {
+        if (!report || !report.narrative) {
+            el.openSearch.innerHTML = "<span class='text-secondary'>No narrative yet.</span>";
+            return;
+        }
+        el.openSearch.innerHTML = formatAssistantText(report.narrative);
+    }
+
+    function setTemplates(t) {
+        el.tplJsm.textContent = (t && t.jsm) ? t.jsm : "—";
+        el.tplStatus.textContent = (t && t.status_page) ? t.status_page : "—";
+    }
+
+    function syncSessionFromResponse(j) {
+        if (j.last_tiny_id !== undefined) state.last_tiny_id = j.last_tiny_id || "";
+        if (j.last_country !== undefined) state.last_country = j.last_country || "";
+        if (j.last_vplmn !== undefined) state.last_vplmn = j.last_vplmn || "";
+        if (j.last_sponsor !== undefined) state.last_sponsor = j.last_sponsor || "";
+        if (j.last_symptoms !== undefined) state.last_symptoms = j.last_symptoms || "";
+        if (j.last_alert_message !== undefined) state.last_alert_message = j.last_alert_message || "";
+        if (j.last_center_time_iso !== undefined) state.last_center_time_iso = j.last_center_time_iso || "";
+        if (j.last_networks) state.last_networks = j.last_networks;
+        if (j.last_opensearch_narrative !== undefined) state.last_opensearch_narrative = j.last_opensearch_narrative || "";
+        if (j.last_coverage_narrative !== undefined) state.last_coverage_narrative = j.last_coverage_narrative || "";
+    }
+
+    function sessionBody() {
+        return {
+            last_tiny_id: state.last_tiny_id,
+            last_country: state.last_country,
+            last_vplmn: state.last_vplmn,
+            last_sponsor: state.last_sponsor,
+            last_symptoms: state.last_symptoms,
+            last_alert_message: state.last_alert_message,
+            last_center_time_iso: state.last_center_time_iso,
+            last_networks: state.last_networks,
+            last_opensearch_narrative: state.last_opensearch_narrative,
+            last_coverage_narrative: state.last_coverage_narrative
+        };
+    }
+
+    function applyResponse(j) {
+        state.phase = j.phase;
+        syncSessionFromResponse(j);
+
+        el.phasePill.textContent = "phase: " + j.phase;
+        renderChecks(j.validation_checks || []);
+        renderCoverage(j.coverage || { networks: [] });
+        renderSimilar(j.similar_incidents, j.rag_error);
+        renderOpenSearch(j.opensearch_report || {});
+        if (j.templates && j.templates.jsm) {
+            setTemplates(j.templates);
+        }
+
+        if (j.assistant_message) {
+            appendMessage("assistant", j.assistant_message);
+        }
+
+        el.pcapChoice.classList.toggle("visible", j.phase === "await_pcap_choice");
+        if (j.phase === "done") {
+            el.pcapChoice.classList.remove("visible");
+        }
+        updateRunEnabled();
+    }
+
+    async function postInteract(body) {
+        el.send.disabled = true;
+        el.runCheck.disabled = true;
+        try {
+            const r = await fetch(INTERACT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+            const j = await r.json();
+            if (!j.success) {
+                appendMessage("assistant", "Error: " + (j.error || r.status));
+                return;
+            }
+            applyResponse(j);
+        } catch (e) {
+            appendMessage("assistant", "Request failed: " + e);
+        } finally {
+            el.send.disabled = false;
+            updateRunEnabled();
+        }
+    }
+
+    el.runCheck.addEventListener("click", function () {
+        if (!anyFormFilled()) return;
+        const tinyId = el.tinyId.value.trim();
+        const country = el.country.value.trim();
+        const vplmn = el.vplmn.value.trim();
+        const sponsor = el.sponsor.value.trim();
+        const symptoms = el.symptoms.value.trim();
+        appendMessage("user", "[Run GNOC check] tinyId " + (tinyId || "—") + " · " + (symptoms.slice(0, 120) || "…"));
+        postInteract(Object.assign({}, sessionBody(), {
+            phase: "collect_context",
+            tiny_id: tinyId,
+            country: country,
+            vplmn: vplmn,
+            sponsor: sponsor,
+            symptoms: symptoms
+        }));
+    });
+
+    el.send.addEventListener("click", async function () {
+        const text = el.input.value.trim();
+        if (!text) return;
+        appendMessage("user", text);
+        el.input.value = "";
+
+        if (state.phase === "await_pcap_choice") {
+            await postInteract(Object.assign({}, sessionBody(), {
+                phase: "await_pcap_choice",
+                user_message: text
+            }));
+            return;
+        }
+        appendMessage("assistant", "Use **Run GNOC check** with the form, or answer **yes** / **no** when PCAP is offered.");
+    });
+
+    el.input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            el.send.click();
+        }
+    });
+
+    el.pcapYes.addEventListener("click", function () {
+        postInteract(Object.assign({}, sessionBody(), {
+            phase: "await_pcap_choice",
+            pcap_choice: true
+        }));
+    });
+
+    el.pcapNo.addEventListener("click", function () {
+        postInteract(Object.assign({}, sessionBody(), {
+            phase: "await_pcap_choice",
+            pcap_choice: false
+        }));
+    });
+
+    document.querySelectorAll(".nx-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+            const id = tab.getAttribute("data-tab");
+            document.querySelectorAll(".nx-tab").forEach(function (t) { t.classList.remove("active"); });
+            document.querySelectorAll(".nx-tab-pane").forEach(function (p) { p.classList.remove("active"); });
+            tab.classList.add("active");
+            const pane = document.getElementById("pane-" + id);
+            if (pane) pane.classList.add("active");
+        });
+    });
+
+    function enterMain() {
+        el.startScreen.classList.add("nx-hidden");
+        el.startScreen.setAttribute("aria-hidden", "true");
+        el.mainApp.classList.remove("nx-hidden");
+        appendMessage("assistant", "Hi — I'm **Nexora**. Fill **any one** of tinyId, country, network, sponsor, or what you see — I'll validate **coverage data.json**, slice **OpenSearch**, count **devices / SIM versions**, match **Jira**, answer with **next steps**, and drop **JSM + status** drafts in the tabs. Then tell me if you still want **PCAP**.");
+        el.tinyId.focus();
+        updateRunEnabled();
+    }
+
+    [el.tinyId, el.country, el.vplmn, el.sponsor, el.symptoms].forEach(function (inp) {
+        inp.addEventListener("input", updateRunEnabled);
+        inp.addEventListener("change", updateRunEnabled);
+    });
+
+    el.enterBtn.addEventListener("click", enterMain);
+})();
+</script>
+{% endblock %}

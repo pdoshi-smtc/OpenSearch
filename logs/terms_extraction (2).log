@@ -1,0 +1,20 @@
+2025-07-26 19:51:05,815 - __main__ - INFO - Starting terminology data extraction from Confluence...
+2025-07-26 19:51:05,815 - __main__ - INFO - Fetching Confluence page: 407798724
+2025-07-26 19:51:07,455 - __main__ - ERROR - Failed to retrieve page. Status: 404
+2025-07-26 19:51:07,456 - __main__ - ERROR - Response: {"statusCode":404,"data":{"authorized":false,"valid":true,"allowedInReadOnlyMode":true,"errors":[],"successful":false},"message":"No content found with id: ContentId{id=407798724}","reason":"Not Found"}
+2025-07-26 19:51:07,458 - __main__ - ERROR - Failed to fetch Confluence page
+2025-07-26 20:00:37,531 - __main__ - INFO - Starting terminology data extraction from Confluence...
+2025-07-26 20:00:37,532 - __main__ - INFO - Fetching Confluence page: 407798724
+2025-07-26 20:00:38,821 - __main__ - INFO - Successfully fetched Confluence page
+2025-07-26 20:00:38,833 - __main__ - INFO - Found 3 tables in the page
+2025-07-26 20:00:38,834 - __main__ - INFO - Table 1 headers: ['Cause Title', 'Technology', 'Technology/RAT Type', 'doc.procedure/Cause', 'Details']
+2025-07-26 20:00:38,835 - __main__ - INFO - Extracted 20 rows from table 1
+2025-07-26 20:00:38,835 - __main__ - INFO - Table 2 headers: ['CS Loc Update', '2G,3G', 'Sigtran', 'UL', 'Circuit Switch location update, mostly for 2G']
+2025-07-26 20:00:38,836 - __main__ - INFO - Extracted 19 rows from table 2
+2025-07-26 20:00:38,837 - __main__ - INFO - Table 3 headers: ['vssf-eu', '3G,4G', 'Radius', 'NA', 'vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)']
+2025-07-26 20:00:38,838 - __main__ - INFO - Extracted 19 rows from table 3
+2025-07-26 20:00:38,838 - __main__ - INFO - Processed 53 terminology entries
+2025-07-26 20:00:38,839 - __main__ - INFO - Found 53 unique terms
+2025-07-26 20:00:38,850 - __main__ - INFO - Successfully saved terminology data to data\handbook.json
+2025-07-26 20:00:38,851 - __main__ - INFO - Metadata saved to data\handbook_metadata.json
+2025-07-26 20:00:38,851 - __main__ - INFO - Terminology data extraction completed successfully

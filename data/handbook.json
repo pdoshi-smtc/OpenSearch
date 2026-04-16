@@ -1,0 +1,379 @@
+[
+  [
+    {
+      "Cause Title": "Success",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "SIGTRAN/DIAMETER, vSSF, Radius",
+      "doc.procedure/Cause": "AIR,ULR, SAI, UL etc",
+      "Details": "Success Result for any type of transaction"
+    },
+    {
+      "Cause Title": "Unknown Subscriber",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius/SIGTRAN",
+      "doc.procedure/Cause": "SAI",
+      "Details": "When the Subscriber data is missing from HLR"
+    },
+    {
+      "Cause Title": "Unexpected Data value",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius/SIGTRAN",
+      "doc.procedure/Cause": "SAI, SRI4SM",
+      "Details": "The responding entity cannot complete the processing of the requested Operation because a parameter has an unexpected data value"
+    },
+    {
+      "Cause Title": "User Request",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius",
+      "doc.procedure/Cause": "STOP",
+      "Details": "User initiated the disconnect (logout)."
+    },
+    {
+      "Cause Title": "Idle Timeout",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius",
+      "doc.procedure/Cause": "STOP",
+      "Details": "Idle timer expired."
+    },
+    {
+      "Cause Title": "Admin Reset",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius",
+      "doc.procedure/Cause": "STOP,NOR",
+      "Details": "System administrator reset the port or session."
+    },
+    {
+      "Cause Title": "Lost Service",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius",
+      "doc.procedure/Cause": "STOP",
+      "Details": "Service can no longer be provided; for example, the user’s connection to a host was interrupted or MNO Outage or Power Outage from Customer etc"
+    },
+    {
+      "Cause Title": "Session timeout",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius",
+      "doc.procedure/Cause": "STOP,NOR",
+      "Details": "Subscriber reached the maximum continuous time allowed for the service or session."
+    },
+    {
+      "Cause Title": "User-Request",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Radius",
+      "doc.procedure/Cause": "STOP",
+      "Details": "User initiated the disconnect (logout)."
+    },
+    {
+      "Cause Title": "Teleservices/EPS not provisioned",
+      "Technology": "2G,3G,4G",
+      "Technology/RAT Type": "Diameter/Sigtran",
+      "doc.procedure/Cause": "AIR,ULR,SRI4SM",
+      "Details": "No  EPS subscription is associated with the IMSI / Devices - [Evolved Packet Core]"
+    },
+    {
+      "Cause Title": "Unexpectedly transient failure",
+      "Technology": "4G",
+      "Technology/RAT Type": "Diameter",
+      "doc.procedure/Cause": "AIR",
+      "Details": "Transient failures include the momentary loss of network connectivity to components and services, the temporary unavailability of a service, and timeouts that occur when a service is busy"
+    },
+    {
+      "Cause Title": "RNA",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Diameter/Sigtran",
+      "doc.procedure/Cause": "UL,ULR,UL_GPRS",
+      "Details": "Roaming not Allowed, When a device is not allowed to use any particular MNO/VPLMN"
+    },
+    {
+      "Cause Title": "System Failure / Unable to comply",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Diameter/Sigtran",
+      "doc.procedure/Cause": "UL,CLR_S6a,UL_GPRS",
+      "Details": "Message rejected because of unspecified reasons"
+    },
+    {
+      "Cause Title": "Bearer Services not Provisioned/RAT type not allowed",
+      "Technology": "4G",
+      "Technology/RAT Type": "Diameter",
+      "doc.procedure/Cause": "ULR",
+      "Details": "Bearer Service is unknown or not available / RAT type the UE is using is not allowed for the IMSI (Bearer Service or data service is a service that allows transmission of information signals between network interfaces)"
+    },
+    {
+      "Cause Title": "Unknown Equipment",
+      "Technology": "4G",
+      "Technology/RAT Type": "Diameter",
+      "doc.procedure/Cause": "NOR",
+      "Details": "The corresponding result code shall be sent by the EIR to indicate that the mobile equipment is not known in the EIR. (Permanent Failure)"
+    },
+    {
+      "Cause Title": "Data Missing",
+      "Technology": "2G,3G",
+      "Technology/RAT Type": "Sigtran",
+      "doc.procedure/Cause": "PurgeMS",
+      "Details": "The subscriber data record was lost due to VLR restart. The subscriber data record was removed by the Super-Charger database management function"
+    },
+    {
+      "Cause Title": "Facility Not supported",
+      "Technology": "2G, 3G, 4G",
+      "Technology/RAT Type": "Sigtran",
+      "doc.procedure/Cause": "SRI4SM",
+      "Details": "Services not availble for the devices"
+    },
+    {
+      "Cause Title": "Absent Subscriber SM",
+      "Technology": "2G, 3G",
+      "Technology/RAT Type": "Sigtran",
+      "doc.procedure/Cause": "SRI4SM",
+      "Details": "Absent subscriber (SMS delivery postponed): The user's mobile number is not reachable or out of the network coverage area"
+    },
+    {
+      "Cause Title": "4G Auth",
+      "Technology": "4G",
+      "Technology/RAT Type": "Diameter",
+      "doc.procedure/Cause": "AIR",
+      "Details": "Used for 4G Authentication case, whether a device is authorized to use the network"
+    },
+    {
+      "Cause Title": "2G/3G Auth",
+      "Technology": "2G,3G",
+      "Technology/RAT Type": "Sigtran",
+      "doc.procedure/Cause": "SAI",
+      "Details": "Used for 2G/3G Authentication case, whether a device is authorized to use the network"
+    }
+  ],
+  [
+    {
+      "CS Loc Update": "4G Loc Update",
+      "2G,3G": "4G",
+      "Sigtran": "Diameter",
+      "UL": "ULR",
+      "Circuit Switch location update, mostly for 2G": "4G device location update"
+    },
+    {
+      "CS Loc Update": "GPRS(PS) Loc Update",
+      "2G,3G": "2G,3G",
+      "Sigtran": "Sigtran",
+      "UL": "UL_GPRS",
+      "Circuit Switch location update, mostly for 2G": "GPRS location update 2G"
+    },
+    {
+      "CS Loc Update": "Cancel Location (CS)",
+      "2G,3G": "2G,3G",
+      "Sigtran": "Sigtran",
+      "UL": "CL",
+      "Circuit Switch location update, mostly for 2G": "Cancel location for devices - It happens when the device is mobile/moving"
+    },
+    {
+      "CS Loc Update": "S6a Cancel Location",
+      "2G,3G": "4G",
+      "Sigtran": "Diameter",
+      "UL": "CLR_S6a",
+      "Circuit Switch location update, mostly for 2G": "This cancel location happens between HSS & MME"
+    },
+    {
+      "CS Loc Update": "Cancel Location for GPRS(PS)",
+      "2G,3G": "2G/3G",
+      "Sigtran": "Sigtran",
+      "UL": "CL_GPRS",
+      "Circuit Switch location update, mostly for 2G": "Happens for cancel location of 2G, when device moves around"
+    },
+    {
+      "CS Loc Update": "Purge - Removal of certain data or context",
+      "2G,3G": "4G",
+      "Sigtran": "Diameter",
+      "UL": "PUR",
+      "Circuit Switch location update, mostly for 2G": "Purge is periodic & induced from MME,  NODEB (Purging means to delete the subscriber data across all enity)"
+    },
+    {
+      "CS Loc Update": "Send Routing Information for Short Message",
+      "2G,3G": "2G,3G",
+      "Sigtran": "Sigtran",
+      "UL": "SRI4SM",
+      "Circuit Switch location update, mostly for 2G": "For SMS, these query messages are called SRI_SM. The HLR responds to these messages with routing information that can be used by the querying node (SMSC) to deliver the SMS message"
+    },
+    {
+      "CS Loc Update": "Notify or Report",
+      "2G,3G": "4G",
+      "Sigtran": "Diameter",
+      "UL": "NOR",
+      "Circuit Switch location update, mostly for 2G": "NOR/NOA (Notification Request and Answer) is one of the simplest of message over S6a/S6d interface. Basic idea of this message is to inform HSS about change in Network and User Equipment information, when there is not change in user's location implies update location shall not triggered. So that HSS shall have latest information about subscriber and can notify to other entities that require received information."
+    },
+    {
+      "CS Loc Update": "Purge Mobile Subscriber",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "Sigtran",
+      "UL": "PurgeMS",
+      "Circuit Switch location update, mostly for 2G": "Purge is periodic & induced from MME, SGSN, VLR, BSC, NODEB (Purging means to delete the subscriber data and to \"freeze\" the TMSI that has been allocated to the purged MS in order to avoid TMSI double allocation.)"
+    },
+    {
+      "CS Loc Update": "Charging Data Record for Mobile Terminated",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "Sigtran",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "Charging Data Records (CDR) for mobile terminated data calls for Billing"
+    },
+    {
+      "CS Loc Update": "Charging Data Record for Mobile Originated",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "Sigtran",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "Charging Data Records (CDR) for mobile originated data calls for Billing"
+    },
+    {
+      "CS Loc Update": "Charging Data Record for Account-Based Charging",
+      "2G,3G": "2G, 3G, 4G",
+      "Sigtran": "Radius",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "Total CDRs for specific account/customer"
+    },
+    {
+      "CS Loc Update": "Charging Data Record for Hub",
+      "2G,3G": "2G, 3G, 4G",
+      "Sigtran": "Radius",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "Total CDRs for the Hub"
+    },
+    {
+      "CS Loc Update": "Interim-Update",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "Radius",
+      "UL": "Interim-Update",
+      "Circuit Switch location update, mostly for 2G": "Periodic collection of data usage for billing or revenue generation."
+    },
+    {
+      "CS Loc Update": "Start",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "Radius",
+      "UL": "Start",
+      "Circuit Switch location update, mostly for 2G": "Starting of data connection"
+    },
+    {
+      "CS Loc Update": "Stop",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "Radius",
+      "UL": "Stop",
+      "Circuit Switch location update, mostly for 2G": "Stoping of data connection"
+    },
+    {
+      "CS Loc Update": "radius-mvno-eu",
+      "2G,3G": "2G, 3G, 4G",
+      "Sigtran": "NA",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "Refers to all radius traffic for all MVNOs of Europe region resposnsible for Authorization, Authentication & Accounting"
+    },
+    {
+      "CS Loc Update": "diameter",
+      "2G,3G": "4G",
+      "Sigtran": "NA",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "Diameter traffic for all regions resposnsible for Authorization, Authentication & Accounting"
+    },
+    {
+      "CS Loc Update": "sigtran",
+      "2G,3G": "2G, 3G",
+      "Sigtran": "NA",
+      "UL": "NA",
+      "Circuit Switch location update, mostly for 2G": "SS7 over IP Signaling , responsible for 2G/3G Circuit switched networks"
+    }
+  ],
+  [
+    {
+      "vssf-eu": "vssf-us",
+      "3G,4G": "3G,4G",
+      "Radius": "Radius",
+      "NA": "NA",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "vSSF traffic in USA (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)"
+    },
+    {
+      "vssf-eu": "sms-eu",
+      "3G,4G": "4G",
+      "Radius": "SIGTRAN",
+      "NA": "NA",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "SMS  traffic in Europe"
+    },
+    {
+      "vssf-eu": "tsvb",
+      "3G,4G": "NA",
+      "Radius": "NA",
+      "NA": "NA",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "TSVB is a set of visualization types that you configure and display on dashboards."
+    },
+    {
+      "vssf-eu": "systemFailure",
+      "3G,4G": "2G, 3G, 4G",
+      "Radius": "SIGTRAN/DIAMETER",
+      "NA": "CLR_S6a/UL/ UL_GPRS",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "Message rejected because of unspecified reasons"
+    },
+    {
+      "vssf-eu": "updateLocation",
+      "3G,4G": "2G, 3G",
+      "Radius": "SIGTRAN",
+      "NA": "UL",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "When a device moves around in an area, the mobile device initiates a location update which is stored in VLR"
+    },
+    {
+      "vssf-eu": "insertSubscriberData",
+      "3G,4G": "2G, 3G,4G",
+      "Radius": "Sigtran",
+      "NA": "ISD",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "The Insert Subscriber Data Procedure shall be used between the HSS and the MME and between the HSS and theSGSN/VLR for updating and/or requesting certain user data in the MME or SGSN or VLR."
+    },
+    {
+      "vssf-eu": "Request accepted",
+      "3G,4G": "EUTRAN",
+      "Radius": "GTP/VSSF",
+      "NA": "Request accepted",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "\"Request accepted\" shall be returned when an MME or an HRPD Access has accepted a Direct Transfer request."
+    },
+    {
+      "vssf-eu": "User authentication failed",
+      "3G,4G": "GERAN",
+      "Radius": "GTP/VSSF",
+      "NA": "User authentication failed",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "User authentication failed"
+    },
+    {
+      "vssf-eu": "No resources available",
+      "3G,4G": "GERAN",
+      "Radius": "GTP/VSSF",
+      "NA": "No resources available",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "No resources available"
+    },
+    {
+      "vssf-eu": "Preferred PDN type not supported",
+      "3G,4G": "EUTRAN",
+      "Radius": "GTP/VSSF",
+      "NA": "Preferred PDN type not supported",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "\"Preferred PDN type not supported\" is used by the PGW to indicate that the PDN type received in the Create SessionRequest message is not supported by the PGW for the PDN corresponding to the received Access Point Name."
+    },
+    {
+      "vssf-eu": "Invalid message format",
+      "3G,4G": "UTRAN",
+      "Radius": "GTP/VSSF",
+      "NA": "Invalid message format",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "\"Activation rejected by GGSN, Serving GW or PDN GW\". Request rejected by Serving GWor PDN GW."
+    },
+    {
+      "vssf-eu": "New PDN type due to network preference",
+      "3G,4G": "UTRAN",
+      "Radius": "GTP/VSSF",
+      "NA": "New PDN type due to network preference",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "\"New PDN type due to network preference\""
+    },
+    {
+      "vssf-eu": "System failure",
+      "3G,4G": "GERAN",
+      "Radius": "GTP/VSSF",
+      "NA": "System failure",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "\"Service option temporarily out of order\""
+    },
+    {
+      "vssf-eu": "SMS MO",
+      "3G,4G": "2G/3G",
+      "Radius": "CDRMO",
+      "NA": "CDRMO",
+      "vSSF traffic in Europe (vSSF is a centralized slicing function that steers traffic to specific gateways without the need to make configuration changes to other network elements)": "Device Originating SMS"
+    }
+  ]
+]

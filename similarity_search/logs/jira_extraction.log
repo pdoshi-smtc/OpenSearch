@@ -1,0 +1,48 @@
+2025-10-28 15:18:47,346 - __main__ - INFO - Starting JIRA data extraction...
+2025-10-28 15:18:47,346 - __main__ - INFO - Executing JQL: project = GNOC AND updated >= -30d ORDER BY updated DESC
+2025-10-28 15:18:47,347 - __main__ - INFO - Max tickets to fetch: 500
+2025-10-28 15:18:47,347 - __main__ - INFO - Requesting batch: startAt=0, maxResults=100
+2025-10-28 15:18:59,156 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=1
+2025-10-28 15:18:59,157 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 100
+2025-10-28 15:18:59,158 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-10-28 15:19:07,671 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=2
+2025-10-28 15:19:07,672 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 200
+2025-10-28 15:19:07,672 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-10-28 15:19:19,407 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=3
+2025-10-28 15:19:19,408 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 300
+2025-10-28 15:19:19,409 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-10-28 15:19:30,957 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=4
+2025-10-28 15:19:30,958 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 400
+2025-10-28 15:19:30,958 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-10-28 15:19:34,060 - __main__ - INFO - API Response: total=not provided, issues_in_batch=34, page=5
+2025-10-28 15:19:34,061 - __main__ - INFO - Added 34 new unique issues. Total unique issues: 434
+2025-10-28 15:19:34,062 - __main__ - INFO - Reached last page according to API
+2025-10-28 15:19:34,062 - __main__ - INFO - Total unique issues fetched: 434
+2025-10-28 15:19:34,064 - __main__ - INFO - Fetched 434 issues for this query
+2025-10-28 15:19:34,064 - __main__ - INFO - Processing 434 issues...
+2025-10-28 15:19:34,168 - __main__ - INFO - Saved 434 issues to data\raw/jira_tickets.json
+2025-10-28 15:19:34,170 - __main__ - INFO - Extraction completed successfully
+2025-11-05 16:55:18,213 - __main__ - INFO - Starting JIRA data extraction...
+2025-11-05 16:55:18,214 - __main__ - INFO - Executing JQL: project = GNOC AND updated >= -30d ORDER BY updated DESC
+2025-11-05 16:55:18,214 - __main__ - INFO - Max tickets to fetch: 500
+2025-11-05 16:55:18,215 - __main__ - INFO - Requesting batch: startAt=0, maxResults=100
+2025-11-05 16:55:30,156 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=1
+2025-11-05 16:55:30,157 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 100
+2025-11-05 16:55:30,157 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-11-05 16:55:41,231 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=2
+2025-11-05 16:55:41,232 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 200
+2025-11-05 16:55:41,233 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-11-05 16:55:52,620 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=3
+2025-11-05 16:55:52,623 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 300
+2025-11-05 16:55:52,623 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-11-05 16:56:04,056 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=4
+2025-11-05 16:56:04,057 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 400
+2025-11-05 16:56:04,057 - __main__ - INFO - Requesting batch with nextPageToken, maxResults=100
+2025-11-05 16:56:13,818 - __main__ - INFO - API Response: total=not provided, issues_in_batch=100, page=5
+2025-11-05 16:56:13,819 - __main__ - INFO - Added 100 new unique issues. Total unique issues: 500
+2025-11-05 16:56:13,820 - __main__ - INFO - Reached max_tickets limit of 500
+2025-11-05 16:56:13,820 - __main__ - INFO - Total unique issues fetched: 500
+2025-11-05 16:56:13,821 - __main__ - INFO - Fetched 500 issues for this query
+2025-11-05 16:56:13,822 - __main__ - INFO - Processing 500 issues...
+2025-11-05 16:56:13,960 - __main__ - INFO - Saved 500 issues to data\raw/jira_tickets.json
+2025-11-05 16:56:13,962 - __main__ - INFO - Extraction completed successfully

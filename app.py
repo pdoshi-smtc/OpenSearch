@@ -1,139 +1,59 @@
-import json
-from datetime import datetime, timedelta
-import re
+"""
+TINA / Semtech Data Intelligence Platform — Flask application entrypoint.
 
-# ---------------- LOAD ALERTS ----------------
-with open('data/alerts.json', 'r', encoding='utf-8', errors='ignore') as f:
-    alerts_data = json.load(f)
+Run locally: python app.py
+Then open http://127.0.0.1:5000/nexora/ for Nexora (GNOC assistant).
+"""
 
-tiny_id = input("Enter tinyId: ")
+import os
 
-# ---------------- FIND ALERT ----------------
-alert_found = None
-for alert in alerts_data.get("alerts", []):
-    if alert.get("tinyId") == tiny_id:
-        alert_found = alert
-        break
+from flask import Flask, render_template
 
-if not alert_found:
-    print("Alert not found!")
-    exit()
+from alerts.routes import alerts_bp
+from know_your_customers.routes import kyc_bp
+from nexora.routes import nexora_bp
+from pcap_analysis.routes import pcap_analysis_bp
+from similarity_search.routes import similarity_bp
+from status_page.routes import status_bp
+from terminologies.routes import terms_bp
 
-# ---------------- EXTRACT MESSAGE ----------------
-message = alert_found.get("message", "")
-print("\nMessage:", message)
 
-# ---------------- EXTRACT VPLMN ----------------
-match = re.search(r"-\s*(.*?)\s*\[", message)
-if match:
-    vplmn = match.group(1).strip()
-else:
-    print("VPLMN not found!")
-    exit()
+def create_app() -> Flask:
+    app = Flask(
+        __name__,
+        template_folder="templates",
+        static_folder="static",
+    )
+    app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "dev-change-me")
 
-print("Extracted VPLMN:", vplmn)
+    @app.route("/")
+    def index():
+        return render_template("index.html")
 
-# ---------------- TIME HANDLING ----------------
-created_at_str = alert_found.get("createdAt_readable")
-created_time = datetime.strptime(created_at_str, "%Y-%m-%d %H:%M:%S UTC")
+    app.register_blueprint(pcap_analysis_bp, url_prefix="/pcap_analysis")
+    app.register_blueprint(similarity_bp, url_prefix="/similarity_search")
+    app.register_blueprint(alerts_bp, url_prefix="/alerts")
+    app.register_blueprint(kyc_bp, url_prefix="/kyc")
+    app.register_blueprint(terms_bp, url_prefix="/terminologies")
+    app.register_blueprint(status_bp, url_prefix="/status")
+    app.register_blueprint(nexora_bp, url_prefix="/nexora")
 
-# Time windows (±1 hour)
-start_time = created_time - timedelta(hours=1)
-end_time = created_time + timedelta(hours=1)
+    return app
 
-prev_start = start_time - timedelta(days=1)
-prev_end = end_time - timedelta(days=1)
 
-print("\nDEBUG: Time Window Current:", start_time, "to", end_time)
-print("DEBUG: Time Window Previous:", prev_start, "to", prev_end)
+app = create_app()
 
-# ---------------- LOAD DATA ----------------
-with open('data/data.json', 'r', encoding='utf-8') as f:
-    data_json = json.load(f)
 
-hits = data_json.get("hits", {}).get("hits", [])
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("404.html"), 404
 
-# ---------------- ANALYSIS FUNCTION ----------------
-def analyze_entries(start, end):
-    count = 0
 
-    unique_customers = set()
-    unique_roaming_partners = set()
-    unique_sim_versions = set()
-    unique_service_types = set()
+@app.errorhandler(500)
+def server_error(e):
+    return render_template("505.html"), 500
 
-    for item in hits:
-        doc = item.get("_source", {}).get("doc", {})
 
-        # Normalize values
-        doc_vplmn = doc.get("vplmn", "").strip()
-        result_detail = doc.get("result_detail", "").strip().lower()
-
-        # Filters
-        if doc_vplmn != vplmn:
-            continue
-
-        if result_detail != "lost-service":
-            continue
-
-        # Timestamp handling
-        timestamp_str = doc.get("timestamp") or doc.get("Event-Timestamp")
-        if not timestamp_str:
-            continue
-
-        try:
-            ts = datetime.strptime(timestamp_str, "%Y-%m-%dT%H:%M:%S")
-        except:
-            continue
-
-        if start <= ts <= end:
-            count += 1
-
-            # Collect unique values
-            customer = doc.get("customer_name", "").strip()
-            partner = doc.get("roaming_partner", "").strip()
-            sim_version = doc.get("sim_version", "").strip()
-            service_type = doc.get("service_type", "").strip()
-
-            if customer:
-                unique_customers.add(customer)
-            if partner:
-                unique_roaming_partners.add(partner)
-            if sim_version:
-                unique_sim_versions.add(sim_version)
-            if service_type:
-                unique_service_types.add(service_type)
-
-    return {
-        "count": count,
-        "customers": unique_customers,
-        "roaming_partners": unique_roaming_partners,
-        "sim_versions": unique_sim_versions,
-        "service_types": unique_service_types
-    }
-
-# ---------------- RUN ANALYSIS ----------------
-current_data = analyze_entries(start_time, end_time)
-previous_data = analyze_entries(prev_start, prev_end)
-
-# ---------------- OUTPUT ----------------
-print("\n--- RESULTS ---")
-print(f"VPLMN: {vplmn}")
-
-print("\n--- CURRENT WINDOW ---")
-print(f"Count: {current_data['count']}")
-
-print("\nUnique Customers:" )
-print(", ".join(sorted(current_data['customers'])) or "None")
-
-print("\nRoaming Partners:")
-print(", ".join(sorted(current_data['roaming_partners'])) or "None")
-
-print("\nSIM Versions:")
-print(", ".join(sorted(current_data['sim_versions'])) or "None")
-
-print("\nService Types:")
-print(", ".join(sorted(current_data['service_types'])) or "None")
-
-print("\n--- PREVIOUS DAY WINDOW ---")
-print(f"Count: {previous_data['count']}")
+if __name__ == "__main__":
+    # Local development — Nexora: http://127.0.0.1:5000/nexora/
+    app.run(host="127.0.0.1", port=int(os.environ.get("PORT", "5000")), debug=True)

@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block title %}Semtech Status Page - Monitor Service Health{% endblock %}
+
+{% block custom_css %}
+<style>
+    .status-container {
+        margin-top: -50px;
+        padding-top: 50px;
+    }
+    
+    .overall-status {
+        background-color: #96e300;
+        color: #333;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+    
+    .overall-status.status-issues {
+        background-color: #e67e22;
+        color: white;
+    }
+    
+    .overall-status h2 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .status-card {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+    
+    .status-card-header {
+        background-color: #f8f9fa;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+    
+    .status-card-body {
+        padding: 1.5rem;
+    }
+    
+    .maintenance-item, .incident-item {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0.375rem;
+        border-left: 4px solid;
+    }
+    
+    .maintenance-item {
+        background-color: #e3f2fd;
+        border-left-color: #2196f3;
+    }
+    
+    .incident-item {
+        background-color: #f5f5f5;
+        border-left-color: #666;
+    }
+    
+    .incident-item.impact-maintenance {
+        background-color: #e3f2fd;
+        border-left-color: #2196f3;
+    }
+    
+    .incident-item.impact-minor {
+        background-color: #fff8e1;
+        border-left-color: #ffc107;
+    }
+    
+    .incident-item.impact-major {
+        background-color: #fff3e0;
+        border-left-color: #ff9800;
+    }
+    
+    .incident-item.impact-critical {
+        background-color: #ffebee;
+        border-left-color: #f44336;
+    }
+    
+    .service-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .service-group-header {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.375rem;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .service-group-header:hover {
+        background-color: #e9ecef;
+    }
+    
+    .service-item {
+        padding: 0.75rem 1rem;
+        margin: 0.25rem 0;
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .status-operational {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .status-non-operational {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .status-degraded {
+        background-color: #ffc107;
+        color: #333;
+    }
+    
+    .description {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.5rem;
+    }
+    
+    .time-info {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    .no-data {
+        color: #6c757d;
+        font-style: italic;
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .last-updated {
+        text-align: right;
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+    
+    .tab-content {
+        animation: fadeIn 0.3s;
+    }
+    
+    .nav-tabs .nav-link {
+        color: #495057;
+        font-weight: 500;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        border-color: transparent;
+        color: var(--semtech-primary);
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: var(--semtech-primary);
+        background-color: transparent;
+        border-color: transparent;
+        border-bottom-color: var(--semtech-primary);
+    }
+    
+    .spinner-border {
+        width: 1rem;
+        height: 1rem;
+        border-width: 0.15rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container status-container"><br>
+    <div class="last-updated">
+        Last Updated: {{ last_updated }}
+        <button class="btn btn-outline-primary btn-sm ms-2" onclick="refreshData()">
+            <i class="fas fa-sync-alt me-1"></i> Refresh
+        </button>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold text-primary mb-3">Status Page</h1>
+            <p class="lead text-muted">Real-time monitoring of Semtech Sierra Wireless services and infrastructure</p>
+        </div>
+    </div>
+
+    <div class="overall-status {% if overall_status != 'All Systems Operational' %}status-issues{% endif %}">
+        <h2><i class="fas fa-server me-2"></i>{{ overall_status }}</h2>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4" id="statusTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="maintenance-tab" data-bs-toggle="tab" data-bs-target="#maintenance" type="button" role="tab">
+                <i class="fas fa-wrench me-1"></i> Maintenance
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab">
+                <i class="fas fa-server me-1"></i> Services
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="incidents-tab" data-bs-toggle="tab" data-bs-target="#incidents" type="button" role="tab">
+                <i class="fas fa-exclamation-circle me-1"></i> Incidents
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="statusTabContent">
+        <!-- Maintenance Tab -->
+        <div class="tab-pane fade show active" id="maintenance" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="status-card">
+                        <div class="status-card-header">
+                            <i class="fas fa-calendar-alt me-2"></i>Scheduled Maintenance
+                        </div>
+                        <div class="status-card-body">
+                            {% if scheduled_maintenance %}
+                                {% for maintenance in scheduled_maintenance %}
+                                <div class="maintenance-item">
+                                    <h6 class="mb-1">{{ maintenance.title }}</h6>
+                                    <div class="time-info">
+                                        <i class="far fa-clock me-1"></i>{{ maintenance.time }}
+                                    </div>
+                                    {% if maintenance.description %}
+                                        <div class="description">
+                                            {{ maintenance.description[:300] }}{% if maintenance.description|length > 300 %}...{% endif %}
+                                        </div>
+                                    {% endif %}
+                                    {% if maintenance.url != '#' %}
+                                        <a href="{{ maintenance.url }}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">
+                                            View Details <i class="fas fa-external-link-alt ms-1"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="no-data">No scheduled maintenance at this time.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="status-card">
+                        <div class="status-card-header">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Non-Operational Devices
+                        </div>
+                        <div class="status-card-body">
+                            {% if non_operational_devices %}
+                                {% for device in non_operational_devices %}
+                                <div class="service-item">
+                                    <div>
+                                        <strong>{{ device.name }}</strong>
+                                        {% if device.group %}
+                                            <div class="description">Group: {{ device.group }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <span class="status-badge status-non-operational">{{ device.status }}</span>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="no-data">All devices are operational.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Services Tab -->
+        <div class="tab-pane fade" id="services" role="tabpanel">
+            <div class="status-card">
+                <div class="status-card-header">
+                    <i class="fas fa-network-wired me-2"></i>Service Groups
+                </div>
+                <div class="status-card-body">
+                    {% if service_groups %}
+                        {% for group in service_groups %}
+                        <div class="service-group">
+                            <div class="service-group-header" data-bs-toggle="collapse" data-bs-target="#group-{{ loop.index }}" role="button">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-chevron-down me-2"></i>
+                                        <strong>{{ group.name }}</strong>
+                                        {% if group.description %}
+                                            <span class="description ms-2">- {{ group.description[:100] }}...</span>
+                                        {% endif %}
+                                    </div>
+                                    <span class="status-badge {% if group.operational %}status-operational{% else %}status-non-operational{% endif %}">
+                                        {{ group.status }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="collapse show" id="group-{{ loop.index }}">
+                                <div class="ps-4 pt-2">
+                                    {% if group.services %}
+                                        {% for service in group.services %}
+                                        <div class="service-item">
+                                            <div>
+                                                {{ service.name }}
+                                                {% if service.description %}
+                                                    <div class="description">{{ service.description }}</div>
+                                                {% endif %}
+                                            </div>
+                                            <span class="status-badge {% if service.operational %}status-operational{% else %}status-non-operational{% endif %}">
+                                                {{ service.status }}
+                                            </span>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="text-muted">No services in this group.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-data">No service information available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Incidents Tab -->
+        <div class="tab-pane fade" id="incidents" role="tabpanel">
+            <div class="status-card">
+                <div class="status-card-header">
+                    <i class="fas fa-history me-2"></i>Past Incidents
+                </div>
+                <div class="status-card-body">
+                    {% if past_incidents %}
+                        {% for incident in past_incidents %}
+                        <div class="incident-item impact-{{ incident.impact }}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h6 class="mb-1">{{ incident.title }}</h6>
+                                <span class="badge bg-secondary">{{ incident.impact|title }}</span>
+                            </div>
+                            <div class="time-info">
+                                <i class="far fa-calendar me-1"></i>{{ incident.date }}
+                            </div>
+                            {% if incident.latest_update %}
+                                <div class="description mt-2">
+                                    {{ incident.latest_update[:200] }}{% if incident.latest_update|length > 200 %}...{% endif %}
+                                </div>
+                            {% endif %}
+                            {% if incident.url != '#' %}
+                                <a href="{{ incident.url }}" target="_blank" class="btn btn-sm btn-outline-secondary mt-2">
+                                    View Details <i class="fas fa-external-link-alt ms-1"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-data">No recent incidents.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    function refreshData() {
+        const refreshBtn = document.querySelector('button[onclick="refreshData()"]');
+        const originalHTML = refreshBtn.innerHTML;
+        refreshBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Refreshing...';
+        refreshBtn.disabled = true;
+        
+        fetch('{{ url_for("status.api_refresh") }}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                refreshBtn.innerHTML = originalHTML;
+                refreshBtn.disabled = false;
+            });
+    }
+    
+    // Auto-refresh every 5 minutes
+    setInterval(() => {
+        location.reload();
+    }, 300000);
+    
+    // Toggle service group collapse icons
+    document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const icon = this.querySelector('.fa-chevron-down, .fa-chevron-right');
+            if (icon) {
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-right');
+            }
+        });
+    });
+</script>
+{% endblock %}

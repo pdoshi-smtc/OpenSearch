@@ -1,0 +1,23 @@
+{
+  "extraction_date": "2025-10-13T11:31:40.948668",
+  "total_issues": 100,
+  "status_distribution": {
+    "Completed": 52,
+    "Awaiting implementation": 15,
+    "Open": 10,
+    "Work in progress": 9,
+    "Manager Approval CR": 3,
+    "In review": 2,
+    "Canceled": 2,
+    "Done": 2,
+    "Manager Approval BAU": 2,
+    "Under investigation": 1,
+    "CAB Approval": 1,
+    "Under review": 1
+  },
+  "priority_distribution": {
+    "P4-Low": 36,
+    "P5-Lowest": 34,
+    "P3-Medium": 30
+  }
+}

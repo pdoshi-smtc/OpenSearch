@@ -1,0 +1,95 @@
+{
+  "last_updated": "2026-04-14T19:07:51.847672",
+  "overall_status": "All Systems Operational",
+  "scheduled_maintenance": [
+    {
+      "title": "Partner Carrier Activity - Maintenance of Network Infrastructure (GNOC-11776)",
+      "url": "https://status.sierrawireless.com/incidents/yq5dk5md70l9",
+      "time": "Apr 14, 2026 19:00-22:00 UTC",
+      "description": "Our Partner Carrier will be doing maintenance on its database infrastructure as part of an initiative to improve network resiliency and efficiency. This work aligns with our commitment to providing best-in-class services with Semtech.Impact: As part of our upcoming network optimization activities, there may be very minor intermittent connectivity issues during the planned window. Some devices could experience brief, momentary disconnections, but network access is expected to restore automatically without any delay.Additional Information:  Semtech engineers will be actively monitoring the network throughout the maintenance activity. Notifications will be sent prior to the start of the work and upon completion."
+    },
+    {
+      "title": "Semtech Planned Activity \u2013 AMM05 Upgrade to version 2.18 Re-Release (API Key Support) (GNOC-11464)",
+      "url": "https://status.sierrawireless.com/incidents/d53pnnj95cdc",
+      "time": "Apr 15, 2026 04:30-12:30 UTC",
+      "description": "This notice is to inform you that Semtech will be performing scheduled maintenance to upgrade AMM05 to version 2.18 Re-Release (API Key Support). This release introduces several new features and enhancements.Impact:- The AMM web User Interface will be unavailable during the maintenance window.- Gateway operation will be unaffected during this change window.- Please confirm with your IT team if your firewall restricts access by IP address. There will be no change to the instance's FQDN. All gateways should be configured to use the server FQDN.- In case a gateway running supported firmware and configuration stops checking in after the upgrade, please reboot the gateway and troubleshoot prior to opening a new support case. Other Information:The Global NOC and Semtech Engineers will actively monitor the network during the maintenance.  Notifications will be sent prior to the start and upon completion of the maintenance window."
+    },
+    {
+      "title": "Partner Carrier Maintenance on Database Infrastructure (GNOC-11518)",
+      "url": "https://status.sierrawireless.com/incidents/1rtbxp4ht7lp",
+      "time": "Apr 15, 2026 06:00-16:00 UTC",
+      "description": "Our Partner Carrier will be doing maintenance on its database infrastructure as part of an initiative to improve network resiliency and efficiency. This work aligns with our commitment to providing best-in-class services with Semtech.Impact: As part of our upcoming network optimization activities, there may be very minor intermittent connectivity issues during the planned window. Some devices could experience brief, momentary disconnections, but network access is expected to restore automatically without any delay.Additional Information:  Semtech engineers will be actively monitoring the network throughout the maintenance activity. Notifications will be sent prior to the start of the work and upon completion."
+    },
+    {
+      "title": "Semtech Planned Activity \u2013 AMM52 Upgrade to version 2.18 Re-Release (API Key Support) (GNOC-11465)",
+      "url": "https://status.sierrawireless.com/incidents/zkjn87yp8tdc",
+      "time": "Apr 16, 2026 04:30-12:30 UTC",
+      "description": "This notice is to inform you that Semtech will be performing scheduled maintenance to upgrade AMM52 to version 2.18 Re-Release (API Key Support). This release introduces several new features and enhancements.Impact:- The AMM web User Interface will be unavailable during the maintenance window.- Gateway operation will be unaffected during this change window.- Please confirm with your IT team if your firewall restricts access by IP address. There will be no change to the instance's FQDN. All gateways should be configured to use the server FQDN.- In case a gateway running supported firmware and configuration stops checking in after the upgrade, please reboot the gateway and troubleshoot prior to opening a new support case. Other Information:The Global NOC and Semtech Engineers will actively monitor the network during the maintenance.  Notifications will be sent prior to the start and upon completion of the maintenance window."
+    },
+    {
+      "title": "Planned Partner Carrier Activity - Network Infrastructure Maintenance (GNOC-11829)",
+      "url": "https://status.sierrawireless.com/incidents/63c5j59xb0wr",
+      "time": "Apr 21, 2026 06:00-09:00 UTC",
+      "description": "Our Partner Carrier will conduct a planned Network Infrastructure Maintenance in the United States Data centers. This maintenance activity may cause temporary disturbances or delays in SMS in the US region only.  Measures have been taken to minimize the impact on customer experience.Impact: During this activity, there is a possibility for intermittent disruptions in SMS traffic and processing that may occur during maintenance.Additional Information: The Global NOC will be actively monitoring the network during the maintenance activity.  Notifications will be sent before and after the completion of the maintenance."
+    },
+    {
+      "title": "Semtech Planned Activity \u2013 Software upgrade on Router Infrastructure in Europe Data Centers (GNOC-11699)",
+      "url": "https://status.sierrawireless.com/incidents/cmy89g5r8ch9",
+      "time": "Apr 21, 2026 20:30 - Apr 22, 2026 00:30 UTC",
+      "description": "Semtech will be doing maintenance of software upgrade on its routers in Europe Data Centers as part of an initiative to improve network resiliency and efficiency. This work aligns with our commitment to providing best-in-class services with Semtech.Impact: During the maintenance window, customers may experience service disruptions in Europe region only. Affected devices may experience degradation or interruptions in SMS, Voice, and Data services and network connectivity briefly.Additional Information:  Semtech engineers will be actively monitoring the network throughout the maintenance activity. Notifications will be sent prior to the start of the work and upon completion."
+    },
+    {
+      "title": "Planned Partner Carrier Activity - Network Infrastructure Maintenance (GNOC-11819)",
+      "url": "https://status.sierrawireless.com/incidents/9wk8zcq8qrwd",
+      "time": "Apr 23, 2026 05:00-09:00 UTC",
+      "description": "Our Partner carrier has changed the maintenance schedule slightly by 1 hour.Maintenance will start one hour later. Start (UTC): 23 April 2026 05:00End (UTC): 23 April 2026 09:00"
+    }
+  ],
+  "past_incidents": [
+    {
+      "date": "Apr 13, 2026",
+      "title": "Semtech Planned Activity \u2013 AMM10 Upgrade to version 2.18 Re-Release (API Key Support) (GNOC-11463)",
+      "url": "https://status.sierrawireless.com/incidents/dlc1c1kd1g48",
+      "impact": "maintenance",
+      "latest_update": "The scheduled maintenance has been completed."
+    },
+    {
+      "date": "Apr  9, 2026",
+      "title": "Semtech Planned Activity \u2013 AMM03 Upgrade to version 2.18 Re-Release (API Key Support) (GNOC-11462)",
+      "url": "https://status.sierrawireless.com/incidents/tdzd3h5pjxzn",
+      "impact": "maintenance",
+      "latest_update": "The scheduled maintenance has been completed."
+    },
+    {
+      "date": "Apr  8, 2026",
+      "title": "Partner Carrier Maintenance on Database Infrastructure (GNOC-11515)",
+      "url": "https://status.sierrawireless.com/incidents/kqv8gpxncht3",
+      "impact": "maintenance",
+      "latest_update": "The scheduled maintenance has been completed."
+    },
+    {
+      "date": "Apr  8, 2026",
+      "title": "Semtech Planned Activity \u2013 AMM08 Upgrade to version 2.18 Re-Release (API Key Support) (GNOC-11461)",
+      "url": "https://status.sierrawireless.com/incidents/34jjk99g93vt",
+      "impact": "maintenance",
+      "latest_update": "The scheduled maintenance has been completed."
+    },
+    {
+      "date": "Apr  8, 2026",
+      "title": "Semtech Planned maintenance in NAM Lithia Springs and Madison Data Centers (GNOC-11693)",
+      "url": "https://status.sierrawireless.com/incidents/f3pk1cy32jbt",
+      "impact": "maintenance",
+      "latest_update": "This notice is to inform you that scheduled maintenance on NAM Lithia Springs and Madison Data Centers (GNOC-11693) has Failed. The full list of affected services can be found below.A new notice will be published once this maintenance is rescheduled for a later date."
+    },
+    {
+      "date": "Apr  8, 2026",
+      "title": "Partner Carrier Maintenance on ORS GEO REDUNDANT PLATFORM (GNOC-11690)",
+      "url": "https://status.sierrawireless.com/incidents/x5scb5kxpjtk",
+      "impact": "maintenance",
+      "latest_update": "The scheduled maintenance has been completed."
+    }
+  ],
+  "services": [],
+  "service_groups": [],
+  "non_operational_devices": []
+}

@@ -1,0 +1,278 @@
+2025-07-26 19:50:14,044 - __main__ - INFO - Starting alerts data extraction...
+2025-07-26 19:50:14,045 - __main__ - INFO - Starting to fetch alerts (maximum: 1000)
+2025-07-26 19:50:14,045 - __main__ - INFO - Fetching alerts: offset=0, limit=50 (retrieved: 0/1000)
+2025-07-26 19:50:16,221 - __main__ - INFO - Added 50 alerts. Total: 50
+2025-07-26 19:50:16,222 - __main__ - INFO - Fetching alerts: offset=50, limit=50 (retrieved: 50/1000)
+2025-07-26 19:50:18,079 - __main__ - INFO - Added 50 alerts. Total: 100
+2025-07-26 19:50:18,081 - __main__ - INFO - Fetching alerts: offset=100, limit=50 (retrieved: 100/1000)
+2025-07-26 19:50:19,122 - __main__ - INFO - Added 50 alerts. Total: 150
+2025-07-26 19:50:19,122 - __main__ - INFO - Fetching alerts: offset=150, limit=50 (retrieved: 150/1000)
+2025-07-26 19:50:19,927 - __main__ - INFO - Added 50 alerts. Total: 200
+2025-07-26 19:50:19,928 - __main__ - INFO - Fetching alerts: offset=200, limit=50 (retrieved: 200/1000)
+2025-07-26 19:50:21,406 - __main__ - INFO - Added 50 alerts. Total: 250
+2025-07-26 19:50:21,406 - __main__ - INFO - Fetching alerts: offset=250, limit=50 (retrieved: 250/1000)
+2025-07-26 19:50:22,723 - __main__ - INFO - Added 50 alerts. Total: 300
+2025-07-26 19:50:22,724 - __main__ - INFO - Fetching alerts: offset=300, limit=50 (retrieved: 300/1000)
+2025-07-26 19:50:24,432 - __main__ - INFO - Added 50 alerts. Total: 350
+2025-07-26 19:50:24,433 - __main__ - INFO - Fetching alerts: offset=350, limit=50 (retrieved: 350/1000)
+2025-07-26 19:50:25,986 - __main__ - INFO - Added 50 alerts. Total: 400
+2025-07-26 19:50:25,988 - __main__ - INFO - Fetching alerts: offset=400, limit=50 (retrieved: 400/1000)
+2025-07-26 19:50:27,330 - __main__ - INFO - Added 50 alerts. Total: 450
+2025-07-26 19:50:27,331 - __main__ - INFO - Fetching alerts: offset=450, limit=50 (retrieved: 450/1000)
+2025-07-26 19:50:29,023 - __main__ - INFO - Added 50 alerts. Total: 500
+2025-07-26 19:50:29,024 - __main__ - INFO - Fetching alerts: offset=500, limit=50 (retrieved: 500/1000)
+2025-07-26 19:50:31,115 - __main__ - INFO - Added 50 alerts. Total: 550
+2025-07-26 19:50:31,116 - __main__ - INFO - Fetching alerts: offset=550, limit=50 (retrieved: 550/1000)
+2025-07-26 19:50:32,351 - __main__ - INFO - Added 50 alerts. Total: 600
+2025-07-26 19:50:32,352 - __main__ - INFO - Fetching alerts: offset=600, limit=50 (retrieved: 600/1000)
+2025-07-26 19:50:33,523 - __main__ - INFO - Added 50 alerts. Total: 650
+2025-07-26 19:50:33,524 - __main__ - INFO - Fetching alerts: offset=650, limit=50 (retrieved: 650/1000)
+2025-07-26 19:50:34,369 - __main__ - INFO - Added 50 alerts. Total: 700
+2025-07-26 19:50:34,370 - __main__ - INFO - Fetching alerts: offset=700, limit=50 (retrieved: 700/1000)
+2025-07-26 19:50:35,189 - __main__ - INFO - Added 50 alerts. Total: 750
+2025-07-26 19:50:35,192 - __main__ - INFO - Fetching alerts: offset=750, limit=50 (retrieved: 750/1000)
+2025-07-26 19:50:36,790 - __main__ - INFO - Added 50 alerts. Total: 800
+2025-07-26 19:50:36,790 - __main__ - INFO - Fetching alerts: offset=800, limit=50 (retrieved: 800/1000)
+2025-07-26 19:50:37,999 - __main__ - INFO - Added 50 alerts. Total: 850
+2025-07-26 19:50:38,000 - __main__ - INFO - Fetching alerts: offset=850, limit=50 (retrieved: 850/1000)
+2025-07-26 19:50:39,042 - __main__ - INFO - Added 50 alerts. Total: 900
+2025-07-26 19:50:39,043 - __main__ - INFO - Fetching alerts: offset=900, limit=50 (retrieved: 900/1000)
+2025-07-26 19:50:39,945 - __main__ - INFO - Added 50 alerts. Total: 950
+2025-07-26 19:50:39,945 - __main__ - INFO - Fetching alerts: offset=950, limit=50 (retrieved: 950/1000)
+2025-07-26 19:50:40,727 - __main__ - INFO - Added 50 alerts. Total: 1000
+2025-07-26 19:50:40,728 - __main__ - INFO - Reached maximum limit of 1000 alerts
+2025-07-26 19:50:40,729 - __main__ - INFO - Successfully retrieved 1000 alerts
+2025-07-26 19:50:40,818 - __main__ - INFO - Successfully saved 1000 alerts to data\alerts.json
+2025-07-26 19:50:40,819 - __main__ - INFO - Alert extraction completed successfully
+2025-07-26 20:01:26,155 - __main__ - INFO - Starting alerts data extraction...
+2025-07-26 20:01:26,155 - __main__ - INFO - Starting to fetch alerts (maximum: 1000)
+2025-07-26 20:01:26,156 - __main__ - INFO - Fetching alerts: offset=0, limit=50 (retrieved: 0/1000)
+2025-07-26 20:01:27,909 - __main__ - INFO - Added 50 alerts. Total: 50
+2025-07-26 20:01:27,910 - __main__ - INFO - Fetching alerts: offset=50, limit=50 (retrieved: 50/1000)
+2025-07-26 20:01:29,238 - __main__ - INFO - Added 50 alerts. Total: 100
+2025-07-26 20:01:29,239 - __main__ - INFO - Fetching alerts: offset=100, limit=50 (retrieved: 100/1000)
+2025-07-26 20:01:30,386 - __main__ - INFO - Added 50 alerts. Total: 150
+2025-07-26 20:01:30,387 - __main__ - INFO - Fetching alerts: offset=150, limit=50 (retrieved: 150/1000)
+2025-07-26 20:01:32,100 - __main__ - INFO - Added 50 alerts. Total: 200
+2025-07-26 20:01:32,101 - __main__ - INFO - Fetching alerts: offset=200, limit=50 (retrieved: 200/1000)
+2025-07-26 20:01:33,299 - __main__ - INFO - Added 50 alerts. Total: 250
+2025-07-26 20:01:33,299 - __main__ - INFO - Fetching alerts: offset=250, limit=50 (retrieved: 250/1000)
+2025-07-26 20:01:34,204 - __main__ - INFO - Added 50 alerts. Total: 300
+2025-07-26 20:01:34,205 - __main__ - INFO - Fetching alerts: offset=300, limit=50 (retrieved: 300/1000)
+2025-07-26 20:01:35,181 - __main__ - INFO - Added 50 alerts. Total: 350
+2025-07-26 20:01:35,182 - __main__ - INFO - Fetching alerts: offset=350, limit=50 (retrieved: 350/1000)
+2025-07-26 20:01:36,914 - __main__ - INFO - Added 50 alerts. Total: 400
+2025-07-26 20:01:36,915 - __main__ - INFO - Fetching alerts: offset=400, limit=50 (retrieved: 400/1000)
+2025-07-26 20:01:37,865 - __main__ - INFO - Added 50 alerts. Total: 450
+2025-07-26 20:01:37,866 - __main__ - INFO - Fetching alerts: offset=450, limit=50 (retrieved: 450/1000)
+2025-07-26 20:01:38,710 - __main__ - INFO - Added 50 alerts. Total: 500
+2025-07-26 20:01:38,711 - __main__ - INFO - Fetching alerts: offset=500, limit=50 (retrieved: 500/1000)
+2025-07-26 20:01:39,403 - __main__ - INFO - Added 50 alerts. Total: 550
+2025-07-26 20:01:39,404 - __main__ - INFO - Fetching alerts: offset=550, limit=50 (retrieved: 550/1000)
+2025-07-26 20:01:40,411 - __main__ - INFO - Added 50 alerts. Total: 600
+2025-07-26 20:01:40,412 - __main__ - INFO - Fetching alerts: offset=600, limit=50 (retrieved: 600/1000)
+2025-07-26 20:01:41,644 - __main__ - INFO - Added 50 alerts. Total: 650
+2025-07-26 20:01:41,645 - __main__ - INFO - Fetching alerts: offset=650, limit=50 (retrieved: 650/1000)
+2025-07-26 20:01:42,588 - __main__ - INFO - Added 50 alerts. Total: 700
+2025-07-26 20:01:42,588 - __main__ - INFO - Fetching alerts: offset=700, limit=50 (retrieved: 700/1000)
+2025-07-26 20:01:43,563 - __main__ - INFO - Added 50 alerts. Total: 750
+2025-07-26 20:01:43,564 - __main__ - INFO - Fetching alerts: offset=750, limit=50 (retrieved: 750/1000)
+2025-07-26 20:01:44,430 - __main__ - INFO - Added 50 alerts. Total: 800
+2025-07-26 20:01:44,430 - __main__ - INFO - Fetching alerts: offset=800, limit=50 (retrieved: 800/1000)
+2025-07-26 20:01:45,976 - __main__ - INFO - Added 50 alerts. Total: 850
+2025-07-26 20:01:45,977 - __main__ - INFO - Fetching alerts: offset=850, limit=50 (retrieved: 850/1000)
+2025-07-26 20:01:47,272 - __main__ - INFO - Added 50 alerts. Total: 900
+2025-07-26 20:01:47,273 - __main__ - INFO - Fetching alerts: offset=900, limit=50 (retrieved: 900/1000)
+2025-07-26 20:01:48,445 - __main__ - INFO - Added 50 alerts. Total: 950
+2025-07-26 20:01:48,446 - __main__ - INFO - Fetching alerts: offset=950, limit=50 (retrieved: 950/1000)
+2025-07-26 20:01:48,963 - __main__ - INFO - Added 50 alerts. Total: 1000
+2025-07-26 20:01:48,964 - __main__ - INFO - Reached maximum limit of 1000 alerts
+2025-07-26 20:01:48,964 - __main__ - INFO - Successfully retrieved 1000 alerts
+2025-07-26 20:01:49,068 - __main__ - INFO - Successfully saved 1000 alerts to data\alerts.json
+2025-07-26 20:01:49,068 - __main__ - INFO - Alert extraction completed successfully
+2025-07-28 14:56:21,321 - __main__ - INFO - Starting alerts data extraction...
+2025-07-28 14:56:21,321 - __main__ - INFO - Starting to fetch alerts (maximum: 1000)
+2025-07-28 14:56:21,322 - __main__ - INFO - Fetching alerts: offset=0, limit=50 (retrieved: 0/1000)
+2025-07-28 14:56:22,588 - __main__ - INFO - Added 50 alerts. Total: 50
+2025-07-28 14:56:22,589 - __main__ - INFO - Fetching alerts: offset=50, limit=50 (retrieved: 50/1000)
+2025-07-28 14:56:23,986 - __main__ - INFO - Added 50 alerts. Total: 100
+2025-07-28 14:56:23,987 - __main__ - INFO - Fetching alerts: offset=100, limit=50 (retrieved: 100/1000)
+2025-07-28 14:56:24,909 - __main__ - INFO - Added 50 alerts. Total: 150
+2025-07-28 14:56:24,910 - __main__ - INFO - Fetching alerts: offset=150, limit=50 (retrieved: 150/1000)
+2025-07-28 14:56:27,232 - __main__ - INFO - Added 50 alerts. Total: 200
+2025-07-28 14:56:27,232 - __main__ - INFO - Fetching alerts: offset=200, limit=50 (retrieved: 200/1000)
+2025-07-28 14:56:28,308 - __main__ - INFO - Added 50 alerts. Total: 250
+2025-07-28 14:56:28,308 - __main__ - INFO - Fetching alerts: offset=250, limit=50 (retrieved: 250/1000)
+2025-07-28 14:56:29,475 - __main__ - INFO - Added 50 alerts. Total: 300
+2025-07-28 14:56:29,476 - __main__ - INFO - Fetching alerts: offset=300, limit=50 (retrieved: 300/1000)
+2025-07-28 14:56:30,650 - __main__ - INFO - Added 50 alerts. Total: 350
+2025-07-28 14:56:30,651 - __main__ - INFO - Fetching alerts: offset=350, limit=50 (retrieved: 350/1000)
+2025-07-28 14:56:31,699 - __main__ - INFO - Added 50 alerts. Total: 400
+2025-07-28 14:56:31,699 - __main__ - INFO - Fetching alerts: offset=400, limit=50 (retrieved: 400/1000)
+2025-07-28 14:56:32,496 - __main__ - INFO - Added 50 alerts. Total: 450
+2025-07-28 14:56:32,496 - __main__ - INFO - Fetching alerts: offset=450, limit=50 (retrieved: 450/1000)
+2025-07-28 14:56:33,659 - __main__ - INFO - Added 50 alerts. Total: 500
+2025-07-28 14:56:33,660 - __main__ - INFO - Fetching alerts: offset=500, limit=50 (retrieved: 500/1000)
+2025-07-28 14:56:34,868 - __main__ - INFO - Added 50 alerts. Total: 550
+2025-07-28 14:56:34,869 - __main__ - INFO - Fetching alerts: offset=550, limit=50 (retrieved: 550/1000)
+2025-07-28 14:56:35,396 - __main__ - INFO - Added 50 alerts. Total: 600
+2025-07-28 14:56:35,396 - __main__ - INFO - Fetching alerts: offset=600, limit=50 (retrieved: 600/1000)
+2025-07-28 14:56:36,440 - __main__ - INFO - Added 50 alerts. Total: 650
+2025-07-28 14:56:36,441 - __main__ - INFO - Fetching alerts: offset=650, limit=50 (retrieved: 650/1000)
+2025-07-28 14:56:37,504 - __main__ - INFO - Added 50 alerts. Total: 700
+2025-07-28 14:56:37,505 - __main__ - INFO - Fetching alerts: offset=700, limit=50 (retrieved: 700/1000)
+2025-07-28 14:56:39,074 - __main__ - INFO - Added 50 alerts. Total: 750
+2025-07-28 14:56:39,075 - __main__ - INFO - Fetching alerts: offset=750, limit=50 (retrieved: 750/1000)
+2025-07-28 14:56:40,645 - __main__ - INFO - Added 50 alerts. Total: 800
+2025-07-28 14:56:40,646 - __main__ - INFO - Fetching alerts: offset=800, limit=50 (retrieved: 800/1000)
+2025-07-28 14:56:42,227 - __main__ - INFO - Added 50 alerts. Total: 850
+2025-07-28 14:56:42,228 - __main__ - INFO - Fetching alerts: offset=850, limit=50 (retrieved: 850/1000)
+2025-07-28 14:56:43,031 - __main__ - INFO - Added 50 alerts. Total: 900
+2025-07-28 14:56:43,032 - __main__ - INFO - Fetching alerts: offset=900, limit=50 (retrieved: 900/1000)
+2025-07-28 14:56:44,202 - __main__ - INFO - Added 50 alerts. Total: 950
+2025-07-28 14:56:44,203 - __main__ - INFO - Fetching alerts: offset=950, limit=50 (retrieved: 950/1000)
+2025-07-28 14:56:45,352 - __main__ - INFO - Added 50 alerts. Total: 1000
+2025-07-28 14:56:45,353 - __main__ - INFO - Reached maximum limit of 1000 alerts
+2025-07-28 14:56:45,354 - __main__ - INFO - Successfully retrieved 1000 alerts
+2025-07-28 14:56:45,559 - __main__ - INFO - Successfully saved 1000 alerts to data\alerts.json
+2025-07-28 14:56:45,562 - __main__ - INFO - Alert extraction completed successfully
+2025-10-13 11:05:41,406 - __main__ - ERROR - JIRA credentials not found in environment variables
+2025-10-13 11:05:41,413 - __main__ - ERROR - Extraction failed: Please set JIRA_USER_EMAIL and JIRA_API_TOKEN in .env file
+2025-10-13 11:07:26,545 - __main__ - INFO - Starting alerts data extraction...
+2025-10-13 11:07:26,546 - __main__ - INFO - Starting to fetch alerts (maximum: 1000)
+2025-10-13 11:07:26,546 - __main__ - INFO - Fetching alerts: offset=0, limit=50 (retrieved: 0/1000)
+2025-10-13 11:07:27,897 - __main__ - INFO - Added 50 alerts. Total: 50
+2025-10-13 11:07:27,897 - __main__ - INFO - Fetching alerts: offset=50, limit=50 (retrieved: 50/1000)
+2025-10-13 11:07:29,343 - __main__ - INFO - Added 50 alerts. Total: 100
+2025-10-13 11:07:29,344 - __main__ - INFO - Fetching alerts: offset=100, limit=50 (retrieved: 100/1000)
+2025-10-13 11:07:31,169 - __main__ - INFO - Added 50 alerts. Total: 150
+2025-10-13 11:07:31,169 - __main__ - INFO - Fetching alerts: offset=150, limit=50 (retrieved: 150/1000)
+2025-10-13 11:07:32,795 - __main__ - INFO - Added 50 alerts. Total: 200
+2025-10-13 11:07:32,796 - __main__ - INFO - Fetching alerts: offset=200, limit=50 (retrieved: 200/1000)
+2025-10-13 11:07:34,384 - __main__ - INFO - Added 50 alerts. Total: 250
+2025-10-13 11:07:34,385 - __main__ - INFO - Fetching alerts: offset=250, limit=50 (retrieved: 250/1000)
+2025-10-13 11:07:35,608 - __main__ - INFO - Added 50 alerts. Total: 300
+2025-10-13 11:07:35,609 - __main__ - INFO - Fetching alerts: offset=300, limit=50 (retrieved: 300/1000)
+2025-10-13 11:07:37,024 - __main__ - INFO - Added 50 alerts. Total: 350
+2025-10-13 11:07:37,024 - __main__ - INFO - Fetching alerts: offset=350, limit=50 (retrieved: 350/1000)
+2025-10-13 11:07:38,391 - __main__ - INFO - Added 50 alerts. Total: 400
+2025-10-13 11:07:38,392 - __main__ - INFO - Fetching alerts: offset=400, limit=50 (retrieved: 400/1000)
+2025-10-13 11:07:39,927 - __main__ - INFO - Added 50 alerts. Total: 450
+2025-10-13 11:07:39,928 - __main__ - INFO - Fetching alerts: offset=450, limit=50 (retrieved: 450/1000)
+2025-10-13 11:07:41,827 - __main__ - INFO - Added 50 alerts. Total: 500
+2025-10-13 11:07:41,828 - __main__ - INFO - Fetching alerts: offset=500, limit=50 (retrieved: 500/1000)
+2025-10-13 11:07:43,193 - __main__ - INFO - Added 50 alerts. Total: 550
+2025-10-13 11:07:43,194 - __main__ - INFO - Fetching alerts: offset=550, limit=50 (retrieved: 550/1000)
+2025-10-13 11:07:44,761 - __main__ - INFO - Added 50 alerts. Total: 600
+2025-10-13 11:07:44,762 - __main__ - INFO - Fetching alerts: offset=600, limit=50 (retrieved: 600/1000)
+2025-10-13 11:07:45,968 - __main__ - INFO - Added 50 alerts. Total: 650
+2025-10-13 11:07:45,969 - __main__ - INFO - Fetching alerts: offset=650, limit=50 (retrieved: 650/1000)
+2025-10-13 11:07:47,302 - __main__ - INFO - Added 50 alerts. Total: 700
+2025-10-13 11:07:47,303 - __main__ - INFO - Fetching alerts: offset=700, limit=50 (retrieved: 700/1000)
+2025-10-13 11:07:48,289 - __main__ - INFO - Added 50 alerts. Total: 750
+2025-10-13 11:07:48,290 - __main__ - INFO - Fetching alerts: offset=750, limit=50 (retrieved: 750/1000)
+2025-10-13 11:07:49,801 - __main__ - INFO - Added 50 alerts. Total: 800
+2025-10-13 11:07:49,802 - __main__ - INFO - Fetching alerts: offset=800, limit=50 (retrieved: 800/1000)
+2025-10-13 11:07:50,720 - __main__ - INFO - Added 50 alerts. Total: 850
+2025-10-13 11:07:50,721 - __main__ - INFO - Fetching alerts: offset=850, limit=50 (retrieved: 850/1000)
+2025-10-13 11:07:51,960 - __main__ - INFO - Added 50 alerts. Total: 900
+2025-10-13 11:07:51,961 - __main__ - INFO - Fetching alerts: offset=900, limit=50 (retrieved: 900/1000)
+2025-10-13 11:07:53,082 - __main__ - INFO - Added 50 alerts. Total: 950
+2025-10-13 11:07:53,083 - __main__ - INFO - Fetching alerts: offset=950, limit=50 (retrieved: 950/1000)
+2025-10-13 11:07:54,463 - __main__ - INFO - Added 50 alerts. Total: 1000
+2025-10-13 11:07:54,464 - __main__ - INFO - Reached maximum limit of 1000 alerts
+2025-10-13 11:07:54,465 - __main__ - INFO - Successfully retrieved 1000 alerts
+2025-10-13 11:07:54,676 - __main__ - INFO - Successfully saved 1000 alerts to data\alerts.json
+2025-10-13 11:07:54,677 - __main__ - INFO - Alert extraction completed successfully
+2025-10-13 11:11:55,051 - __main__ - INFO - Starting alerts data extraction...
+2025-10-13 11:11:55,052 - __main__ - INFO - Starting to fetch alerts (maximum: 1000)
+2025-10-13 11:11:55,053 - __main__ - INFO - Fetching alerts: offset=0, limit=50 (retrieved: 0/1000)
+2025-10-13 11:11:56,496 - __main__ - INFO - Added 50 alerts. Total: 50
+2025-10-13 11:11:56,497 - __main__ - INFO - Fetching alerts: offset=50, limit=50 (retrieved: 50/1000)
+2025-10-13 11:11:58,258 - __main__ - INFO - Added 50 alerts. Total: 100
+2025-10-13 11:11:58,259 - __main__ - INFO - Fetching alerts: offset=100, limit=50 (retrieved: 100/1000)
+2025-10-13 11:11:59,558 - __main__ - INFO - Added 50 alerts. Total: 150
+2025-10-13 11:11:59,559 - __main__ - INFO - Fetching alerts: offset=150, limit=50 (retrieved: 150/1000)
+2025-10-13 11:12:01,128 - __main__ - INFO - Added 50 alerts. Total: 200
+2025-10-13 11:12:01,129 - __main__ - INFO - Fetching alerts: offset=200, limit=50 (retrieved: 200/1000)
+2025-10-13 11:12:02,851 - __main__ - INFO - Added 50 alerts. Total: 250
+2025-10-13 11:12:02,852 - __main__ - INFO - Fetching alerts: offset=250, limit=50 (retrieved: 250/1000)
+2025-10-13 11:12:04,115 - __main__ - INFO - Added 50 alerts. Total: 300
+2025-10-13 11:12:04,115 - __main__ - INFO - Fetching alerts: offset=300, limit=50 (retrieved: 300/1000)
+2025-10-13 11:12:04,978 - __main__ - INFO - Added 50 alerts. Total: 350
+2025-10-13 11:12:04,979 - __main__ - INFO - Fetching alerts: offset=350, limit=50 (retrieved: 350/1000)
+2025-10-13 11:12:06,508 - __main__ - INFO - Added 50 alerts. Total: 400
+2025-10-13 11:12:06,509 - __main__ - INFO - Fetching alerts: offset=400, limit=50 (retrieved: 400/1000)
+2025-10-13 11:12:07,483 - __main__ - INFO - Added 50 alerts. Total: 450
+2025-10-13 11:12:07,483 - __main__ - INFO - Fetching alerts: offset=450, limit=50 (retrieved: 450/1000)
+2025-10-13 11:12:08,902 - __main__ - INFO - Added 50 alerts. Total: 500
+2025-10-13 11:12:08,902 - __main__ - INFO - Fetching alerts: offset=500, limit=50 (retrieved: 500/1000)
+2025-10-13 11:12:10,159 - __main__ - INFO - Added 50 alerts. Total: 550
+2025-10-13 11:12:10,160 - __main__ - INFO - Fetching alerts: offset=550, limit=50 (retrieved: 550/1000)
+2025-10-13 11:12:11,751 - __main__ - INFO - Added 50 alerts. Total: 600
+2025-10-13 11:12:11,752 - __main__ - INFO - Fetching alerts: offset=600, limit=50 (retrieved: 600/1000)
+2025-10-13 11:12:13,193 - __main__ - INFO - Added 50 alerts. Total: 650
+2025-10-13 11:12:13,194 - __main__ - INFO - Fetching alerts: offset=650, limit=50 (retrieved: 650/1000)
+2025-10-13 11:12:14,116 - __main__ - INFO - Added 50 alerts. Total: 700
+2025-10-13 11:12:14,116 - __main__ - INFO - Fetching alerts: offset=700, limit=50 (retrieved: 700/1000)
+2025-10-13 11:12:15,862 - __main__ - INFO - Added 50 alerts. Total: 750
+2025-10-13 11:12:15,864 - __main__ - INFO - Fetching alerts: offset=750, limit=50 (retrieved: 750/1000)
+2025-10-13 11:12:17,207 - __main__ - INFO - Added 50 alerts. Total: 800
+2025-10-13 11:12:17,208 - __main__ - INFO - Fetching alerts: offset=800, limit=50 (retrieved: 800/1000)
+2025-10-13 11:12:18,536 - __main__ - INFO - Added 50 alerts. Total: 850
+2025-10-13 11:12:18,537 - __main__ - INFO - Fetching alerts: offset=850, limit=50 (retrieved: 850/1000)
+2025-10-13 11:12:19,948 - __main__ - INFO - Added 50 alerts. Total: 900
+2025-10-13 11:12:19,948 - __main__ - INFO - Fetching alerts: offset=900, limit=50 (retrieved: 900/1000)
+2025-10-13 11:12:21,087 - __main__ - INFO - Added 50 alerts. Total: 950
+2025-10-13 11:12:21,088 - __main__ - INFO - Fetching alerts: offset=950, limit=50 (retrieved: 950/1000)
+2025-10-13 11:12:21,969 - __main__ - INFO - Added 50 alerts. Total: 1000
+2025-10-13 11:12:21,969 - __main__ - INFO - Reached maximum limit of 1000 alerts
+2025-10-13 11:12:21,970 - __main__ - INFO - Successfully retrieved 1000 alerts
+2025-10-13 11:12:22,075 - __main__ - INFO - Successfully saved 1000 alerts to data\alerts.json
+2025-10-13 11:12:22,076 - __main__ - INFO - Alert extraction completed successfully
+2025-10-13 11:16:54,169 - __main__ - INFO - Starting alerts data extraction...
+2025-10-13 11:16:54,170 - __main__ - INFO - Starting to fetch alerts (maximum: 1000)
+2025-10-13 11:16:54,171 - __main__ - INFO - Fetching alerts: offset=0, limit=50 (retrieved: 0/1000)
+2025-10-13 11:16:55,643 - __main__ - INFO - Added 50 alerts. Total: 50
+2025-10-13 11:16:55,643 - __main__ - INFO - Fetching alerts: offset=50, limit=50 (retrieved: 50/1000)
+2025-10-13 11:16:57,623 - __main__ - INFO - Added 50 alerts. Total: 100
+2025-10-13 11:16:57,624 - __main__ - INFO - Fetching alerts: offset=100, limit=50 (retrieved: 100/1000)
+2025-10-13 11:16:59,246 - __main__ - INFO - Added 50 alerts. Total: 150
+2025-10-13 11:16:59,247 - __main__ - INFO - Fetching alerts: offset=150, limit=50 (retrieved: 150/1000)
+2025-10-13 11:17:00,945 - __main__ - INFO - Added 50 alerts. Total: 200
+2025-10-13 11:17:00,946 - __main__ - INFO - Fetching alerts: offset=200, limit=50 (retrieved: 200/1000)
+2025-10-13 11:17:02,746 - __main__ - INFO - Added 50 alerts. Total: 250
+2025-10-13 11:17:02,747 - __main__ - INFO - Fetching alerts: offset=250, limit=50 (retrieved: 250/1000)
+2025-10-13 11:17:04,185 - __main__ - INFO - Added 50 alerts. Total: 300
+2025-10-13 11:17:04,185 - __main__ - INFO - Fetching alerts: offset=300, limit=50 (retrieved: 300/1000)
+2025-10-13 11:17:05,532 - __main__ - INFO - Added 50 alerts. Total: 350
+2025-10-13 11:17:05,533 - __main__ - INFO - Fetching alerts: offset=350, limit=50 (retrieved: 350/1000)
+2025-10-13 11:17:06,844 - __main__ - INFO - Added 50 alerts. Total: 400
+2025-10-13 11:17:06,845 - __main__ - INFO - Fetching alerts: offset=400, limit=50 (retrieved: 400/1000)
+2025-10-13 11:17:08,096 - __main__ - INFO - Added 50 alerts. Total: 450
+2025-10-13 11:17:08,097 - __main__ - INFO - Fetching alerts: offset=450, limit=50 (retrieved: 450/1000)
+2025-10-13 11:17:09,597 - __main__ - INFO - Added 50 alerts. Total: 500
+2025-10-13 11:17:09,597 - __main__ - INFO - Fetching alerts: offset=500, limit=50 (retrieved: 500/1000)
+2025-10-13 11:17:10,888 - __main__ - INFO - Added 50 alerts. Total: 550
+2025-10-13 11:17:10,889 - __main__ - INFO - Fetching alerts: offset=550, limit=50 (retrieved: 550/1000)
+2025-10-13 11:17:12,110 - __main__ - INFO - Added 50 alerts. Total: 600
+2025-10-13 11:17:12,111 - __main__ - INFO - Fetching alerts: offset=600, limit=50 (retrieved: 600/1000)
+2025-10-13 11:17:13,685 - __main__ - INFO - Added 50 alerts. Total: 650
+2025-10-13 11:17:13,685 - __main__ - INFO - Fetching alerts: offset=650, limit=50 (retrieved: 650/1000)
+2025-10-13 11:17:14,804 - __main__ - INFO - Added 50 alerts. Total: 700
+2025-10-13 11:17:14,805 - __main__ - INFO - Fetching alerts: offset=700, limit=50 (retrieved: 700/1000)
+2025-10-13 11:17:17,148 - __main__ - INFO - Added 50 alerts. Total: 750
+2025-10-13 11:17:17,148 - __main__ - INFO - Fetching alerts: offset=750, limit=50 (retrieved: 750/1000)
+2025-10-13 11:17:18,718 - __main__ - INFO - Added 50 alerts. Total: 800
+2025-10-13 11:17:18,718 - __main__ - INFO - Fetching alerts: offset=800, limit=50 (retrieved: 800/1000)
+2025-10-13 11:17:20,291 - __main__ - INFO - Added 50 alerts. Total: 850
+2025-10-13 11:17:20,308 - __main__ - INFO - Fetching alerts: offset=850, limit=50 (retrieved: 850/1000)
+2025-10-13 11:17:22,019 - __main__ - INFO - Added 50 alerts. Total: 900
+2025-10-13 11:17:22,020 - __main__ - INFO - Fetching alerts: offset=900, limit=50 (retrieved: 900/1000)
+2025-10-13 11:17:23,433 - __main__ - INFO - Added 50 alerts. Total: 950
+2025-10-13 11:17:23,433 - __main__ - INFO - Fetching alerts: offset=950, limit=50 (retrieved: 950/1000)
+2025-10-13 11:17:25,132 - __main__ - INFO - Added 50 alerts. Total: 1000
+2025-10-13 11:17:25,133 - __main__ - INFO - Reached maximum limit of 1000 alerts
+2025-10-13 11:17:25,133 - __main__ - INFO - Successfully retrieved 1000 alerts
+2025-10-13 11:17:25,297 - __main__ - INFO - Successfully saved 1000 alerts to data\alerts.json
+2025-10-13 11:17:25,297 - __main__ - INFO - Alert extraction completed successfully

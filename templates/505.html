@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Internal Server Error | Semtech Data Intelligence Platform{% endblock %}
+
+{% block custom_css %}
+<style>
+    .error-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .error-content {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .error-code {
+        font-size: 8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        line-height: 1;
+    }
+    
+    .error-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--semtech-dark);
+        margin-bottom: 1rem;
+    }
+    
+    .error-description {
+        font-size: 1.1rem;
+        color: var(--semtech-gray);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+    
+    .error-illustration {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .error-illustration i {
+        font-size: 6rem;
+        color: #dc3545;
+        opacity: 0.5;
+    }
+    
+    .gear {
+        position: absolute;
+        color: var(--semtech-gray);
+        opacity: 0.3;
+    }
+    
+    .gear-1 {
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2rem;
+        animation: rotate 4s linear infinite;
+    }
+    
+    .gear-2 {
+        bottom: -10px;
+        right: 20%;
+        font-size: 1.5rem;
+        animation: rotate-reverse 3s linear infinite;
+    }
+    
+    .gear-3 {
+        bottom: -10px;
+        left: 20%;
+        font-size: 1.5rem;
+        animation: rotate 5s linear infinite;
+    }
+    
+    @keyframes rotate {
+        from { transform: translateX(-50%) rotate(0deg); }
+        to { transform: translateX(-50%) rotate(360deg); }
+    }
+    
+    @keyframes rotate-reverse {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(-360deg); }
+    }
+    
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+    
+    .status-info {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        border-left: 4px solid #dc3545;
+    }
+    
+    .status-info h5 {
+        color: var(--semtech-dark);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .status-info p {
+        margin-bottom: 0.5rem;
+        color: var(--semtech-gray);
+    }
+    
+    .status-info .timestamp {
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .troubleshooting-steps {
+        text-align: left;
+        background: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        margin-top: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .troubleshooting-steps h5 {
+        color: var(--semtech-dark);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .troubleshooting-steps ol {
+        color: var(--semtech-gray);
+        padding-left: 1.5rem;
+        margin-bottom: 0;
+    }
+    
+    .troubleshooting-steps li {
+        margin-bottom: 0.75rem;
+    }
+    
+    .pulse {
+        animation: pulse-animation 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-animation {
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); }
+    }
+    
+    .error-reference {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 0.25rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container error-container">
+    <div class="error-content">
+        <div class="error-illustration">
+            <i class="fas fa-exclamation-triangle pulse"></i>
+            <i class="fas fa-cog gear gear-1"></i>
+            <i class="fas fa-cog gear gear-2"></i>
+            <i class="fas fa-cog gear gear-3"></i>
+        </div>
+        
+        <div class="error-code">500</div>
+        
+        <h1 class="error-title">Internal Server Error</h1>
+        
+        <p class="error-description">
+            We're experiencing technical difficulties. Our servers encountered an unexpected condition that prevented them from fulfilling your request. 
+            Our engineering team has been notified and is working to resolve the issue.
+        </p>
+        
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-primary-custom">
+                <i class="fas fa-home me-2"></i>Go to Homepage
+            </a>
+            <button onclick="location.reload()" class="btn btn-outline-primary">
+                <i class="fas fa-sync-alt me-2"></i>Try Again
+            </button>
+            <a href="{{ url_for('status.status_home') }}" class="btn btn-outline-danger">
+                <i class="fas fa-heartbeat me-2"></i>Check System Status
+            </a>
+        </div>
+        
+        <div class="status-info">
+            <h5><i class="fas fa-info-circle me-2"></i>Error Details</h5>
+            <p><strong>Error Code:</strong> 500 - Internal Server Error</p>
+            <p><strong>Timestamp:</strong> <span class="timestamp" id="timestamp"></span></p>
+            <p><strong>Request ID:</strong> <span class="timestamp" id="requestId"></span></p>
+        </div>
+        
+        <div class="troubleshooting-steps">
+            <h5><i class="fas fa-tools me-2"></i>Troubleshooting Steps</h5>
+            <ol>
+                <li>Try refreshing the page in a few moments</li>
+                <li>Clear your browser cache and cookies</li>
+                <li>Check our <a href="{{ url_for('status.status_home') }}">system status page</a> for any ongoing issues</li>
+                <li>If the problem persists, please contact our support team</li>
+            </ol>
+        </div>
+        
+        <div class="error-reference">
+            Reference: ERROR_500_<span id="errorRef"></span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    // Generate timestamp
+    document.getElementById('timestamp').textContent = new Date().toISOString();
+    
+    // Generate random request ID
+    const requestId = 'REQ-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    document.getElementById('requestId').textContent = requestId;
+    
+    // Generate error reference
+    const errorRef = Date.now().toString(36).toUpperCase();
+    document.getElementById('errorRef').textContent = errorRef;
+    
+    // Log error for monitoring
+    console.error('500 Error: Internal Server Error', {
+        timestamp: new Date().toISOString(),
+        requestId: requestId,
+        errorRef: errorRef,
+        path: window.location.pathname
+    });
+    
+    // Glitch effect for error code
+    const errorCode = document.querySelector('.error-code');
+    setInterval(() => {
+        errorCode.style.opacity = '0.8';
+        setTimeout(() => {
+            errorCode.style.opacity = '1';
+        }, 100);
+    }, 5000);
+    
+    // Auto-retry after 30 seconds (optional)
+    let retryCount = 30;
+    const retryButton = document.querySelector('button[onclick="location.reload()"]');
+    
+    const countdown = setInterval(() => {
+        retryCount--;
+        if (retryCount > 0) {
+            retryButton.innerHTML = `<i class="fas fa-sync-alt me-2"></i>Try Again (${retryCount}s)`;
+        } else {
+            retryButton.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Try Again';
+            clearInterval(countdown);
+        }
+    }, 1000);
+</script>
+{% endblock %}

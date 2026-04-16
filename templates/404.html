@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found | Semtech Data Intelligence Platform{% endblock %}
+
+{% block custom_css %}
+<style>
+    .error-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .error-content {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .error-code {
+        font-size: 8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        line-height: 1;
+    }
+    
+    .error-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--semtech-dark);
+        margin-bottom: 1rem;
+    }
+    
+    .error-description {
+        font-size: 1.1rem;
+        color: var(--semtech-gray);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+    
+    .error-illustration {
+        margin-bottom: 2rem;
+        opacity: 0.8;
+    }
+    
+    .error-illustration i {
+        font-size: 6rem;
+        color: var(--semtech-primary);
+        opacity: 0.5;
+    }
+    
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .suggested-links {
+        margin-top: 3rem;
+        padding-top: 3rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .suggested-links h5 {
+        color: var(--semtech-dark);
+        margin-bottom: 1.5rem;
+    }
+    
+    .link-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .link-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        color: var(--semtech-dark);
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+    
+    .link-card:hover {
+        background: white;
+        border-color: var(--semtech-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-decoration: none;
+        color: var(--semtech-primary);
+    }
+    
+    .link-card i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--semtech-primary);
+    }
+    
+    .link-card h6 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .floating {
+        animation: float 3s ease-in-out infinite;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container error-container">
+    <div class="error-content">
+        <div class="error-illustration floating">
+            <i class="fas fa-satellite-dish"></i>
+        </div>
+        
+        <div class="error-code">404</div>
+        
+        <h1 class="error-title">Page Not Found</h1>
+        
+        <p class="error-description">
+            Oops! It seems like the page you're looking for has wandered off into the digital wilderness. 
+            The resource you requested could not be found on our servers.
+        </p>
+        
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-primary-custom">
+                <i class="fas fa-home me-2"></i>Go to Homepage
+            </a>
+            <button onclick="history.back()" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Go Back
+            </button>
+        </div>
+        
+        <div class="suggested-links">
+            <h5>Quick Links to Popular Pages</h5>
+            <div class="link-grid">
+                <a href="{{ url_for('similarity.similarity_home') }}" class="link-card">
+                    <i class="fas fa-search"></i>
+                    <h6>Similar Incident</h6>
+                </a>
+                <a href="{{ url_for('alerts.alerts_home') }}" class="link-card">
+                    <i class="fas fa-bell"></i>
+                    <h6>Alerts System</h6>
+                </a>
+                <a href="{{ url_for('kyc.kyc_home') }}" class="link-card">
+                    <i class="fas fa-users"></i>
+                    <h6>Know Your Customers</h6>
+                </a>
+                <a href="{{ url_for('status.status_home') }}" class="link-card">
+                    <i class="fas fa-heartbeat"></i>
+                    <h6>Status Monitor</h6>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    // Log 404 errors for monitoring (you can send this to your analytics)
+    console.error('404 Error: Page not found - ' + window.location.pathname);
+    
+    // Particle effect for visual interest
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.style.position = 'fixed';
+        particle.style.width = '4px';
+        particle.style.height = '4px';
+        particle.style.background = 'rgba(0, 83, 159, 0.3)';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.left = Math.random() * window.innerWidth + 'px';
+        particle.style.top = Math.random() * window.innerHeight + 'px';
+        document.body.appendChild(particle);
+        
+        const duration = Math.random() * 3000 + 2000;
+        particle.animate([
+            { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+            { transform: `translate(${Math.random() * 200 - 100}px, -100px) scale(0)`, opacity: 0 }
+        ], {
+            duration: duration,
+            easing: 'ease-out'
+        }).onfinish = () => particle.remove();
+    }
+    
+    // Create particles periodically
+    setInterval(createParticle, 300);
+</script>
+{% endblock %}

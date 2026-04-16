@@ -1,0 +1,886 @@
+{% extends "base.html" %}
+
+{% block title %}Cheat Sheet- Semtech Intelligence Platform{% endblock %}
+
+{% block custom_css %}
+<style>
+    /* Page specific styles */
+    .terms-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .terms-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .terms-header h2 {
+        color: var(--semtech-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .terms-header .subtitle {
+        color: var(--semtech-gray);
+        font-size: 1.1rem;
+    }
+
+    /* Search Section */
+    .search-section {
+        max-width: 800px;
+        margin: 0 auto 40px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        flex: 1;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 15px 20px;
+        padding-left: 50px;
+        border: 2px solid #e9ecef;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--semtech-gray);
+        font-size: 1.2rem;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--semtech-primary);
+        box-shadow: 0 0 0 0.2rem rgba(0, 83, 159, 0.25);
+    }
+
+    .btn-search-term {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .btn-search-term:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 83, 159, 0.3);
+        color: white;
+    }
+
+    /* Autocomplete Suggestions */
+    .suggestion-box {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid var(--semtech-primary);
+        border-top: none;
+        border-radius: 0 0 15px 15px;
+        max-height: 400px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    .suggestion-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .suggestion-item:hover {
+        background: linear-gradient(135deg, rgba(0, 83, 159, 0.1) 0%, rgba(0, 128, 199, 0.1) 100%);
+        padding-left: 25px;
+    }
+
+    .suggestion-icon {
+        color: var(--semtech-primary);
+        font-size: 0.9rem;
+    }
+
+    .suggestion-highlight {
+        font-weight: 600;
+        color: var(--semtech-primary);
+    }
+
+    /* Quick Stats */
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card-mini {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card-mini:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 83, 159, 0.3);
+    }
+
+    .stat-value-mini {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .stat-label-mini {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Alphabet Filter */
+    .alphabet-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+        padding: 20px;
+        background: var(--semtech-light-gray);
+        border-radius: 15px;
+    }
+
+    .letter-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid var(--semtech-primary);
+        background: white;
+        color: var(--semtech-primary);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .letter-btn:hover {
+        background: var(--semtech-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .letter-btn.active {
+        background: var(--semtech-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .letter-btn.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .letter-btn.disabled:hover {
+        background: white;
+        color: var(--semtech-primary);
+        transform: none;
+    }
+
+    /* Term Details */
+    .term-details {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .term-header {
+        background: linear-gradient(135deg, var(--semtech-primary) 0%, var(--semtech-secondary) 100%);
+        color: white;
+        padding: 25px 30px;
+    }
+
+    .term-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .term-icon {
+        font-size: 1.5rem;
+    }
+
+    .details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .details-table tr {
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.2s ease;
+    }
+
+    .details-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .details-table tr:hover {
+        background: rgba(0, 83, 159, 0.03);
+    }
+
+    .details-table td {
+        padding: 20px 30px;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: var(--semtech-primary);
+        width: 30%;
+        vertical-align: top;
+    }
+
+    .detail-value {
+        color: var(--semtech-dark);
+        line-height: 1.6;
+    }
+
+    /* Suggestions Section */
+    .suggestions-section {
+        text-align: center;
+        padding: 40px;
+        background: var(--semtech-light-gray);
+        border-radius: 20px;
+        margin-bottom: 30px;
+    }
+
+    .suggestions-title {
+        font-size: 1.3rem;
+        color: var(--semtech-dark);
+        margin-bottom: 20px;
+    }
+
+    .suggestions-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .suggestion-chip {
+        background: white;
+        border: 2px solid var(--semtech-primary);
+        color: var(--semtech-primary);
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .suggestion-chip:hover {
+        background: var(--semtech-primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 83, 159, 0.3);
+    }
+
+    /* Categories Section */
+    .categories-section {
+        margin-top: 40px;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .category-card {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .category-card:hover {
+        border-color: var(--semtech-primary);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-letter {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--semtech-primary);
+        margin-bottom: 10px;
+    }
+
+    .category-count {
+        color: var(--semtech-gray);
+        font-size: 0.9rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 20px;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn-action {
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-browse-all {
+        background: white;
+        color: var(--semtech-primary);
+        border: 2px solid var(--semtech-primary);
+    }
+
+    .btn-browse-all:hover {
+        background: var(--semtech-primary);
+        color: white;
+    }
+
+    .btn-export {
+        background: var(--semtech-success);
+        color: white;
+        border: none;
+    }
+
+    .btn-export:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Error State */
+    .error-message {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Popular Terms */
+    .popular-terms {
+        margin-top: 30px;
+    }
+
+    .popular-terms-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--semtech-dark);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .popular-terms-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .popular-term {
+        background: var(--semtech-light-gray);
+        color: var(--semtech-dark);
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .popular-term:hover {
+        background: var(--semtech-primary);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .search-form {
+            flex-direction: column;
+        }
+        
+        .btn-search-term {
+            width: 100%;
+        }
+        
+        .quick-stats {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .detail-label {
+            width: 40%;
+        }
+        
+        .alphabet-filter {
+            padding: 15px;
+        }
+        
+        .letter-btn {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Loading Animation */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Terms Container -->
+    <div class="terms-container">
+        <div class="terms-header">
+            <h2><i class="fas fa-book me-2"></i>Cheat Sheet</h2>
+            <p class="subtitle">Search and explore technical terms, acronyms, and definitions</p>
+        </div>
+
+        <!-- Quick Stats -->
+        {% if stats %}
+        <div class="quick-stats">
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.total_terms }}</div>
+                <div class="stat-label-mini">Total Terms</div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.total_entries }}</div>
+                <div class="stat-label-mini">Total Entries</div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.tables_count }}</div>
+                <div class="stat-label-mini">Data Tables</div>
+            </div>
+            <div class="stat-card-mini">
+                <div class="stat-value-mini">{{ stats.fields|length }}</div>
+                <div class="stat-label-mini">Data Fields</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <form method="POST" action="{{ url_for('terms.search_term') }}" class="search-form">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="term" 
+                        name="term" 
+                        class="search-input" 
+                        placeholder="Search for terms, acronyms, or definitions..." 
+                        value="{{ query }}"
+                        autocomplete="off"
+                        required
+                    >
+                    <ul id="suggestions" class="suggestion-box"></ul>
+                </div>
+                <button type="submit" class="btn btn-search-term">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </form>
+
+            <!-- Popular Terms -->
+            <div class="popular-terms">
+                <div class="popular-terms-title">Popular Searches</div>
+                <div class="popular-terms-list">
+                    <span class="popular-term" onclick="searchTerm('Success')">Success</span>
+                    <span class="popular-term" onclick="searchTerm('sigtran')">Sigtran</span>
+                    <span class="popular-term" onclick="searchTerm('4G Auth')">4G Auth</span>
+                    <span class="popular-term" onclick="searchTerm('2G/3G Auth')">2G/3G Auth</span>
+                    <span class="popular-term" onclick="searchTerm('RNA')">RNA</span>
+                    <span class="popular-term" onclick="searchTerm('diameter')">Diameter</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Results Section -->
+    {% if result %}
+    <div class="term-details fade-in">
+        <div class="term-header">
+            <div class="term-name">
+                <i class="fas fa-book-open term-icon"></i>
+                {{ result.values()|list|first if result else 'Term' }}
+            </div>
+        </div>
+        <table class="details-table">
+            {% for key, value in result.items() %}
+            <tr>
+                <td class="detail-label">{{ key }}</td>
+                <td class="detail-value">{{ value if value else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="action-buttons">
+            <a href="#" class="btn-action btn-export" onclick="exportTerm('{{ result.values()|list|first }}')">
+                <i class="fas fa-download"></i> Export Details
+            </a>
+            <a href="{{ url_for('terms.terms_home') }}" class="btn-action btn-browse-all">
+                <i class="fas fa-search"></i> New Search
+            </a>
+        </div>
+    </div>
+    {% elif query and suggestions %}
+    <div class="suggestions-section">
+        <h3 class="suggestions-title">
+            No exact match found for "<strong>{{ query }}</strong>"
+        </h3>
+        <p class="text-muted mb-4">Did you mean one of these terms?</p>
+        <div class="suggestions-grid">
+            {% for suggestion in suggestions %}
+            <a href="#" class="suggestion-chip" onclick="selectSuggestion('{{ suggestion }}')">
+                <i class="fas fa-tag"></i>
+                {{ suggestion }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif query %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-search-minus"></i>
+        </div>
+        <h3>No Term Found</h3>
+        <p class="text-muted">No terminology found matching "<strong>{{ query }}</strong>"</p>
+        <p class="text-muted">Try searching with a different term or browse by category</p>
+    </div>
+    {% endif %}
+
+    <!-- Alphabet Filter -->
+    <div class="terms-container">
+        <h3 class="text-center mb-3">Browse by Letter</h3>
+        <div class="alphabet-filter">
+            <button class="letter-btn" onclick="filterByLetter('ALL')">All</button>
+            <button class="letter-btn" onclick="filterByLetter('#')">#</button>
+            {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+            <button class="letter-btn" onclick="filterByLetter('{{ letter }}')" 
+                    id="letter-{{ letter }}">{{ letter }}</button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Terms List Modal -->
+<div class="modal fade" id="termsListModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalTitle">All Terms</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="termsListContent">
+                <!-- Terms list will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById("term");
+    const suggestionsBox = document.getElementById("suggestions");
+    let selectedIndex = -1;
+    let suggestions = [];
+
+    // Autocomplete functionality
+    input.addEventListener("input", async function() {
+        const query = input.value.trim();
+        
+        if (!query) {
+            suggestionsBox.style.display = "none";
+            return;
+        }
+
+        try {
+            const response = await fetch(`/terminologies/api/suggest?q=${encodeURIComponent(query)}`);
+            suggestions = await response.json();
+            
+            suggestionsBox.innerHTML = "";
+            selectedIndex = -1;
+            
+            if (suggestions.length === 0) {
+                suggestionsBox.style.display = "none";
+                return;
+            }
+            
+            suggestions.forEach((term, index) => {
+                const div = document.createElement("div");
+                div.className = "suggestion-item";
+                
+                // Add icon and highlight matching part
+                const regex = new RegExp(`(${query})`, 'gi');
+                const highlighted = term.replace(regex, '<span class="suggestion-highlight">$1</span>');
+                div.innerHTML = `<i class="fas fa-tag suggestion-icon"></i> ${highlighted}`;
+                
+                div.addEventListener("click", () => {
+                    input.value = term;
+                    suggestionsBox.style.display = "none";
+                    document.querySelector("form").submit();
+                });
+                
+                suggestionsBox.appendChild(div);
+            });
+            
+            suggestionsBox.style.display = "block";
+        } catch (error) {
+            console.error("Error fetching suggestions:", error);
+        }
+    });
+
+    // Keyboard navigation
+    input.addEventListener("keydown", function(e) {
+        const items = suggestionsBox.querySelectorAll(".suggestion-item");
+        
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection(items);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, -1);
+            updateSelection(items);
+        } else if (e.key === "Enter" && selectedIndex >= 0) {
+            e.preventDefault();
+            input.value = suggestions[selectedIndex];
+            suggestionsBox.style.display = "none";
+            document.querySelector("form").submit();
+        } else if (e.key === "Escape") {
+            suggestionsBox.style.display = "none";
+            selectedIndex = -1;
+        }
+    });
+
+    function updateSelection(items) {
+        items.forEach((item, index) => {
+            if (index === selectedIndex) {
+                item.style.background = "linear-gradient(135deg, rgba(0, 83, 159, 0.1) 0%, rgba(0, 128, 199, 0.1) 100%)";
+            } else {
+                item.style.background = "";
+            }
+        });
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest(".search-input-wrapper")) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+
+    // Update alphabet filter based on available terms
+    updateAlphabetFilter();
+});
+
+// Search for a specific term
+function searchTerm(term) {
+    document.getElementById("term").value = term;
+    document.querySelector("form").submit();
+}
+
+// Select suggestion from "Did you mean"
+function selectSuggestion(term) {
+    document.getElementById("term").value = term;
+    document.querySelector("form").submit();
+}
+
+// Filter by letter
+async function filterByLetter(letter) {
+    const modal = new bootstrap.Modal(document.getElementById('termsListModal'));
+    const content = document.getElementById('termsListContent');
+    const title = document.getElementById('termsModalTitle');
+    
+    // Update modal title
+    if (letter === 'ALL') {
+        title.textContent = 'All Terms';
+    } else if (letter === '#') {
+        title.textContent = 'Terms starting with numbers or symbols';
+    } else {
+        title.textContent = `Terms starting with ${letter}`;
+    }
+    
+    // Show loading
+    content.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
+    modal.show();
+    
+    try {
+        const response = await fetch(`/terminologies/api/terms?letter=${letter}`);
+        const data = await response.json();
+        
+        if (data.success && data.terms.length > 0) {
+            let html = `
+                <div class="list-group">
+                    ${data.terms.map(term => `
+                        <a href="#" class="list-group-item list-group-item-action" 
+                           onclick="viewTerm('${term}')">
+                            <i class="fas fa-tag me-2 text-primary"></i>
+                            ${term}
+                        </a>
+                    `).join('')}
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-muted">Showing ${data.terms.length} terms</small>
+                </div>
+            `;
+            content.innerHTML = html;
+        } else {
+            content.innerHTML = '<div class="alert alert-info">No terms found for this letter</div>';
+        }
+    } catch (error) {
+        content.innerHTML = '<div class="alert alert-danger">Error loading terms</div>';
+    }
+}
+
+// View term from list
+function viewTerm(term) {
+    document.getElementById("term").value = term;
+    document.querySelector("form").submit();
+}
+
+// Export term details
+function exportTerm(termName) {
+    // Create CSV content
+    const table = document.querySelector('.details-table');
+    let csv = 'Field,Value\n';
+    
+    table.querySelectorAll('tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length === 2) {
+            csv += `"${cells[0].textContent}","${cells[1].textContent}"\n`;
+        }
+    });
+    
+    // Download CSV
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `term_${termName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+}
+
+// Update alphabet filter to show which letters have terms
+async function updateAlphabetFilter() {
+    try {
+        const response = await fetch('/terminologies/api/categories');
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update letter buttons based on available categories
+            for (let letter in data.categories) {
+                const btn = document.getElementById(`letter-${letter}`);
+                if (btn) {
+                    if (data.categories[letter] === 0) {
+                        btn.classList.add('disabled');
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error updating alphabet filter:', error);
+    }
+}
+
+// Export all terms
+async function exportAllTerms(format = 'csv') {
+    window.location.href = `/terminologies/api/export?format=${format}`;
+}
+</script>
+{% endblock %}

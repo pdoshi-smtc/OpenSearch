@@ -1,0 +1,45 @@
+# Core Flask Framework
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Web Scraping (for Status Page)
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.3
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Database (if needed for future modules)
+SQLAlchemy==2.0.23
+Flask-SQLAlchemy==3.1.1
+
+# Forms and Validation (if needed)
+Flask-WTF==1.2.1
+WTForms==3.1.1
+
+# JSON handling
+simplejson==3.19.2
+
+# Date and Time
+python-dateutil==2.8.2
+
+# HTTP client
+urllib3==2.1.0
+certifi==2023.11.17
+
+# HTML parsing
+html5lib==1.1
+
+# Threading and Async (already included in Python, but for clarity)
+# Built-in, no installation needed
+
+# Additional utilities
+click==8.1.7
+itsdangerous==2.1.2
+MarkupSafe==2.1.3
+Jinja2==3.1.2
+rapidfuzz
+nltk
+pandas
+scikit-learn
