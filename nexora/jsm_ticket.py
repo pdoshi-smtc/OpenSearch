@@ -17,6 +17,8 @@ def create_jsm_ticket(summary, description):
         "Content-Type": "application/json"
     }
 
+    cleaned_description = description.replace("**", "")
+
     payload = {
         "fields": {
             "project": {"key": "GNOC"},
@@ -29,7 +31,7 @@ def create_jsm_ticket(summary, description):
                     {
                         "type": "paragraph",
                         "content": [
-                            {"type": "text", "text": description}
+                            {"type": "text", "text": cleaned_description}
                         ]
                     }
                 ]

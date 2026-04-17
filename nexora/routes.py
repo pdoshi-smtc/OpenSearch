@@ -971,71 +971,63 @@ def nexora_home():
 def interact():
     """
     Phases:
-      collect_context — any of tiny_id, country, vplmn, sponsor, symptoms (≥1 required)
-      await_pcap_choice — PCAP yes/no (templates already returned from collect_context)
+      collect_context      — any of tiny_id, country, vplmn, sponsor, symptoms
+      await_ticket_confirm — show lost-service results, ask yes/no to create JSM ticket
+      await_pcap_choice    — PCAP yes/no after ticket decision
     """
     try:
         data = request.get_json(force=True, silent=True) or {}
     except Exception:
         data = {}
 
-    phase = (data.get("phase") or "collect_context").strip()
-    pcap_choice = data.get("pcap_choice")
+    phase        = (data.get("phase") or "collect_context").strip()
+    pcap_choice  = data.get("pcap_choice")
     user_message = (data.get("user_message") or "").strip()
 
-    # Build lost-service narrative for main chat message
-    lost_service_block = build_lost_service_narrative(tiny_id, vplmn, alert)
-     # ── existing reply_lines assembly ──
-    reply_lines = []
-    if lost_service_block:
-        reply_lines.append(lost_service_block)
-        reply_lines.append("")                         # spacer
-
-    reply_lines.append("**Nexora — traffic slice (OpenSearch export)**")
-    reply_lines.append(opensearch_report.get("narrative", ""))
-    reply_lines.append("")
-    reply_lines.append("**Nexora — roaming coverage workbook**")
-    reply_lines.append(cov_narrative)
-
-    reply_lines: List[str] = []
-    templates: Dict[str, str] = {}
-    similar_incidents: List[Dict[str, Any]] = []
-    rag_error: Optional[str] = None
-    opensearch_report: Dict[str, Any] = {}
-    validation_checks: List[Dict[str, str]] = []
-
-    last_tiny = (data.get("last_tiny_id") or "").strip()
-    last_country = (data.get("last_country") or "").strip()
-    last_vplmn = (data.get("last_vplmn") or "").strip()
-    last_sponsor = (data.get("last_sponsor") or "").strip()
-    last_symptoms = (data.get("last_symptoms") or "").strip()
-    last_alert_msg = (data.get("last_alert_message") or "").strip()
-    last_center_iso = (data.get("last_center_time_iso") or "").strip()
-    last_networks = data.get("last_networks") or []
+    # ── Restore session state sent back from the browser ─────────────────────
+    last_tiny          = (data.get("last_tiny_id")              or "").strip()
+    last_country       = (data.get("last_country")              or "").strip()
+    last_vplmn         = (data.get("last_vplmn")                or "").strip()
+    last_sponsor       = (data.get("last_sponsor")              or "").strip()
+    last_symptoms      = (data.get("last_symptoms")             or "").strip()
+    last_alert_msg     = (data.get("last_alert_message")        or "").strip()
+    last_center_iso    = (data.get("last_center_time_iso")      or "").strip()
+    last_networks      = data.get("last_networks") or []
     if not isinstance(last_networks, list):
-        last_networks = []
-    last_os_narrative = (data.get("last_opensearch_narrative") or "").strip()
-    last_cov_narrative = (data.get("last_coverage_narrative") or "").strip()
+        last_networks  = []
+    last_os_narrative  = (data.get("last_opensearch_narrative") or "").strip()
+    last_cov_narrative = (data.get("last_coverage_narrative")   or "").strip()
+    last_lost_block    = (data.get("last_lost_block")           or "").strip()
+    last_jsm_summary   = (data.get("last_jsm_summary")         or "").strip()
+    last_jsm_desc      = (data.get("last_jsm_description")     or "").strip()
 
     def session_payload(
         networks: List[str],
-        os_narrative: str = "",
+        os_narrative: str  = "",
         cov_narrative: str = "",
+        lost_block: str    = "",
+        jsm_summary: str   = "",
+        jsm_desc: str      = "",
     ) -> Dict[str, Any]:
         return {
-            "last_tiny_id": last_tiny,
-            "last_country": last_country,
-            "last_vplmn": last_vplmn,
-            "last_sponsor": last_sponsor,
-            "last_symptoms": last_symptoms,
-            "last_alert_message": last_alert_msg,
-            "last_center_time_iso": last_center_iso,
-            "last_networks": networks,
-            "last_opensearch_narrative": os_narrative or last_os_narrative,
-            "last_coverage_narrative": cov_narrative or last_cov_narrative,
+            "last_tiny_id":             last_tiny,
+            "last_country":             last_country,
+            "last_vplmn":               last_vplmn,
+            "last_sponsor":             last_sponsor,
+            "last_symptoms":            last_symptoms,
+            "last_alert_message":       last_alert_msg,
+            "last_center_time_iso":     last_center_iso,
+            "last_networks":            networks,
+            "last_opensearch_narrative": os_narrative  or last_os_narrative,
+            "last_coverage_narrative":  cov_narrative  or last_cov_narrative,
+            "last_lost_block":          lost_block     or last_lost_block,
+            "last_jsm_summary":         jsm_summary    or last_jsm_summary,
+            "last_jsm_description":     jsm_desc       or last_jsm_desc,
         }
 
-    # ----- PCAP follow-up (templates already generated) -----
+    # =========================================================================
+    # PHASE: await_pcap_choice
+    # =========================================================================
     if phase == "await_pcap_choice":
         choice: Optional[bool] = None
         if pcap_choice is True or pcap_choice is False:
@@ -1043,103 +1035,262 @@ def interact():
         elif user_message:
             choice = _yes_no(user_message)
         if choice is None:
-            return jsonify(
-                {
-                    "success": False,
-                    "error": "Say **yes** or **no** to PCAP analysis (or use the buttons).",
-                }
-            ), 400
+            return jsonify({
+                "success": False,
+                "error": "Say **yes** or **no** to PCAP analysis (or use the buttons).",
+            }), 400
 
         if choice:
             msg = (
-                "**Nexora:** Great — open **PCAP Analyzer** from the Next actions tab, upload your trace, "
-                "and attach the export to the Jira draft I already prepared."
+                "**Nexora:** Redirecting you to PCAP Analyzer — upload your trace there and "
+                "attach the export to the Jira ticket already created.\n\n"
+                "__REDIRECT__:http://127.0.0.1:5000/pcap_analysis/"
             )
         else:
             msg = (
-                "**Nexora:** Understood — skipping PCAP for now. The **JSM** and **status page** drafts in the tabs "
-                "are ready to copy; refine wording if you need a narrower customer message."
+                "**Nexora:** Understood — skipping PCAP for now. "
+                "The **JSM** and **status page** drafts in the tabs are ready to copy."
             )
+
         nets = last_networks or extract_network_names(last_vplmn + " " + last_symptoms)
-        return jsonify(
-            {
-                "success": True,
-                "phase": "done",
-                "assistant_message": msg,
-                "validation_checks": [],
-                "coverage": coverage_context_for_network(nets),
-                "coverage_file": {},
-                "similar_incidents": [],
-                "rag_error": None,
-                "templates": {},
-                "opensearch_report": {"narrative": last_os_narrative},
-                **session_payload(nets),
-            }
+        return jsonify({
+            "success":           True,
+            "phase":             "done",
+            "assistant_message": msg,
+            "validation_checks": [],
+            "coverage":          coverage_context_for_network(nets),
+            "coverage_file":     {},
+            "similar_incidents": [],
+            "rag_error":         None,
+            "templates":         {},
+            "opensearch_report": {"narrative": last_os_narrative},
+            **session_payload(nets),
+        })
+
+    # =========================================================================
+    # PHASE: await_ticket_confirm  — user replied yes/no to creating the ticket
+    # =========================================================================
+    if phase == "await_ticket_confirm":
+        ticket_choice = data.get("ticket_choice")
+        choice_bool: Optional[bool] = None
+        if ticket_choice is True or ticket_choice is False:
+            choice_bool = bool(ticket_choice)
+        elif user_message:
+            choice_bool = _yes_no(user_message)
+
+        if choice_bool is None:
+            return jsonify({
+                "success": False,
+                "error":   "Please choose **Yes — create ticket** or **No — skip**.",
+            }), 400
+
+        nets = last_networks or []
+
+        if choice_bool:
+            # Create the JSM ticket now
+            status_code, response_text = create_jsm_ticket(last_jsm_summary, last_jsm_desc)
+            print("JSM Ticket Created:", status_code, response_text)
+
+            if status_code in (200, 201):
+                ticket_msg = (
+                    "✅ **JSM ticket created successfully.**\n\n"
+                    f"**Summary:** {last_jsm_summary}\n\n"
+                    "The full lost-service analysis has been added to the ticket description."
+                )
+            else:
+                ticket_msg = (
+                    f"⚠️ **JSM ticket creation returned status {status_code}.** "
+                    "Check the server logs — the draft is still in the JSM tab.\n\n"
+                    f"Response: {response_text[:300]}"
+                )
+        else:
+            ticket_msg = (
+                "**Nexora:** Ticket creation skipped. "
+                "The draft is still available in the **JSM ticket** tab if you change your mind."
+            )
+
+        ticket_msg += (
+            "\n\n---\n\n"
+            "**Do you want to run PCAP analysis?** "
+            "Upload a trace for deeper signalling proof."
         )
 
+        return jsonify({
+            "success":           True,
+            "phase":             "await_pcap_choice",
+            "assistant_message": ticket_msg,
+            "validation_checks": [],
+            "coverage":          coverage_context_for_network(nets),
+            "coverage_file":     {},
+            "similar_incidents": [],
+            "rag_error":         None,
+            "templates":         {},
+            "opensearch_report": {"narrative": last_os_narrative},
+            **session_payload(nets),
+        })
+
+    # =========================================================================
+    # PHASE: collect_context  — main analysis pass
+    # =========================================================================
     if phase != "collect_context":
         return jsonify({"success": False, "error": f"Unknown phase: {phase}"}), 400
 
-    tiny_id = (data.get("tiny_id") or "").strip() or last_tiny
-    country = (data.get("country") or "").strip() or last_country
-    vplmn = (data.get("vplmn") or data.get("network_name") or "").strip() or last_vplmn
-    sponsor = (data.get("sponsor") or "").strip() or last_sponsor
+    tiny_id  = (data.get("tiny_id")        or "").strip() or last_tiny
+    country  = (data.get("country")        or "").strip() or last_country
+    vplmn    = (data.get("vplmn") or data.get("network_name") or "").strip() or last_vplmn
+    sponsor  = (data.get("sponsor")        or "").strip() or last_sponsor
     symptoms = (data.get("symptoms") or user_message or "").strip() or last_symptoms
 
     any_ctx = any(x.strip() for x in (tiny_id, country, vplmn, sponsor, symptoms) if x)
     if not any_ctx:
-        return jsonify(
-            {
-                "success": False,
-                "error": "Fill **at least one** field (tinyId, country, network, sponsor, or what you are seeing), then run the check.",
-            }
-        ), 400
+        return jsonify({
+            "success": False,
+            "error":   "Fill **at least one** field (tinyId, country, network, sponsor, or symptoms).",
+        }), 400
 
     if not symptoms.strip():
         symptoms = "Automated GNOC context check from the supplied tinyId / country / network / sponsor fields."
 
-    alert = find_alert_by_tiny_id(tiny_id) if tiny_id else None
-    center: datetime
-    alert_msg = ""
+    # ── Alert lookup ──────────────────────────────────────────────────────────
+    alert         = find_alert_by_tiny_id(tiny_id) if tiny_id else None
+    alert_msg     = ""
     tiny_not_found_note = ""
+    center: datetime
+
     if alert:
-        center = parse_alert_center_time(alert) or datetime.utcnow()
+        center    = parse_alert_center_time(alert) or datetime.utcnow()
         alert_msg = alert.get("message") or ""
-        inferred = extract_vplmn_from_alert_message(alert_msg)
+        inferred  = extract_vplmn_from_alert_message(alert_msg)
         if not vplmn and inferred:
             vplmn = inferred
     else:
         center = datetime.utcnow()
         if data.get("incident_time"):
             try:
-                raw = str(data.get("incident_time"))[:19]
-                center = datetime.fromisoformat(raw.replace("Z", ""))
+                center = datetime.fromisoformat(
+                    str(data["incident_time"])[:19].replace("Z", "")
+                )
             except Exception:
                 pass
         if tiny_id:
             tiny_not_found_note = (
-                f"\n\n_(Nexora note: tinyId **{tiny_id}** is not in `data/alerts.json` — I centred the window on "
-                f"**{center.strftime('%Y-%m-%d %H:%M')}** UTC. Add the alert export for an exact timestamp.)_"
+                f"\n\n_(Nexora note: tinyId **{tiny_id}** not in `alerts.json` — "
+                f"centred on **{center.strftime('%Y-%m-%d %H:%M')}** UTC.)_"
             )
 
     tok = extract_network_names(symptoms)
     if not vplmn and tok:
         vplmn = tok[0]
 
-    mcc_prefix = country_to_mcc_prefix(country)
-    cov_report = build_coverage_file_report(country, vplmn, sponsor, symptoms)
+    # ── Lost-service block ────────────────────────────────────────────────────
+    def build_lost_service_block() -> str:
+        if not alert:
+            if tiny_id:
+                return f"_(tinyId `{tiny_id}` not found in `alerts.json` — cannot anchor lost-service window.)_"
+            return ""
+
+        ts_center = parse_alert_center_time(alert)
+        if not ts_center:
+            return f"_(Alert found for tinyId `{tiny_id}` but timestamp could not be parsed.)_"
+
+        w_start = ts_center - timedelta(hours=1)
+        w_end   = ts_center + timedelta(hours=1)
+        p_start = w_start   - timedelta(days=1)
+        p_end   = w_end     - timedelta(days=1)
+
+        needle = vplmn.strip()
+        hits   = get_cached_hits()
+
+        def analyze(start: datetime, end: datetime):
+            count         = 0
+            customers:     set = set()
+            partners:      set = set()
+            sim_versions:  set = set()
+            service_types: set = set()
+            for item in hits:
+                doc = item.get("_source", {}).get("doc", {})
+                if needle and doc.get("vplmn", "").strip() != needle:
+                    continue
+                if doc.get("result_detail", "").strip().lower() != "lost-service":
+                    continue
+                ts = parse_doc_timestamp(doc)
+                if ts is None or not (start <= ts <= end):
+                    continue
+                count += 1
+                c  = doc.get("customer_name",  "").strip()
+                p  = doc.get("roaming_partner", "").strip()
+                sv = doc.get("sim_version",     "").strip()
+                st = doc.get("service_type",    "").strip()
+                if c:  customers.add(c)
+                if p:  partners.add(p)
+                if sv: sim_versions.add(sv)
+                if st: service_types.add(st)
+            return count, customers, partners, sim_versions, service_types
+
+        cur_count,  cur_custs, cur_parts, cur_simvs, cur_svcts = analyze(w_start, w_end)
+        prev_count, *_                                          = analyze(p_start, p_end)
+
+        a_msg = alert.get("message", "")
+        lines = [
+            "**Nexora — Lost-Service Analysis (alert time window ±1 h)**",
+            "",
+            f"**Alert message:** {a_msg[:180]}{'…' if len(a_msg) > 180 else ''}",
+            f"**Extracted VPLMN:** `{needle or '(not found)'}`",
+            f"**Time window (current):** {w_start.strftime('%Y-%m-%d %H:%M')} → {w_end.strftime('%Y-%m-%d %H:%M')} UTC",
+            f"**Time window (prev day):** {p_start.strftime('%Y-%m-%d %H:%M')} → {p_end.strftime('%Y-%m-%d %H:%M')} UTC",
+            "",
+            "**--- RESULTS ---**",
+            f"**VPLMN:** {needle or '(any)'}",
+            "",
+            "**--- CURRENT WINDOW ---**",
+            f"**Count:** {cur_count}",
+            "",
+            f"**Unique Customers ({len(cur_custs)}):**",
+            (", ".join(sorted(cur_custs)) if cur_custs else "_None_"),
+            "",
+            f"**Roaming Partners ({len(cur_parts)}):**",
+            (", ".join(sorted(cur_parts)) if cur_parts else "_None_"),
+            "",
+            f"**SIM Versions ({len(cur_simvs)}):**",
+            (", ".join(sorted(cur_simvs)) if cur_simvs else "_None_"),
+            "",
+            f"**Service Types ({len(cur_svcts)}):**",
+            (", ".join(sorted(cur_svcts)) if cur_svcts else "_None_"),
+            "",
+            "**--- PREVIOUS DAY WINDOW ---**",
+            f"**Count:** {prev_count}",
+        ]
+
+        if cur_count > 0 and prev_count == 0:
+            lines += ["", f"⚠️ **Spike detected:** {cur_count} lost-service events today vs 0 yesterday."]
+        elif cur_count > prev_count * 1.5 + 1:
+            pct = int((cur_count - prev_count) / max(prev_count, 1) * 100)
+            lines += ["", f"⚠️ **Spike detected:** {cur_count} today vs {prev_count} yesterday (+{pct}% increase)."]
+        elif cur_count == 0:
+            lines += ["", "✅ **No lost-service events** in this window for the given VPLMN."]
+
+        return "\n".join(lines)
+
+    lost_service_block = build_lost_service_block()
+
+    # ── Coverage (no OpenSearch traffic slice) ────────────────────────────────
+    mcc_prefix    = country_to_mcc_prefix(country)
+    cov_report    = build_coverage_file_report(country, vplmn, sponsor, symptoms)
     cov_narrative = cov_report.get("narrative", "")
 
+    # Keep opensearch_report for internal use (validation checks / templates)
+    # but do NOT include its narrative in the chat message
     opensearch_report = analyze_opensearch_correlation(
         center, vplmn, sponsor, mcc_prefix, symptoms
     )
     os_narrative = opensearch_report.get("narrative", "")
 
     networks = extract_network_names(f"{vplmn} {symptoms}")
-    if (vplmn or "").strip():
-        head = (vplmn or "").strip()
+    if vplmn.strip():
+        head     = vplmn.strip()
         networks = [head] + [n for n in networks if _norm_txt(n) != _norm_txt(head)]
 
+    # ── Validation checks ─────────────────────────────────────────────────────
     validation_checks = run_validation_checks(
         tiny_id=tiny_id,
         vplmn=vplmn,
@@ -1147,143 +1298,112 @@ def interact():
         networks=networks,
         coverage_matches=int(cov_report.get("matches") or 0),
         coverage_file_ok=bool(cov_report.get("source_found")),
-        alert=alert,                   # already resolved above in interact()
+        alert=alert,
     )
+
     coverage = coverage_context_for_network(networks)
     coverage["file_insight"] = {
-        "matches": cov_report.get("matches", 0),
-        "alternate_networks": cov_report.get("alternate_networks", [])[:14],
-        "alternate_sponsors": cov_report.get("alternate_sponsors", [])[:16],
+        "matches":              cov_report.get("matches", 0),
+        "alternate_networks":   cov_report.get("alternate_networks", [])[:14],
+        "alternate_sponsors":   cov_report.get("alternate_sponsors", [])[:16],
         "product_versions_top": cov_report.get("product_versions_top", [])[:8],
     }
 
+    # ── RAG / Jira ────────────────────────────────────────────────────────────
     pq = build_rag_query(symptoms, vplmn, sponsor, country, networks)
     similar_incidents, rag_error = rag_search(pq)
-    res_hint = resolution_from_similar(similar_incidents)
+    res_hint    = resolution_from_similar(similar_incidents)
     action_plan = build_nexora_action_plan(opensearch_report, cov_report, similar_incidents)
+
+    # ── Templates ─────────────────────────────────────────────────────────────
     templates = generate_templates(
-        symptoms,
-        vplmn,
-        sponsor,
-        country,
-        tiny_id,
-        similar_incidents,
-        os_narrative,
-        cov_narrative,
+        symptoms, vplmn, sponsor, country, tiny_id,
+        similar_incidents, os_narrative, cov_narrative,
     )
 
-    
-    # =========================
-    # 🔥 FIXED ISSUE DETECTION
-    # =========================
+    # ── Pre-build JSM ticket content (sent to browser; created only on confirm) ─
+    jsm_summary = f"[GNOC] {alert_msg[:120] if alert_msg else (vplmn or 'Network') + ' - ' + symptoms[:60]}"
+    jsm_description = f"""{lost_service_block}
 
-    issue_detected = False
+--- Coverage ---
+{cov_narrative[:800]}
 
-    event_count = opensearch_report.get("current", {}).get("count", 0)
+--- Similar Jira Tickets ---
+{res_hint[:600]}
 
-    # Condition 1: Lost service keyword
-    if "lost" in symptoms.lower():
-        issue_detected = True
+--- Action Plan ---
+{action_plan[:600]}
 
-    # Condition 2: Any alert-based issue (better for your case)
-    if tiny_id:
-        issue_detected = True
+TinyId: {tiny_id}
+Country: {country}
+Network / VPLMN: {vplmn}
+Sponsor: {sponsor}
+""".strip()
 
-    # Condition 3: Node Down (VERY IMPORTANT for your data)
-    if "down" in (alert_msg or "").lower():
-        issue_detected = True
-
-    # Condition 4: Event spike (keep optional)
-    if event_count > 10:
-        issue_detected = True
-
-
-    # =========================
-    # 🚀 CREATE TICKET
-    # =========================
-
-    print("DEBUG:")
-    print("event_count:", event_count)
-    print("tiny_id:", tiny_id)
-    print("alert_msg:", alert_msg)
-    print("issue_detected:", issue_detected)
-    if issue_detected:
-        summary = f"[GNOC] {vplmn or 'Network'} - {symptoms[:50]}"
-
-        description = f"""
-    Issue detected by Nexora
-
-    TinyId: {tiny_id}
-    Alert: {alert_msg}
-
-    Symptoms: {symptoms}
-    Country: {country}
-    Network: {vplmn}
-    Sponsor: {sponsor}
-
-    --- OpenSearch ---
-    {opensearch_report.get("narrative", "")[:500]}
-
-    --- Coverage ---
-    {cov_report.get("narrative", "")[:500]}
-    """
-
-        status_code, response_text = create_jsm_ticket(summary, description)
-
-        print("JSM Ticket Created:", status_code)
-        print(response_text)
-
-
-    last_tiny = tiny_id
-    last_country = country
-    last_vplmn = vplmn
-    last_sponsor = sponsor
-    last_symptoms = symptoms
-    last_alert_msg = alert_msg
-    last_center_iso = center.isoformat(sep=" ")
-    last_networks = networks
-    last_os_narrative = os_narrative
+    # ── Update session ────────────────────────────────────────────────────────
+    last_tiny          = tiny_id
+    last_country       = country
+    last_vplmn         = vplmn
+    last_sponsor       = sponsor
+    last_symptoms      = symptoms
+    last_alert_msg     = alert_msg
+    last_center_iso    = center.isoformat(sep=" ")
+    last_networks      = networks
+    last_os_narrative  = os_narrative
     last_cov_narrative = cov_narrative
 
-    reply_lines.append("**Nexora — traffic slice (OpenSearch export)**")
-    reply_lines.append(opensearch_report.get("narrative", ""))
-    reply_lines.append("")
+    # ── Assemble reply ────────────────────────────────────────────────────────
+    reply_lines: List[str] = []
+
+    # 1. Lost-service analysis
+    if lost_service_block:
+        reply_lines.append(lost_service_block)
+        reply_lines.append("")
+
+    # 2. Coverage workbook
     reply_lines.append("**Nexora — roaming coverage workbook**")
     reply_lines.append(cov_narrative)
+
+    # 3. Alert not-found note
     if tiny_not_found_note:
         reply_lines.append(tiny_not_found_note)
-    if alert:
-        reply_lines.append(
-            f"\n**Linked alert (context):** {alert_msg[:400]}{'…' if len(alert_msg) > 400 else ''}"
-        )
+
+    # 4. Jira hints + action plan
     reply_lines.append("")
     reply_lines.append(res_hint)
     reply_lines.append("")
     reply_lines.append(action_plan)
+
     if rag_error:
         reply_lines.append(f"\n_(Jira engine note: {rag_error})_")
 
+    # 5. Ticket confirmation prompt
     reply_lines.append(
-        "\n\n**Nexora:** Do you still want **PCAP analysis**? Reply **yes** or **no**, or use the buttons. "
-        "**JSM** and **status page** drafts are already in the tabs from this run."
+        "\n\n---\n\n"
+        "**Nexora:** Based on the lost-service analysis above, do you want to "
+        "**create a JSM ticket** now with this information?"
     )
 
-    return jsonify(
-        {
-            "success": True,
-            "phase": "await_pcap_choice",
-            "assistant_message": "\n\n".join(reply_lines),
-            "validation_checks": validation_checks,
-            "coverage": coverage,
-            "coverage_file": cov_report,
-            "similar_incidents": similar_incidents,
-            "rag_error": rag_error,
-            "templates": templates,
-            "opensearch_report": opensearch_report,
-            **session_payload(networks, os_narrative, cov_narrative),
-        }
-    )
-
+    return jsonify({
+        "success":           True,
+        "phase":             "await_ticket_confirm",
+        "assistant_message": "\n\n".join(reply_lines),
+        "validation_checks": validation_checks,
+        "coverage":          coverage,
+        "coverage_file":     cov_report,
+        "similar_incidents": similar_incidents,
+        "rag_error":         rag_error,
+        "templates":         templates,
+        "opensearch_report": opensearch_report,
+        **session_payload(
+            networks,
+            os_narrative,
+            cov_narrative,
+            lost_block  = lost_service_block,
+            jsm_summary = jsm_summary,
+            jsm_desc    = jsm_description,
+        ),
+    })
 @nexora_bp.route("/health", methods=["GET"])
 def health():
     return jsonify({"service": "nexora", "ok": True})

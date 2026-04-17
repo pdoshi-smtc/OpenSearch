@@ -1,3 +1,5 @@
+<!-- nexora.html -->
+
 {% extends "base.html" %}
 
 {% block title %}Nexora — GNOC Advance Assistant | TINA{% endblock %}
@@ -517,6 +519,18 @@
     footer {
         margin-top: 0 !important;
     }
+    .nx-ticket-confirm {
+        display: none;
+        padding: 0.65rem 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .nx-ticket-confirm.visible {
+        display: flex;
+    }
 </style>
 {% endblock %}
 
@@ -600,6 +614,13 @@
                     <button type="button" class="nx-btn nx-btn-yes" id="nxPcapYes">Yes — I'll upload a trace</button>
                     <button type="button" class="nx-btn nx-btn-no" id="nxPcapNo">No — continue</button>
                 </div>
+
+                <div class="nx-ticket-confirm" id="nxTicketConfirm" aria-live="polite">
+                    <span class="small text-secondary me-1">Create JSM ticket with this analysis?</span>
+                    <button type="button" class="nx-btn nx-btn-yes" id="nxTicketYes">Yes — create ticket</button>
+                    <button type="button" class="nx-btn nx-btn-no"  id="nxTicketNo">No — skip</button>
+                </div>
+
                 <div class="nx-input-row">
                     <textarea id="nxInput" rows="1" placeholder="Optional: type yes/no for PCAP, or notes…"
                         aria-label="Message to Nexora"></textarea>
@@ -669,32 +690,38 @@
         last_center_time_iso: "",
         last_networks: [],
         last_opensearch_narrative: "",
-        last_coverage_narrative: ""
+        last_coverage_narrative: "",
+        last_lost_block: "",
+        last_jsm_summary: "",
+        last_jsm_description: "",
     };
 
     const el = {
-        startScreen: document.getElementById("nxStartScreen"),
-        mainApp: document.getElementById("nxMainApp"),
-        enterBtn: document.getElementById("nxEnterBtn"),
-        chat: document.getElementById("nxChatLog"),
-        input: document.getElementById("nxInput"),
-        send: document.getElementById("nxSend"),
-        runCheck: document.getElementById("nxRunCheck"),
-        phasePill: document.getElementById("nxPhasePill"),
-        checks: document.getElementById("nxChecks"),
-        openSearch: document.getElementById("nxOpenSearch"),
-        coverage: document.getElementById("nxCoverage"),
-        similar: document.getElementById("nxSimilar"),
-        tplJsm: document.getElementById("nxTplJsm"),
-        tplStatus: document.getElementById("nxTplStatus"),
-        pcapChoice: document.getElementById("nxPcapChoice"),
-        pcapYes: document.getElementById("nxPcapYes"),
-        pcapNo: document.getElementById("nxPcapNo"),
-        tinyId: document.getElementById("nxTinyId"),
-        country: document.getElementById("nxCountry"),
-        vplmn: document.getElementById("nxVplmn"),
-        sponsor: document.getElementById("nxSponsor"),
-        symptoms: document.getElementById("nxSymptoms")
+        startScreen:   document.getElementById("nxStartScreen"),
+        mainApp:       document.getElementById("nxMainApp"),
+        enterBtn:      document.getElementById("nxEnterBtn"),
+        chat:          document.getElementById("nxChatLog"),
+        input:         document.getElementById("nxInput"),
+        send:          document.getElementById("nxSend"),
+        runCheck:      document.getElementById("nxRunCheck"),
+        phasePill:     document.getElementById("nxPhasePill"),
+        checks:        document.getElementById("nxChecks"),
+        openSearch:    document.getElementById("nxOpenSearch"),
+        coverage:      document.getElementById("nxCoverage"),
+        similar:       document.getElementById("nxSimilar"),
+        tplJsm:        document.getElementById("nxTplJsm"),
+        tplStatus:     document.getElementById("nxTplStatus"),
+        pcapChoice:    document.getElementById("nxPcapChoice"),
+        pcapYes:       document.getElementById("nxPcapYes"),
+        pcapNo:        document.getElementById("nxPcapNo"),
+        ticketConfirm: document.getElementById("nxTicketConfirm"),   // NEW
+        ticketYes:     document.getElementById("nxTicketYes"),        // NEW
+        ticketNo:      document.getElementById("nxTicketNo"),         // NEW
+        tinyId:        document.getElementById("nxTinyId"),
+        country:       document.getElementById("nxCountry"),
+        vplmn:         document.getElementById("nxVplmn"),
+        sponsor:       document.getElementById("nxSponsor"),
+        symptoms:      document.getElementById("nxSymptoms")
     };
 
     function anyFormFilled() {
@@ -814,30 +841,36 @@
     }
 
     function syncSessionFromResponse(j) {
-        if (j.last_tiny_id !== undefined) state.last_tiny_id = j.last_tiny_id || "";
-        if (j.last_country !== undefined) state.last_country = j.last_country || "";
-        if (j.last_vplmn !== undefined) state.last_vplmn = j.last_vplmn || "";
-        if (j.last_sponsor !== undefined) state.last_sponsor = j.last_sponsor || "";
-        if (j.last_symptoms !== undefined) state.last_symptoms = j.last_symptoms || "";
-        if (j.last_alert_message !== undefined) state.last_alert_message = j.last_alert_message || "";
-        if (j.last_center_time_iso !== undefined) state.last_center_time_iso = j.last_center_time_iso || "";
-        if (j.last_networks) state.last_networks = j.last_networks;
+        if (j.last_tiny_id              !== undefined) state.last_tiny_id              = j.last_tiny_id              || "";
+        if (j.last_country              !== undefined) state.last_country              = j.last_country              || "";
+        if (j.last_vplmn                !== undefined) state.last_vplmn                = j.last_vplmn                || "";
+        if (j.last_sponsor              !== undefined) state.last_sponsor              = j.last_sponsor              || "";
+        if (j.last_symptoms             !== undefined) state.last_symptoms             = j.last_symptoms             || "";
+        if (j.last_alert_message        !== undefined) state.last_alert_message        = j.last_alert_message        || "";
+        if (j.last_center_time_iso      !== undefined) state.last_center_time_iso      = j.last_center_time_iso      || "";
+        if (j.last_networks)                           state.last_networks             = j.last_networks;
         if (j.last_opensearch_narrative !== undefined) state.last_opensearch_narrative = j.last_opensearch_narrative || "";
-        if (j.last_coverage_narrative !== undefined) state.last_coverage_narrative = j.last_coverage_narrative || "";
+        if (j.last_coverage_narrative   !== undefined) state.last_coverage_narrative   = j.last_coverage_narrative   || "";
+        if (j.last_lost_block           !== undefined) state.last_lost_block           = j.last_lost_block           || "";
+        if (j.last_jsm_summary          !== undefined) state.last_jsm_summary          = j.last_jsm_summary          || "";
+        if (j.last_jsm_description      !== undefined) state.last_jsm_description      = j.last_jsm_description      || "";
     }
 
     function sessionBody() {
         return {
-            last_tiny_id: state.last_tiny_id,
-            last_country: state.last_country,
-            last_vplmn: state.last_vplmn,
-            last_sponsor: state.last_sponsor,
-            last_symptoms: state.last_symptoms,
-            last_alert_message: state.last_alert_message,
-            last_center_time_iso: state.last_center_time_iso,
-            last_networks: state.last_networks,
+            last_tiny_id:              state.last_tiny_id,
+            last_country:              state.last_country,
+            last_vplmn:                state.last_vplmn,
+            last_sponsor:              state.last_sponsor,
+            last_symptoms:             state.last_symptoms,
+            last_alert_message:        state.last_alert_message,
+            last_center_time_iso:      state.last_center_time_iso,
+            last_networks:             state.last_networks,
             last_opensearch_narrative: state.last_opensearch_narrative,
-            last_coverage_narrative: state.last_coverage_narrative
+            last_coverage_narrative:   state.last_coverage_narrative,
+            last_lost_block:           state.last_lost_block,
+            last_jsm_summary:          state.last_jsm_summary,
+            last_jsm_description:      state.last_jsm_description,
         };
     }
 
@@ -855,13 +888,27 @@
         }
 
         if (j.assistant_message) {
-            appendMessage("assistant", j.assistant_message);
+            if (j.assistant_message.includes("__REDIRECT__:")) {
+                const parts = j.assistant_message.split("__REDIRECT__:");
+                const cleanMsg = parts[0].trim();
+                const url = parts[1].trim();
+                if (cleanMsg) appendMessage("assistant", cleanMsg);
+                setTimeout(function () { window.location.href = url; }, 1800);
+            } else {
+                appendMessage("assistant", j.assistant_message);
+            }
         }
 
-        el.pcapChoice.classList.toggle("visible", j.phase === "await_pcap_choice");
-        if (j.phase === "done") {
-            el.pcapChoice.classList.remove("visible");
+        // Hide all confirm bars first, then show the right one
+        el.pcapChoice.classList.remove("visible");
+        el.ticketConfirm.classList.remove("visible");
+
+        if (j.phase === "await_ticket_confirm") {
+            el.ticketConfirm.classList.add("visible");
+        } else if (j.phase === "await_pcap_choice") {
+            el.pcapChoice.classList.add("visible");
         }
+
         updateRunEnabled();
     }
 
@@ -888,20 +935,22 @@
         }
     }
 
+    // ── Button listeners ──────────────────────────────────────────────────────
+
     el.runCheck.addEventListener("click", function () {
         if (!anyFormFilled()) return;
-        const tinyId = el.tinyId.value.trim();
-        const country = el.country.value.trim();
-        const vplmn = el.vplmn.value.trim();
-        const sponsor = el.sponsor.value.trim();
+        const tinyId   = el.tinyId.value.trim();
+        const country  = el.country.value.trim();
+        const vplmn    = el.vplmn.value.trim();
+        const sponsor  = el.sponsor.value.trim();
         const symptoms = el.symptoms.value.trim();
         appendMessage("user", "[Run GNOC check] tinyId " + (tinyId || "—") + " · " + (symptoms.slice(0, 120) || "…"));
         postInteract(Object.assign({}, sessionBody(), {
-            phase: "collect_context",
-            tiny_id: tinyId,
-            country: country,
-            vplmn: vplmn,
-            sponsor: sponsor,
+            phase:    "collect_context",
+            tiny_id:  tinyId,
+            country:  country,
+            vplmn:    vplmn,
+            sponsor:  sponsor,
             symptoms: symptoms
         }));
     });
@@ -912,14 +961,21 @@
         appendMessage("user", text);
         el.input.value = "";
 
-        if (state.phase === "await_pcap_choice") {
+        if (state.phase === "await_ticket_confirm") {
             await postInteract(Object.assign({}, sessionBody(), {
-                phase: "await_pcap_choice",
+                phase:        "await_ticket_confirm",
                 user_message: text
             }));
             return;
         }
-        appendMessage("assistant", "Use **Run GNOC check** with the form, or answer **yes** / **no** when PCAP is offered.");
+        if (state.phase === "await_pcap_choice") {
+            await postInteract(Object.assign({}, sessionBody(), {
+                phase:        "await_pcap_choice",
+                user_message: text
+            }));
+            return;
+        }
+        appendMessage("assistant", "Use **Run GNOC check** with the form, or use the buttons to confirm.");
     });
 
     el.input.addEventListener("keydown", function (e) {
@@ -929,16 +985,30 @@
         }
     });
 
+    el.ticketYes.addEventListener("click", function () {
+        postInteract(Object.assign({}, sessionBody(), {
+            phase:         "await_ticket_confirm",
+            ticket_choice: true
+        }));
+    });
+
+    el.ticketNo.addEventListener("click", function () {
+        postInteract(Object.assign({}, sessionBody(), {
+            phase:         "await_ticket_confirm",
+            ticket_choice: false
+        }));
+    });
+
     el.pcapYes.addEventListener("click", function () {
         postInteract(Object.assign({}, sessionBody(), {
-            phase: "await_pcap_choice",
+            phase:       "await_pcap_choice",
             pcap_choice: true
         }));
     });
 
     el.pcapNo.addEventListener("click", function () {
         postInteract(Object.assign({}, sessionBody(), {
-            phase: "await_pcap_choice",
+            phase:       "await_pcap_choice",
             pcap_choice: false
         }));
     });
@@ -958,7 +1028,7 @@
         el.startScreen.classList.add("nx-hidden");
         el.startScreen.setAttribute("aria-hidden", "true");
         el.mainApp.classList.remove("nx-hidden");
-        appendMessage("assistant", "Hi — I'm **Nexora**. Fill **any one** of tinyId, country, network, sponsor, or what you see — I'll validate **coverage data.json**, slice **OpenSearch**, count **devices / SIM versions**, match **Jira**, answer with **next steps**, and drop **JSM + status** drafts in the tabs. Then tell me if you still want **PCAP**.");
+        appendMessage("assistant", "Hi — I'm **Nexora**. Fill **any one** of tinyId, country, network, sponsor, or what you see — I'll validate **coverage data.json**, count **lost-service events**, match **Jira**, and drop **JSM + status** drafts in the tabs.");
         el.tinyId.focus();
         updateRunEnabled();
     }
