@@ -1,6 +1,5 @@
 """
-Nexora — GNOC Advance Assistant: quick checks, OpenSearch correlation, Jira similarity,
-PCAP handoff, status page and Jira templates.
+routes.py
 """
 import json
 import os
@@ -535,15 +534,119 @@ def analyze_opensearch_correlation(
         "narrative": "\n\n".join(narrative),
     }
 
-
 def run_validation_checks(
-    user_text: str,
+    tiny_id: str,
+    vplmn: str,
+    symptoms: str,
     networks: List[str],
     coverage_matches: int,
     coverage_file_ok: bool,
+    alert: Optional[dict] = None,
 ) -> List[Dict[str, str]]:
+    """
+    Validation checks — now includes a real lost-service count from data.json
+    using the alert's createdAt_readable as the time anchor (±1 hour).
+    """
+
+    # ── Lost-service count ──────────────────────────────────────────────────
+    lost_current = 0
+    lost_previous = 0
+    lost_customers: set = set()
+    lost_partners: set = set()
+    lost_sim_versions: set = set()
+    lost_service_types: set = set()
+    lost_window_note = ""
+    lost_status = "pending"
+    lost_detail = "No tinyId supplied — cannot anchor time window."
+
+    if alert:
+        center = parse_alert_center_time(alert)
+        if center:
+            window_start  = center - timedelta(hours=1)
+            window_end    = center + timedelta(hours=1)
+            prev_start    = window_start - timedelta(days=1)
+            prev_end      = window_end   - timedelta(days=1)
+
+            vplmn_needle = vplmn.strip() if vplmn else ""
+            hits = get_cached_hits()
+
+            def count_lost(start: datetime, end: datetime):
+                n = 0
+                custs:  set = set()
+                parts:  set = set()
+                simvs:  set = set()
+                svcts:  set = set()
+                for item in hits:
+                    doc = item.get("_source", {}).get("doc", {})
+                    doc_vplmn = doc.get("vplmn", "").strip()
+                    if vplmn_needle and doc_vplmn != vplmn_needle:
+                        continue
+                    if doc.get("result_detail", "").strip().lower() != "lost-service":
+                        continue
+                    ts = parse_doc_timestamp(doc)
+                    if ts is None or not (start <= ts <= end):
+                        continue
+                    n += 1
+                    c = doc.get("customer_name", "").strip()
+                    p = doc.get("roaming_partner", "").strip()
+                    sv = doc.get("sim_version", "").strip()
+                    st = doc.get("service_type", "").strip()
+                    if c:  custs.add(c)
+                    if p:  parts.add(p)
+                    if sv: simvs.add(sv)
+                    if st: svcts.add(st)
+                return n, custs, parts, simvs, svcts
+
+            lost_current,  lost_customers,   lost_partners, \
+            lost_sim_versions, lost_service_types = count_lost(window_start, window_end)
+
+            lost_previous, *_ = count_lost(prev_start, prev_end)
+
+            lost_window_note = (
+                f"{window_start.strftime('%Y-%m-%d %H:%M')} → "
+                f"{window_end.strftime('%Y-%m-%d %H:%M')} UTC"
+            )
+
+            if lost_current == 0 and lost_previous == 0:
+                lost_status = "ok"
+                lost_detail = (
+                    f"No `lost-service` events for VPLMN `{vplmn_needle or 'any'}` "
+                    f"in window ({lost_window_note}). Previous day also 0."
+                )
+            elif lost_current > lost_previous * 1.5 + 1:
+                lost_status = "warn"
+                lost_detail = (
+                    f"**{lost_current}** lost-service events in window ({lost_window_note}), "
+                    f"vs **{lost_previous}** same window yesterday — spike detected. "
+                    f"Customers: {', '.join(sorted(lost_customers)[:6]) or 'none'}. "
+                    f"Partners: {', '.join(sorted(lost_partners)[:6]) or 'none'}. "
+                    f"SIM versions: {', '.join(sorted(lost_sim_versions)[:6]) or 'none'}. "
+                    f"Service types: {', '.join(sorted(lost_service_types)[:6]) or 'none'}."
+                )
+            else:
+                lost_status = "ok"
+                lost_detail = (
+                    f"**{lost_current}** lost-service events in window ({lost_window_note}), "
+                    f"vs **{lost_previous}** yesterday — within normal range. "
+                    f"Customers: {', '.join(sorted(lost_customers)[:6]) or 'none'}."
+                )
+        else:
+            lost_status = "warn"
+            lost_detail = f"Alert found for tinyId `{tiny_id}` but timestamp could not be parsed."
+    elif tiny_id:
+        lost_status = "warn"
+        lost_detail = f"tinyId `{tiny_id}` not found in `alerts.json` — cannot anchor time window."
+
+    # ── Coverage check ───────────────────────────────────────────────────────
     cov_status = "ok" if coverage_matches else ("warn" if coverage_file_ok else "warn")
+
     checks = [
+        {
+            "id": "lost_service_count",
+            "label": "Nexora — lost-service events (alert time window ±1 h)",
+            "status": lost_status,
+            "detail": lost_detail,
+        },
         {
             "id": "alert_opensearch",
             "label": "Nexora — alert time ↔ OpenSearch export",
@@ -759,6 +862,105 @@ def _yes_no(text: str) -> Optional[bool]:
         return False
     return None
 
+def build_lost_service_narrative(
+    tiny_id: str,
+    vplmn: str,
+    alert: Optional[dict],
+) -> str:
+    """
+    Returns a formatted lost-service analysis block for the main chat message.
+    Mirrors the reference script output exactly.
+    """
+    if not alert:
+        if tiny_id:
+            return f"_(tinyId `{tiny_id}` not found in `alerts.json` — cannot anchor lost-service window.)_"
+        return ""
+
+    center = parse_alert_center_time(alert)
+    if not center:
+        return f"_(Alert found for tinyId `{tiny_id}` but timestamp could not be parsed.)_"
+
+    window_start = center - timedelta(hours=1)
+    window_end   = center + timedelta(hours=1)
+    prev_start   = window_start - timedelta(days=1)
+    prev_end     = window_end   - timedelta(days=1)
+
+    vplmn_needle = (vplmn or "").strip()
+    hits = get_cached_hits()
+
+    def analyze(start: datetime, end: datetime):
+        count = 0
+        customers:     set = set()
+        partners:      set = set()
+        sim_versions:  set = set()
+        service_types: set = set()
+        for item in hits:
+            doc = item.get("_source", {}).get("doc", {})
+            if vplmn_needle and doc.get("vplmn", "").strip() != vplmn_needle:
+                continue
+            if doc.get("result_detail", "").strip().lower() != "lost-service":
+                continue
+            ts = parse_doc_timestamp(doc)
+            if ts is None or not (start <= ts <= end):
+                continue
+            count += 1
+            c  = doc.get("customer_name",    "").strip()
+            p  = doc.get("roaming_partner",  "").strip()
+            sv = doc.get("sim_version",      "").strip()
+            st = doc.get("service_type",     "").strip()
+            if c:  customers.add(c)
+            if p:  partners.add(p)
+            if sv: sim_versions.add(sv)
+            if st: service_types.add(st)
+        return count, customers, partners, sim_versions, service_types
+
+    cur_count, cur_custs, cur_parts, cur_simvs, cur_svcts = analyze(window_start, window_end)
+    prev_count, *_ = analyze(prev_start, prev_end)
+
+    alert_msg = alert.get("message", "")
+    lines = [
+        "**Nexora — Lost-Service Analysis (alert time window ±1 h)**",
+        "",
+        f"**Alert message:** {alert_msg[:180]}{'…' if len(alert_msg) > 180 else ''}",
+        f"**Extracted VPLMN:** `{vplmn_needle or '(not found)'}`",
+        f"**Time window (current):** {window_start.strftime('%Y-%m-%d %H:%M')} → {window_end.strftime('%Y-%m-%d %H:%M')} UTC",
+        f"**Time window (previous day):** {prev_start.strftime('%Y-%m-%d %H:%M')} → {prev_end.strftime('%Y-%m-%d %H:%M')} UTC",
+        "",
+        "**--- RESULTS ---**",
+        f"**VPLMN:** {vplmn_needle or '(any)'}",
+        "",
+        "**--- CURRENT WINDOW ---**",
+        f"**Count:** {cur_count}",
+        "",
+        f"**Unique Customers ({len(cur_custs)}):**",
+        (", ".join(sorted(cur_custs)) if cur_custs else "_None_"),
+        "",
+        f"**Roaming Partners ({len(cur_parts)}):**",
+        (", ".join(sorted(cur_parts)) if cur_parts else "_None_"),
+        "",
+        f"**SIM Versions ({len(cur_simvs)}):**",
+        (", ".join(sorted(cur_simvs)) if cur_simvs else "_None_"),
+        "",
+        f"**Service Types ({len(cur_svcts)}):**",
+        (", ".join(sorted(cur_svcts)) if cur_svcts else "_None_"),
+        "",
+        "**--- PREVIOUS DAY WINDOW ---**",
+        f"**Count:** {prev_count}",
+    ]
+
+    # Spike callout
+    if cur_count > 0 and prev_count == 0:
+        lines.append("")
+        lines.append(f"⚠️ **Spike detected:** {cur_count} lost-service events today vs 0 yesterday.")
+    elif cur_count > prev_count * 1.5 + 1:
+        pct = int((cur_count - prev_count) / max(prev_count, 1) * 100)
+        lines.append("")
+        lines.append(f"⚠️ **Spike detected:** {cur_count} today vs {prev_count} yesterday (+{pct}% increase).")
+    elif cur_count == 0:
+        lines.append("")
+        lines.append("✅ **No lost-service events** in this window for the given VPLMN.")
+
+    return "\n".join(lines)
 
 @nexora_bp.route("/")
 def nexora_home():
@@ -780,6 +982,20 @@ def interact():
     phase = (data.get("phase") or "collect_context").strip()
     pcap_choice = data.get("pcap_choice")
     user_message = (data.get("user_message") or "").strip()
+
+    # Build lost-service narrative for main chat message
+    lost_service_block = build_lost_service_narrative(tiny_id, vplmn, alert)
+     # ── existing reply_lines assembly ──
+    reply_lines = []
+    if lost_service_block:
+        reply_lines.append(lost_service_block)
+        reply_lines.append("")                         # spacer
+
+    reply_lines.append("**Nexora — traffic slice (OpenSearch export)**")
+    reply_lines.append(opensearch_report.get("narrative", ""))
+    reply_lines.append("")
+    reply_lines.append("**Nexora — roaming coverage workbook**")
+    reply_lines.append(cov_narrative)
 
     reply_lines: List[str] = []
     templates: Dict[str, str] = {}
@@ -925,10 +1141,13 @@ def interact():
         networks = [head] + [n for n in networks if _norm_txt(n) != _norm_txt(head)]
 
     validation_checks = run_validation_checks(
-        symptoms,
-        networks,
-        int(cov_report.get("matches") or 0),
-        bool(cov_report.get("source_found")),
+        tiny_id=tiny_id,
+        vplmn=vplmn,
+        symptoms=symptoms,
+        networks=networks,
+        coverage_matches=int(cov_report.get("matches") or 0),
+        coverage_file_ok=bool(cov_report.get("source_found")),
+        alert=alert,                   # already resolved above in interact()
     )
     coverage = coverage_context_for_network(networks)
     coverage["file_insight"] = {
@@ -1064,7 +1283,6 @@ def interact():
             **session_payload(networks, os_narrative, cov_narrative),
         }
     )
-
 
 @nexora_bp.route("/health", methods=["GET"])
 def health():
