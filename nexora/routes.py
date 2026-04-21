@@ -85,6 +85,18 @@ CODE_STOPWORDS = {
 VPLMN_ALERT_RE = re.compile(r"-\s*(.*?)\s*\[", re.DOTALL)
 
 
+ANSWERS_JSON = os.path.join(ROOT, "data", "answers.json")
+
+def load_demo_answer(tiny_id: str) -> Optional[dict]:
+    """Return pre-defined answer if tiny_id is a demo ID, else None."""
+    if not os.path.isfile(ANSWERS_JSON):
+        return None
+    with open(ANSWERS_JSON, "r", encoding="utf-8") as f:
+        blob = json.load(f)
+    if tiny_id not in blob.get("demo_tiny_ids", []):
+        return None
+    return blob.get("answers", {}).get(tiny_id)
+
 def _normalize_net(token: str) -> str:
     return re.sub(r"[^a-z0-9]", "", token.lower())
 
@@ -980,6 +992,7 @@ def interact():
     except Exception:
         data = {}
 
+
     phase        = (data.get("phase") or "collect_context").strip()
     pcap_choice  = data.get("pcap_choice")
     user_message = (data.get("user_message") or "").strip()
@@ -1150,6 +1163,59 @@ def interact():
 
     if not symptoms.strip():
         symptoms = "Automated GNOC context check from the supplied tinyId / country / network / sponsor fields."
+
+
+
+    # ── Demo mode: pre-defined answers for hackathon tinyIds ─────────────────
+    demo = load_demo_answer(tiny_id)
+    if demo:
+        lost_block   = demo["lost_service_block"]
+        cov_text     = demo["coverage_narrative"]
+        similar_text = demo["similar_tickets"]
+        action_text  = demo["action_plan"]
+        jsm_summary  = demo["jsm_summary"]
+        jsm_desc     = demo["jsm_description"]
+
+        reply_lines = [
+            lost_block,
+            "",
+            "**Nexora — roaming coverage workbook**",
+            cov_text,
+            "",
+            similar_text,
+            "",
+            action_text,
+            "\n\n---\n\n**Nexora:** Based on the lost-service analysis above, do you want to **create a JSM ticket** now with this information?",
+        ]
+
+        last_tiny = tiny_id
+        last_networks = []
+
+        return jsonify({
+            "success":           True,
+            "phase":             "await_ticket_confirm",
+            "assistant_message": "\n\n".join(reply_lines),
+            "validation_checks": [
+                {"id": "demo", "label": "Demo mode — pre-loaded answers", "status": "ok",
+                 "detail": f"tinyId {tiny_id} is using hackathon sample data."}
+            ],
+            "coverage":          {"networks": [], "file_insight": {}},
+            "coverage_file":     {},
+            "similar_incidents": [],
+            "rag_error":         None,
+            "templates": {
+                "jsm":         jsm_summary + "\n\n" + jsm_desc,
+                "status_page": f"Investigating: {jsm_summary}"
+            },
+            "opensearch_report": {"narrative": ""},
+            **session_payload(
+                [],
+                lost_block  = lost_block,
+                jsm_summary = jsm_summary,
+                jsm_desc    = jsm_desc,
+            ),
+        })
+    # ── end demo mode ─────────────────────────────────────────────────────────
 
     # ── Alert lookup ──────────────────────────────────────────────────────────
     alert         = find_alert_by_tiny_id(tiny_id) if tiny_id else None
