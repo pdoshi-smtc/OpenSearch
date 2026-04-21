@@ -537,18 +537,8 @@
 {% block content %}
 <div class="nexora-wrap">
     <div class="nx-start" id="nxStartScreen" role="region" aria-label="Nexora welcome">
-        <h1>Hi — I'm Nexora</h1>
-        <p>
-            I'm the <strong>GNOC Advance Assistant</strong> on TINA. I help your Global Network Operations team shrink
-            engineering check time when you see field issues—<strong>lost service</strong>, <strong>location update</strong> problems,
-            <strong>maintenance</strong> correlations, or <strong>customer-specific</strong> incidents.
-        </p>
-        <p>
-            I pull an <strong>alert time window</strong> when you give a <strong>tinyId</strong>, correlate the exported
-            <strong>OpenSearch</strong> snapshot, validate <strong>coverage data.json</strong> for alternate networks and sponsors,
-            match <strong>similar Jira tickets</strong>, answer with <strong>device / SIM version / impact counts</strong>, build
-            <strong>JSM</strong> and <strong>status page</strong> drafts immediately, and optionally send you to <strong>PCAP</strong> for deeper proof.
-        </p>
+        <h1>Hi — I'm GNOC Assistant</h1>
+        <p><strong>Nexora</strong> is an AI-powered GNOC (Global Network Operations Center) assistant, designed to help telecom engineers monitor networks, analyze and validate the issues regarding network, roaming partner, maintenance, or customer-specific and provide actionable insights for faster troubleshooting and resolution.</p>
         <button type="button" class="nx-enter" id="nxEnterBtn">Start session</button>
     </div>
 
@@ -955,28 +945,49 @@
         }));
     });
 
-    el.send.addEventListener("click", async function () {
-        const text = el.input.value.trim();
-        if (!text) return;
-        appendMessage("user", text);
-        el.input.value = "";
+   el.send.addEventListener("click", async function () {
+    const text = el.input.value.trim();
+    if (!text) return;
+    appendMessage("user", text);
+    el.input.value = "";
 
-        if (state.phase === "await_ticket_confirm") {
-            await postInteract(Object.assign({}, sessionBody(), {
-                phase:        "await_ticket_confirm",
-                user_message: text
-            }));
-            return;
+    // Confirmation phases — route to interact as before
+    if (state.phase === "await_ticket_confirm") {
+        await postInteract(Object.assign({}, sessionBody(), {
+            phase:        "await_ticket_confirm",
+            user_message: text
+        }));
+        return;
+    }
+    if (state.phase === "await_pcap_choice") {
+        await postInteract(Object.assign({}, sessionBody(), {
+            phase:        "await_pcap_choice",
+            user_message: text
+        }));
+        return;
+    }
+
+    // Free-text question — ask Gemini
+    el.send.disabled = true;
+    try {
+        const r = await fetch("{{ url_for('nexora.ask') }}", {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body:    JSON.stringify(Object.assign({}, sessionBody(), { question: text }))
+        });
+        const j = await r.json();
+        if (j.success) {
+            appendMessage("assistant", j.answer);
+        } else {
+            appendMessage("assistant", "Error: " + (j.error || "unknown"));
         }
-        if (state.phase === "await_pcap_choice") {
-            await postInteract(Object.assign({}, sessionBody(), {
-                phase:        "await_pcap_choice",
-                user_message: text
-            }));
-            return;
-        }
-        appendMessage("assistant", "Use **Run GNOC check** with the form, or use the buttons to confirm.");
-    });
+    } catch (e) {
+        appendMessage("assistant", "Request failed: " + e);
+    } finally {
+        el.send.disabled = false;
+        updateRunEnabled();
+    }
+});
 
     el.input.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) {

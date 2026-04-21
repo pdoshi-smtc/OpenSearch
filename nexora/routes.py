@@ -2,6 +2,7 @@
 routes.py
 """
 import json
+import time
 import os
 import re
 import threading
@@ -87,6 +88,180 @@ VPLMN_ALERT_RE = re.compile(r"-\s*(.*?)\s*\[", re.DOTALL)
 
 ANSWERS_JSON = os.path.join(ROOT, "data", "answers.json")
 
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL   = "liquid/lfm-2.5-1.2b-thinking:free"  # free model
+
+NEXORA_SYSTEM = """You are Nexora, an advanced GNOC (Global Network Operations Center) AI assistant built on the TINA platform.
+
+Your role is to assist telecom engineers in real-time network monitoring, incident analysis, and troubleshooting across roaming, signaling, and data services.
+
+## Core Responsibilities
+- Diagnose issues such as **Lost Service**, **Location Update failures**, **Attach/Detach issues**, **PDP/Session drops**, and **roaming failures**
+- Correlate alarms across network elements (MME, HLR/HSS, STP, DRA, PGW, SGSN, etc.)
+- Analyze trends in KPIs (success rates, latency, failure ratios)
+- Assist in **Root Cause Analysis (RCA)** with structured reasoning
+- Identify whether issues are from **VPLMN, HPLMN, IPX/GRX providers (e.g., BICS)**, or internal nodes
+- Suggest next steps including escalation, log checks, and validations
+
+## Response Style
+- Be **concise, technical, and structured**
+- Use markdown bold (**text**) for key telecom terms, alarms, and KPIs
+- Prefer bullet points for clarity
+- Avoid unnecessary explanations
+
+## Analysis Framework (IMPORTANT)
+When analyzing an issue, follow this structure:
+
+1. **Observation**
+   - What is happening? (symptoms, alerts, KPIs)
+
+2. **Impact**
+   - Which services/users are affected?
+
+3. **Possible Causes**
+   - Network element failures
+   - Signaling issues (MAP, Diameter, GTP)
+   - Roaming partner issues
+   - Transport/IPX issues
+   - Configuration/maintenance
+
+4. **Checks to Perform**
+   - Logs (OpenSearch, traces)
+   - KPI dashboards
+   - Node health
+   - Recent changes / maintenance
+
+5. **Conclusion (RCA Hypothesis)**
+   - Most likely cause based on available data
+
+6. **Recommended Actions**
+   - Escalation (internal / vendor / IPX)
+   - Immediate mitigation steps
+
+## Domain Awareness
+You are aware of:
+- Telecom protocols: **MAP, Diameter, GTP, SS7**
+- Events: **Location Update, Attach, PDP Context Creation**
+- KPIs: **Success Rate, Failure Rate, Latency**
+- Tools: **OpenSearch, dashboards, alarms**
+- Real-world GNOC workflows and escalation practices
+
+## Constraints
+- If the query is **outside telecom / GNOC / networking**, politely redirect:
+  "I specialize in GNOC and telecom network operations. Please provide a network-related query."
+
+- Do NOT hallucinate unknown data — clearly say if information is insufficient
+
+- Prioritize **actionable insights over generic explanations**
+
+## Tone
+- Professional GNOC engineer
+- Clear, confident, and operationally focused
+"""
+
+
+# """You are Nexora, a GNOC (Global Network Operations Center) AI assistant built on the TINA platform.
+# You help telecom engineers diagnose roaming issues, lost-service events, location update failures, and maintenance correlations.
+# Answer concisely and technically. Use markdown bold (**text**) for key terms.
+# If asked something unrelated to telecom / GNOC / networking, politely redirect the user back to the GNOC context."""
+
+
+def ask_gemini(user_question: str, session_context: dict) -> str:
+    """
+    Ask OpenRouter (drop-in replacement for the old Gemini function).
+    Name kept as ask_gemini so no other code needs to change.
+    """
+    if not OPENROUTER_API_KEY:
+        return "_(OpenRouter API key not configured — set OPENROUTER_API_KEY in .env)_"
+
+    # Build session context block
+    ctx_parts = []
+    if session_context.get("last_tiny_id"):
+        ctx_parts.append(f"Active tinyId: {session_context['last_tiny_id']}")
+    if session_context.get("last_vplmn"):
+        ctx_parts.append(f"VPLMN: {session_context['last_vplmn']}")
+    if session_context.get("last_country"):
+        ctx_parts.append(f"Country: {session_context['last_country']}")
+    if session_context.get("last_symptoms"):
+        ctx_parts.append(f"Symptoms: {session_context['last_symptoms']}")
+    if session_context.get("last_lost_block"):
+        ctx_parts.append(f"Lost-service analysis:\n{session_context['last_lost_block'][:600]}")
+    if session_context.get("last_coverage_narrative"):
+        ctx_parts.append(f"Coverage workbook:\n{session_context['last_coverage_narrative'][:400]}")
+
+    context_block = "\n\n".join(ctx_parts)
+    user_content  = (
+        (f"Current session context:\n{context_block}\n\n" if context_block else "")
+        + f"Engineer asks: {user_question}"
+    )
+
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=OPENROUTER_API_KEY,
+    )
+
+    last_err = ""
+    for attempt in range(3):
+        try:
+            response = client.chat.completions.create(
+                model=OPENROUTER_MODEL,
+                messages=[
+                    {"role": "system", "content": NEXORA_SYSTEM},
+                    {"role": "user",   "content": user_content},
+                ],
+                extra_headers={
+                    "HTTP-Referer":       "http://127.0.0.1:5000",
+                    "X-OpenRouter-Title": "Nexora GNOC Assistant",
+                },
+                extra_body={"reasoning": {"enabled": True}},
+                timeout=25,
+            )
+
+            text = response.choices[0].message.content or ""
+            return text.strip() or "_(Model returned an empty response.)_"
+
+        except Exception as e:
+            last_err = str(e)
+            # Retry on rate-limit or service unavailable
+            if "429" in last_err or "503" in last_err:
+                time.sleep(8 * (attempt + 1))
+                continue
+            return f"_(Error: {e})_"
+
+    return f"_(Service unavailable after retries — {last_err})_"
+
+@nexora_bp.route("/ask", methods=["POST"])
+def ask():
+    """
+    Free-text Q&A powered by Gemini.
+    Called when the user types a question outside of the normal phase flow.
+    """
+    try:
+        data = request.get_json(force=True, silent=True) or {}
+    except Exception:
+        data = {}
+
+    question = (data.get("question") or "").strip()
+    if not question:
+        return jsonify({"success": False, "error": "No question provided."}), 400
+
+    session_ctx = {
+        "last_tiny_id":             (data.get("last_tiny_id")              or ""),
+        "last_vplmn":               (data.get("last_vplmn")                or ""),
+        "last_country":             (data.get("last_country")              or ""),
+        "last_symptoms":            (data.get("last_symptoms")             or ""),
+        "last_lost_block":          (data.get("last_lost_block")           or ""),
+        "last_coverage_narrative":  (data.get("last_coverage_narrative")   or ""),
+        "last_opensearch_narrative":(data.get("last_opensearch_narrative") or ""),
+    }
+
+    answer = ask_gemini(question, session_ctx)
+    return jsonify({"success": True, "answer": answer})
 def load_demo_answer(tiny_id: str) -> Optional[dict]:
     """Return pre-defined answer if tiny_id is a demo ID, else None."""
     if not os.path.isfile(ANSWERS_JSON):
@@ -1165,8 +1340,6 @@ def interact():
         symptoms = "Automated GNOC context check from the supplied tinyId / country / network / sponsor fields."
 
 
-
-    # ── Demo mode: pre-defined answers for hackathon tinyIds ─────────────────
     demo = load_demo_answer(tiny_id)
     if demo:
         lost_block   = demo["lost_service_block"]
