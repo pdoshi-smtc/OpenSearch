@@ -425,6 +425,120 @@
       "age_days": 0
     },
     {
+      "id": "bfdf318c-2bc0-4cfd-a979-f221162c6288-1775976265400",
+      "tinyId": "992746",
+      "createdAt": 1775976265400,
+      "updatedAt": 1775976729562,
+      "message": "VPLMN DOWN - Hi3g Access AB [ Diameter/Sigtran - System failure / Unable to comply ] | The number of Failed sessio t",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-363b0b51b2fb",
+      "tags": [
+        "Production"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": true,
+      "count": 1,
+      "owner": "pdoshi@semtech.com",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775976265400,
+      "escalationIds": [
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 464162,
+      "responders": [
+        {
+          "id": "21006fff-c91b-4b01-a648-da81675859d4",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-10 07:20:00 UTC",
+      "updatedAt_readable": "2026-04-12 07:50:09 UTC",
+      "lastOccuredAt_readable": "2026-04-12 06:44:25 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 11.02,
+      "age_days": 0
+    },
+    {
+      "id": "bfdf318c-2bc0-4cfd-a979-f221162c6288-1775976265400",
+      "tinyId": "992747",
+      "createdAt": 1775976265400,
+      "updatedAt": 1775976729562,
+      "message": "Suspicious number of sessions detected for customer 'AddSecure Group Services AB': 36203.0 sessions established between 2026-02-05 04:00:00 and 2026-02-05 05:00:00 (threshold: 7575.1). Potential fraud case. Impacted SIMs count : 5994.0 Impacted SIMs: [{'iccid': '8933240100001562954', 'percentage': 0.29}, {'iccid': '8933240100001563002', 'percentage': 0.25}, {'iccid': '8933240100001923238', 'percentage': 0.24}, {'iccid': '8933240100001809917', 'percentage': 0.2}, ",
+      "entity": "",
+      "source": "Zenoss",
+      "status": "closed",
+      "alias": "0242ac11-0007-892b-11f1-363b0b51b2fb",
+      "tags": [
+        "Production"
+      ],
+      "customActions": [],
+      "components": [],
+      "services": [],
+      "acknowledged": true,
+      "count": 1,
+      "owner": "pdoshi@semtech.com",
+      "ownerTeamId": "",
+      "snoozed": false,
+      "snoozedUntil": 0,
+      "lastOccuredAt": 1775976265400,
+      "escalationIds": [
+        "e5f6ff66-da72-4d6f-9a27-edf2952bbc30"
+      ],
+      "integrationType": "Zenoss",
+      "integrationName": "Zenoss Cloud",
+      "actions": [
+        "details",
+        "addNote",
+        "addTag",
+        "editTag",
+        "removeTag"
+      ],
+      "priority": "P3",
+      "elapsedTime": 464162,
+      "responders": [
+        {
+          "id": "21006fff-c91b-4b01-a648-da81675859d4",
+          "type": "team"
+        },
+        {
+          "id": "d7334492-ab08-4015-b591-f4e33c76ac40",
+          "type": "team"
+        }
+      ],
+      "alertType": "raw",
+      "seen": true,
+      "alert_description": null,
+      "createdAt_readable": "2026-04-12 06:44:25 UTC",
+      "updatedAt_readable": "2026-04-12 06:52:09 UTC",
+      "lastOccuredAt_readable": "2026-04-12 06:44:25 UTC",
+      "processed_at": "2026-04-12T17:45:34.214803+00:00",
+      "age_hours": 11.02,
+      "age_days": 0
+    },
+    {
       "id": "f690588b-ae66-4db4-9cef-8d96b9e63cd4-1775968041332",
       "tinyId": "992744",
       "createdAt": 1775968041332,
